@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 const JadwalCard = () => {
   const StartEndTime = (title, time, date) => {
     return (
@@ -10,7 +12,7 @@ const JadwalCard = () => {
   };
 
   return (
-    <div className="bg-white border rounded-lg p-4 text-xs">
+    <div className="bg-white border rounded-lg p-4 text-xs grid">
       <div className="bg-green-100 rounded-full px-2 py-1 text-green-500 text-[10px] w-fit">
         Sedang Berlangsung
       </div>
@@ -36,6 +38,9 @@ const JadwalCard = () => {
           <p>Durasi</p>
           <p className="text-sm font-bold">60 Menit</p>
         </div>
+      </div>
+      <div className=" pt-4">
+        <Button className="bg-[#8CBAC7] text-white w-full">Lihat Detail</Button>
       </div>
     </div>
   );
