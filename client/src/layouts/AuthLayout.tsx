@@ -3,7 +3,7 @@ import MainLayout from "./MainLayout";
 
 const AuthLayout = () => {
   return (
-    <MainLayout>
+    <MainLayout variant="auth">
       <div className="bg-gray-200 w-full h-[85vh] rounded-lg p-8">
         <Outlet />
       </div>
