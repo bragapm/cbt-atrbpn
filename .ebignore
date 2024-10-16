@@ -1,0 +1,16 @@
+.env*
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/config.yml
+
+# dependencies
+node_modules
+
+# client
+client/
+!client/dist/*
+
+#git
+.git
+.gitignore
