@@ -46,6 +46,7 @@ const options = {
       },
     },
     datalabels: {
+      display: false,
       color: "#000000", // Set the label color here
       font: {
         size: 10,
