@@ -16,7 +16,7 @@ const LoginParticipant: React.FC = () => {
     >
       <Card className="w-[642px] p-4 h-full">
         {login ? (
-          <TestRule />
+          <TestRule check={checked} setChecked={setChecked} />
         ) : (
           <div className="w-full h-full flex gap-4 flex-col px-20 justify-center">
             <HeaderLogin />
@@ -67,7 +67,7 @@ const HeaderLogin = () => {
   );
 };
 
-const TestRule = () => {
+const TestRule = ({ check, setChecked }) => {
   return (
     <div className="w-full h-full flex gap-4 flex-col ">
       <div className="flex gap-2 items-center justify-between ">
@@ -83,15 +83,22 @@ const TestRule = () => {
         Lorem facilisi elementum.
       </div>
       <div className="flex gap-2">
-        <input type="checkbox"></input>
+        <input
+          type="checkbox"
+          value={check}
+          onClick={() => setChecked(!check)}
+        ></input>
         <p className=" text-sm w-full space-x-3">
           Saya setuju dengan Perjanjian dan Ketentuan.
         </p>
       </div>
-
-      <Button variant="default" className="h-14">
+      <Button
+        variant="default"
+        className="h-14 w-fit mx-auto"
+        disabled={!check}
+      >
         Saya Setuju
-        <img src={"/images/ic-check.svg"} className="pl-2"></img>
+        <img src={"/images/ic-check-white.svg"} className="pl-2"></img>
       </Button>
     </div>
   );
