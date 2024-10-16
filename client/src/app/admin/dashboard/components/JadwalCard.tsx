@@ -18,8 +18,8 @@ const JadwalCard = () => {
       </div>
       <div className="flex gap-2 items-center ">
         {StartEndTime("Mulai", "10:00", "20 November 2024")}
-        <div className="bg-white shadow-lg rounded-full h-8 w-8 flex">
-          <p className="m-auto">ic</p>
+        <div className="bg-white shadow-md rounded-full border border-gray-50 p-3 flex">
+          <img src={"/images/ic-arrow-right.svg"} className="m-auto"></img>
         </div>
         {StartEndTime("Selesai", "12:00", "20 November 2024")}
       </div>
