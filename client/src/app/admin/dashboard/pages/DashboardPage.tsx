@@ -3,8 +3,9 @@ import myImage from "@/assets/ic-dash-card.png";
 import JadwalSesiSection from "../components/JadwalSesiSection";
 import StatistikHasil from "../components/StatistikHasil";
 import StatistikJadwal from "../components/StatistikJadwal";
+import React from "react";
 
-const Dashboardpage = () => {
+const Dashboardpage: React.FC = () => {
   const cardlist = [
     { name: "Total Peserta Terdaftar", value: 1000 },
     { name: "Ujian Sedang Berlangsung", value: 30 },

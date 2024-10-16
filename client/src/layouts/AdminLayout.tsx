@@ -1,14 +1,15 @@
-import Navbar from "@/components/navbars";
 import { Outlet } from "react-router-dom";
+import MainLayout from "./MainLayout";
+import { Sidebar } from "@/components/sidebar";
 
 const AdminLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Navbar />
-      <div className="flex gap-2">
+    <MainLayout variant="admin">
+      <div className="w-full flex gap-2">
+        <Sidebar />
         <Outlet />
       </div>
-    </div>
+    </MainLayout>
   );
 };
 
