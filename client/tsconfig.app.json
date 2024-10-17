@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
+    "noEmit": true, // Prevents emitting .js files during dev
+    "isolatedModules": true, // Required for React with Vite
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
+
   "include": ["src"]
 }
