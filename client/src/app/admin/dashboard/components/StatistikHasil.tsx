@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CardHeader from "./CardHeader";
 import ChartCard from "./ChartCard";
+import BarChart from "./BarChart";
 
 const StatistikHasil = () => {
   const [dataChartDataAverage, setChartDataAverage] = useState<any>(null);
@@ -29,6 +30,7 @@ const StatistikHasil = () => {
     };
     setChartDataAverage(data);
   }, []);
+
   return (
     <div className=" space-y-4 ">
       <CardHeader
@@ -61,8 +63,11 @@ const StatistikHasil = () => {
               </div>
             ))}
           </div>
-          <div className="col-span-3">
-            {/* <ChartCard labels={["ada", "dua"]} data={[3, 4]} /> */}
+          <div className="col-span-3 border rounded-lg p-4">
+            <BarChart
+              labels={["9/10/24", "10/10/24", "11/10/24"]}
+              data={[70, 40, 80]}
+            />
           </div>
         </div>
       </div>
