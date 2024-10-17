@@ -4,7 +4,7 @@ import MainLayout from "./MainLayout";
 const ExamLayout = () => {
   return (
     <MainLayout variant="admin">
-      <div className="w-full h-[85vh] rounded-lg">
+      <div className="w-full h-[85vh] rounded-lg mt-28">
         <Outlet />
       </div>
     </MainLayout>

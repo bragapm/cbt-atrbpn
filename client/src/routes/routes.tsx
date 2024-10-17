@@ -7,6 +7,7 @@ import AdminLayout from "@/layouts/AdminLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import { createBrowserRouter } from "react-router-dom";
+import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginParticipant />,
+      },
+      {
+        path: "finish",
+        element: <FinishExam />,
       },
     ],
   },

@@ -19,7 +19,7 @@ const Dashboardpage: React.FC = () => {
     { icon: "/images/ic-check.svg", name: "Ujian Selesai", value: 20 },
   ];
   return (
-    <div className="p-4 w-full flex flex-col gap-6 ">
+    <div className="p-4 w-full flex flex-col gap-6">
       <div className="bg-[#2A6083] w-full rounded-2xl py-4 flex flex-col gap-8 text-white">
         <div className=" flex justify-between items-center  px-6">
           <div>

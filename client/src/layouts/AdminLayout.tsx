@@ -7,7 +7,7 @@ const AdminLayout: React.FC = () => {
     <MainLayout variant="admin">
       <div className="w-full flex gap-2 mt-28">
         <Sidebar />
-        <div className="pl-96">
+        <div className="pl-96 w-full">
           <Outlet />
         </div>
       </div>
