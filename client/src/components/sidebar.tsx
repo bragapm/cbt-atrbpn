@@ -27,7 +27,7 @@ function SidebarComponent({
   activePath,
 }: SidebarProps) {
   return (
-    <div className="w-[380px] rounded-xl shadow bg-white h-[83vh] flex flex-col border-r">
+    <div className="w-[380px] rounded-xl shadow bg-white h-[83vh] flex flex-col border-r fixed z-50">
       <div className="p-4 border-b">
         <h1 className="text-xl font-semibold text-primary">{title}</h1>
         <p className="text-sm text-gray-600">{subtitle}</p>
@@ -67,12 +67,12 @@ export function Sidebar() {
   const sidebarData = {
     title: "Dashboard",
     subtitle: "Admin",
-    activePath: "/dashboard",
+    activePath: "/",
     sections: [
       {
         title: "Soal",
         items: [
-          { icon: <Home size={18} />, label: "Dashboard", href: "/dashboard" },
+          { icon: <Home size={18} />, label: "Dashboard", href: "/" },
           {
             icon: <FileText size={18} />,
             label: "Management Bank Soal",

@@ -1,7 +1,11 @@
 import LoginPage from "@/app/admin/authentication/pages/LoginPage";
 import DashboardPage from "@/app/admin/dashboard/pages/DashboardPage";
+<<<<<<< HEAD
 import LoginParticipant from "@/app/client/authentication/pages/LoginParticipant";
 import ExamCbtPage from "@/app/client/test-cbt/pages/ExamCbtPage";
+=======
+import BankSoalPages from "@/app/admin/management-question-bank/pages/BankSoalPages";
+>>>>>>> 66e43c876f5433c0d39a7d15049683e1adca845a
 import AdminLayout from "@/layouts/AdminLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import ExamLayout from "@/layouts/ExamLayout";
@@ -15,6 +19,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardPage />,
+      },
+      {
+        path: "bank-soal",
+        element: <BankSoalPages />,
       },
     ],
   },

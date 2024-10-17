@@ -5,9 +5,11 @@ import { Sidebar } from "@/components/sidebar";
 const AdminLayout: React.FC = () => {
   return (
     <MainLayout variant="admin">
-      <div className="w-full flex gap-2">
+      <div className="w-full flex gap-2 mt-28">
         <Sidebar />
-        <Outlet />
+        <div className="pl-96">
+          <Outlet />
+        </div>
       </div>
     </MainLayout>
   );
