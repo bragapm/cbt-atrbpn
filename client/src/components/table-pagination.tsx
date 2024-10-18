@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 
-interface PaginationTableProps {
+export interface PaginationTableProps {
   totalItems: number; // Total number of items
   pageSize: number; // Number of items per page
   currentPage: number; // Currently active page
