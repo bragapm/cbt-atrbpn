@@ -1,11 +1,12 @@
 import { FileCheck, FileText, Home, PenTool, User, Users } from "lucide-react";
-import { Link } from "react-router-dom";
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarItem {
   icon: React.ReactNode;
   label: string;
   href: string;
+  activepath?: string;
 }
 
 interface SidebarSection {
@@ -20,14 +21,13 @@ interface SidebarProps {
   activePath: string;
 }
 
-function SidebarComponent({
-  title,
-  subtitle,
-  sections,
-  activePath,
-}: SidebarProps) {
+function SidebarComponent({ title, subtitle, sections }: SidebarProps) {
+  const { pathname } = useLocation();
+
+  const firstSegment = pathname.split("/")[1];
+
   return (
-    <div className="w-[380px] rounded-xl shadow bg-white h-[83vh] flex flex-col border-r fixed z-50">
+    <div className="w-[365px] rounded-xl shadow bg-white h-[83vh] flex flex-col border-r fixed z-50">
       <div className="p-4 border-b">
         <h1 className="text-xl font-semibold text-primary">{title}</h1>
         <p className="text-sm text-gray-600">{subtitle}</p>
@@ -44,7 +44,7 @@ function SidebarComponent({
                   <Link
                     to={item.href}
                     className={`flex items-center px-2 py-4 text-sm rounded-md ${
-                      activePath === item.href
+                      item?.activepath === firstSegment
                         ? "bg-primary/10 text-primary"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
@@ -64,7 +64,7 @@ function SidebarComponent({
 
 // Example usage as a separate component
 export function Sidebar() {
-  const sidebarData = {
+  const sidebarData: SidebarProps = {
     title: "Dashboard",
     subtitle: "Admin",
     activePath: "/",
@@ -72,11 +72,17 @@ export function Sidebar() {
       {
         title: "Soal",
         items: [
-          { icon: <Home size={18} />, label: "Dashboard", href: "/" },
+          {
+            icon: <Home size={18} />,
+            label: "Dashboard",
+            href: "/",
+            activepath: "",
+          },
           {
             icon: <FileText size={18} />,
             label: "Management Bank Soal",
             href: "/bank-soal",
+            activepath: "bank-soal",
           },
           {
             icon: <PenTool size={18} />,

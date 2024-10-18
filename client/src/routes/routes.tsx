@@ -2,6 +2,7 @@ import LoginPage from "@/app/admin/authentication/pages/LoginPage";
 import DashboardPage from "@/app/admin/dashboard/pages/DashboardPage";
 import LoginParticipant from "@/app/client/authentication/pages/LoginParticipant";
 import ExamCbtPage from "@/app/client/test-cbt/pages/ExamCbtPage";
+import BankSoalImportPage from "@/app/admin/management-question-bank/pages/BankSoalImportPage";
 import BankSoalPages from "@/app/admin/management-question-bank/pages/BankSoalPages";
 import AdminLayout from "@/layouts/AdminLayout";
 import AuthLayout from "@/layouts/AuthLayout";
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "bank-soal",
         element: <BankSoalPages />,
+      },
+      {
+        path: "bank-soal/import",
+        element: <BankSoalImportPage />,
       },
     ],
   },
