@@ -13,7 +13,7 @@ const MainLayout: React.FC<{
       })}
     >
       <Navbar variant={variant} />
-      <div className="w-full h-full px-6 z-40">{children}</div>
+      <div className="w-full h-full px-6 z-[100]">{children}</div>
     </div>
   );
 };

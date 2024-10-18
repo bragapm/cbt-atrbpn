@@ -14,17 +14,8 @@ const MultiChoiceTutorial = () => {
     <div className="demo_choice w-full bg-white border rounded-2xl p-3 grid gap-2">
       <p className="text-primary font-medium">Pilih Jawaban Anda</p>
       {["A", "B", "C", "D", "E"].map((el, idx) => (
-        <div
-          className={`flex gap-2 border p-2 rounded-xl ${
-            idx === 4 ? "bg-[#F5FBFB] border-[#2A6083]" : ""
-          }`}
-          key={el}
-        >
-          <div
-            className={`${
-              idx === 4 ? "bg-[#2A6083]" : "bg-primary"
-            } w-6 h-6 text-white rounded-lg flex text-x`}
-          >
+        <div className="flex gap-2 border p-2 rounded-xl" key={el}>
+          <div className="bg-primary w-6 h-6 text-white rounded-lg flex text-xs">
             <p className="m-auto">{el}</p>
           </div>
           <div className="flex-1">
