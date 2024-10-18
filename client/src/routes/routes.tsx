@@ -8,6 +8,8 @@ import AuthLayout from "@/layouts/AuthLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import { createBrowserRouter } from "react-router-dom";
 import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
+import PinPage from "@/app/client/test-cbt/pages/PinPage";
+import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
         path: "finish",
         element: <FinishExam />,
       },
+      {
+        path: "pin",
+        element: <PinPage />,
+      },
     ],
   },
   {
@@ -55,6 +61,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <ExamCbtPage />,
+      },
+      {
+        path: "tutorial",
+        element: <ExamTutorial />,
       },
     ],
   },
