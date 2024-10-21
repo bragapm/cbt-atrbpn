@@ -1,15 +1,10 @@
 import FinishDialogConfirm from "@/components/FinishDialogConfirm";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const RemainingTime = () => {
   const navigate = useNavigate();
-  const [isShowSuccessDialog, setIsShowSuccessDialog] = useState(false);
-  const handleEndExam = () => {
-    navigate("/exam/finish");
-  };
-
   return (
     <>
       <FinishDialogConfirm
@@ -32,7 +27,15 @@ const RemainingTime = () => {
           </Button>
         </div>
       </div>
-    </>
+      <div>
+        <Button
+          className="bg-red-500 rounded-xl "
+          onClick={() => navigate("/exam/finish")}
+        >
+          Akhiri Ujian
+        </Button>
+      </div>
+    </div>
   );
 };
 

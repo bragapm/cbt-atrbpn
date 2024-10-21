@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 const PinPage: React.FC = () => {
   const [pin, setpin] = useState("");
-  const [login, setLogin] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className={`w-full h-full flex justify-end items-center`}>
@@ -42,9 +43,9 @@ const PinPage: React.FC = () => {
               variant="default"
               className="h-14"
               disabled={pin === ""}
-              onClick={() => setLogin(true)}
+              onClick={() => navigate("/exam")}
             >
-              Mulai Ujian
+              Mulai Ujian{" "}
             </Button>
           </div>
         </div>
