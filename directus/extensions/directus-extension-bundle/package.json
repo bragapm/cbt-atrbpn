@@ -1,0 +1,20 @@
+{
+  "name": "directus-extension",
+  "version": "1.0.0",
+  "directus:extension": {
+    "type": "bundle",
+    "path": {
+      "app": "dist/app.js",
+      "api": "dist/api.js"
+    },
+    "entries": [
+      {
+        "type": "endpoint",
+        "name": "hello",
+        "source": "src/hello/index.js"
+      }
+    ],
+    "host": "10.8.2"
+  },
+  "type": "module"
+}

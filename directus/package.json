@@ -1,0 +1,43 @@
+{
+  "name": "directus-extension",
+  "description": "Please enter a description for your extension",
+  "icon": "extension",
+  "version": "1.0.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-custom-bundle"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "directus:extension": {
+    "type": "bundle",
+    "path": {
+      "app": "extensions/directus-extension-bundle/dist/app.js",
+      "api": "extensions/directus-extension-bundle/dist/api.js"
+    },
+    "entries": [
+      {
+        "type": "endpoint",
+        "name": "hello",
+        "source": "src/hello/index.js"
+      }
+    ],
+    "host": "10.8.2"
+  },
+  "scripts": {
+    "start": "npx directus start",
+    "build": "directus-extension build",
+    "dev": "directus-extension build -w --no-minify",
+    "link": "directus-extension link",
+    "add": "directus-extension add"
+  },
+  "dependencies": {
+    "@directus/extensions-sdk": "12.1.0"
+  },
+  "devDependencies": {
+    "directus": "10.8.2"
+  }
+}

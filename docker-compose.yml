@@ -9,7 +9,10 @@ services:
     restart: unless-stopped
 
   directus:
-    image: directus/directus:10.8.2
+    #image: directus/directus:10.8.2
+    build:
+      context: ./directus
+      dockerfile: Dockerfile
     depends_on:
       - cache
     environment:
