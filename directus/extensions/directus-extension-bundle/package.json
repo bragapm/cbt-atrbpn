@@ -12,6 +12,11 @@
         "type": "endpoint",
         "name": "hello",
         "source": "src/hello/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "coupon",
+        "source": "src/coupon/index.js"
       }
     ],
     "host": "10.8.2"
