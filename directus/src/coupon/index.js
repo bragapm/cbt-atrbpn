@@ -36,7 +36,7 @@ export default (router, { services, exceptions, getSchema }) => {
         updated_at: now,
         last_login_at: now,
       });
-
+      
       // Autentikasi untuk mendapatkan access_token dan refresh_token
       const authService = new AuthenticationService({
         accountability: null,
@@ -44,22 +44,23 @@ export default (router, { services, exceptions, getSchema }) => {
       });
 
       console.log({ authService });
-
-      const authData = await authService.login({
+      console.log('Attempting login with:', { email: user_email, password: user_password });
+      const authData = await authService.login(undefined,{
         email: user_email,
         password: user_password,
       });
 
-      console.log("www");
+      console.log("authdata",authData);
 
       // Kembalikan informasi yang dibutuhkan
       res.json({
         email: user_email,
         password: user_password,
         last_login_at: newUser.last_login_at,
-        access_token: authData.access_token,
-        refresh_token: authData.refresh_token,
+        access_token: authData.accessToken,
+        refresh_token: authData.refreshToken,
       });
+
     } catch (error) {
       // Gunakan generic error handler jika ServiceUnavailableException tidak tersedia
       console.error("Error creating user or coupon:", error);
