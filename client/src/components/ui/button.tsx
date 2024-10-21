@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         actions: "bg-[#8CBAC7] text-white shadow hover:bg-primary/90 h-9",
         loading: "bg-primary/50 text-primary-foreground/80 hover:bg-primary/90",
+        upload:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-gray-400 border-gray-400  text-primary",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -27,6 +29,7 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
         actions: "px-4 py-6",
+        upload: "px-4 py-2",
       },
     },
     defaultVariants: {
