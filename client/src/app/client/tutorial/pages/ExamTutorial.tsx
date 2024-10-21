@@ -2,6 +2,7 @@ import ListQuestTutorial from "../components/ListQuestTutorial";
 import MultiChoiceTutorial from "../components/MultiChoiceTutorial";
 import QuestDetailTutorial from "../components/QuestDetailTutorial";
 import TimeTutorial from "../components/TimeTutorial";
+import { useNavigate } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import Joyride, {
@@ -13,18 +14,9 @@ import Joyride, {
 
 import a11yChecker from "a11y-checker";
 
-interface Props {
-  breakpoint: string;
-}
-
-interface State {
-  run: boolean;
-  steps: Step[];
-}
-
 export default function ExamTutorial() {
-  const handleNextQuestion = () => {};
-  const handlePrevQuestion = () => {};
+  const navigate = useNavigate();
+
   const [tourState, setTourState] = useState<any>({
     run: true,
     steps: [
@@ -82,6 +74,11 @@ export default function ExamTutorial() {
         target: ".finish_time",
         title: "Akhiri Ujian",
       },
+      {
+        title: "Selesai tutorial",
+        placement: "center",
+        target: "body",
+      },
     ],
   });
 
@@ -100,8 +97,11 @@ export default function ExamTutorial() {
 
     if (finishedStatuses.includes(status)) {
       setTourState((prevState) => ({ ...prevState, run: false }));
+      navigate("/exam/pin");
     }
   };
+
+  function CountdownTimer({ isRunning }) {}
 
   function Tooltip({
     backProps,
@@ -113,40 +113,89 @@ export default function ExamTutorial() {
     step,
     tooltipProps,
   }: TooltipRenderProps) {
+    const [count, setCount] = useState(10);
+    const [disable, setdisable] = useState(true);
+
+    useEffect(() => {
+      let intervalId;
+      if (index === 7) {
+        intervalId = setInterval(() => {
+          setCount((prevCount) => {
+            if (prevCount > 0) {
+              return prevCount - 1;
+            } else {
+              clearInterval(intervalId);
+              setdisable(false);
+              return 0;
+            }
+          });
+        }, 1000);
+      }
+
+      return () => clearInterval(intervalId);
+    }, [count, index]);
+
+    const formattedTime = new Date(count * 1000).toISOString().slice(11, 19);
+
     return (
       <div
-        className="bg-white max-w-[295px] overflow-hidden rounded-xl border-2 border-w border-primary p-3 space-y-2"
+        className="bg-white max-w-[395px] overflow-hidden rounded-xl border-2 border-w border-primary p-3 space-y-2"
         {...tooltipProps}
       >
-        {step.title && (
-          <p className="text-xl text-primary font-semibold">{step.title}</p>
-        )}
-        {step.content && <div className="text-sm">{step.content}</div>}
-        <div className="p-2 bg-white">
-          <div className="flex justify-between">
-            {/* {!isLastStep && (
-              <button {...skipProps}>
-                <p>skip</p>
-              </button>
-            )} */}
-            <div className="flex gap-2 justify-between w-full">
-              {index > 0 && (
-                <button
-                  className="border border-primary text-primary rounded-xl px-3 p-2 text-sm"
-                  {...backProps}
-                >
-                  <p>Sebelumnya</p>
-                </button>
-              )}
-              <button
-                className="border border-primary bg-primary text-white rounded-xl px-3 p-2 text-sm"
-                {...primaryProps}
-              >
-                <p>Selanjutnya</p>
-              </button>
+        {index === 7 ? (
+          <div className="grid gap-6">
+            <div className="flex justify-between gap-2 items-center px-10">
+              <img src="/images/logo.svg" />{" "}
+              <p className=" text-lg font-semibold">WAKTU LATIHAN SELESAI </p>
+              <p></p>
             </div>
+            <p className="text-center">
+              Silahkan klik tombol Mulai Ujian setelah tombol berwana biru untuk
+              memulai ujian
+            </p>
+            <div className="text-red-500 text-4xl font-semibold p-3 border rounded-lg mx-auto w-fit">
+              <p className="text-center">{formattedTime}</p>
+            </div>
+            <button
+              disabled={disable}
+              className={`border border-primary text-white rounded-xl px-11 p-2 text-sm mx-auto ${
+                disable ? "bg-gray-400" : "bg-primary"
+              }`}
+              {...primaryProps}
+            >
+              <p>Mulai Ujian</p>
+            </button>
           </div>
-        </div>
+        ) : (
+          <>
+            {step.title && (
+              <p className="text-xl text-primary font-semibold">{step.title}</p>
+            )}
+            {step.content && <div className="text-sm">{step.content}</div>}
+            <div className="p-2 bg-white">
+              <div
+                className={`${
+                  index !== 0 && "flex gap-2"
+                }  justify-between w-full`}
+              >
+                {index > 0 && (
+                  <button
+                    className="border border-primary text-primary rounded-xl px-3 p-2 text-sm w-full"
+                    {...backProps}
+                  >
+                    <p>Sebelumnya</p>
+                  </button>
+                )}
+                <button
+                  className="border border-primary bg-primary text-white rounded-xl px-3 p-2 text-sm w-full"
+                  {...primaryProps}
+                >
+                  <p> {index === 0 ? "Mulai" : "Selanjutnya"}</p>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -160,6 +209,7 @@ export default function ExamTutorial() {
         scrollToFirstStep
         // showProgress
         // showSkipButton
+        disableOverlayClose
         steps={tourState.steps}
         styles={{
           options: {
@@ -168,7 +218,7 @@ export default function ExamTutorial() {
         }}
         tooltipComponent={Tooltip}
       />
-      <section className="demo__hero">
+      {/* <section className="demo__hero">
         <div>
           <button
             onClick={handleClickStart}
@@ -177,7 +227,7 @@ export default function ExamTutorial() {
             Start
           </button>
         </div>
-      </section>
+      </section> */}
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-3 grid gap-2">
           <QuestDetailTutorial />
