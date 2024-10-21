@@ -22,7 +22,18 @@ const ListQuestTutorial = () => {
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
       <div className="flex flex-wrap gap-2 flex-1">
         {numbers.map((number) => (
-          <div key={number} className="w-8 h-8 rounded-lg bg-gray-200 flex">
+          <div
+            key={number}
+            className={`w-8 h-8 rounded-lg flex ${
+              number === 1
+                ? legenda[0].color
+                : number === 2
+                ? legenda[2].color
+                : number === 3
+                ? `${legenda[1].color} text-white`
+                : "bg-gray-200"
+            }`}
+          >
             <p className="m-auto text-[11px]">{number}</p>
           </div>
         ))}
