@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ListQuestionNumbers = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
+  const [numberSelect, setNumberSelect] = useState(1);
+  const legenda = [
+    { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
+    { color: "bg-primary", title: "Soal sedang diisi" },
+    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
+  ];
 
   useEffect(() => {
     const newNumbers = [];
@@ -11,18 +17,22 @@ const ListQuestionNumbers = () => {
     setNumbers(newNumbers);
   }, []);
 
-  const legenda = [
-    { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
-    { color: "bg-primary", title: "Soal sedang diisi" },
-    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
-  ];
+  const handleclickSoal = (number) => {
+    setNumberSelect(number);
+  };
 
   return (
     <div className="w-full bg-white border rounded-lg p-3 flex-1 flex flex-col gap-4">
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
       <div className="flex flex-wrap gap-2 flex-1">
         {numbers.map((number) => (
-          <div key={number} className="w-8 h-8 rounded-lg bg-gray-200 flex">
+          <div
+            key={number}
+            onClick={() => handleclickSoal(number)}
+            className={`${
+              numberSelect === number ? "bg-primary text-white" : ""
+            } w-8 h-8 rounded-lg bg-gray-200 flex cursor-pointer hover:bg-gray-100`}
+          >
             <p className="m-auto text-[11px]">{number}</p>
           </div>
         ))}
