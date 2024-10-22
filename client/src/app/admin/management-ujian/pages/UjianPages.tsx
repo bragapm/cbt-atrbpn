@@ -1,42 +1,33 @@
 import TableActions from "@/components/table-actions";
-import BankSoalTable from "../components/BankSoalTable";
+import UjianTable from "../components/UjianTable";
 import { Button } from "@/components/ui/button";
 import { Cloud, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const BankSoalPages = () => {
+const UjianPages = () => {
   const navigate = useNavigate();
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions
-        title="Daftar Soal"
+        title="Sesi Ujian"
         description="Data ditampilkan sesuai dengan filter"
         actions={
           <div className="flex gap-2">
             <Button
               variant="actions"
               size="actions"
-              startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/import")}
-            >
-              Import Soal
-            </Button>
-
-            <Button
-              variant="actions"
-              size="actions"
               startContent={<Plus />}
-              onClick={() => navigate("/bank-soal/create")}
+              onClick={() => navigate("/ujian/create")}
             >
-              Tambah Soal
+              Tambah Sesi Ujian
             </Button>
           </div>
         }
       />
-      <BankSoalTable />
+      <UjianTable />
     </div>
   );
 };
 
-export default BankSoalPages;
+export default UjianPages;
