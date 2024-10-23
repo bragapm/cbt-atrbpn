@@ -10,6 +10,7 @@ import ExamCbtPage from "@/app/client/test-cbt/pages/ExamCbtPage";
 import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
 import AdminLayout from "@/layouts/AdminLayout";
 import ExamLayout from "@/layouts/ExamLayout";
+import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
 
 export const protectedRoutes = [
   {
@@ -61,6 +62,10 @@ export const protectedRoutes = [
       {
         path: "finish",
         element: <FinishExam />,
+      },
+      {
+        path: "tutorial",
+        element: <ExamTutorial />,
       },
     ],
   },
