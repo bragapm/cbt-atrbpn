@@ -1,7 +1,7 @@
 import TableActions from "@/components/table-actions";
 import UjianTable from "../components/UjianTable";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const UjianPages = () => {

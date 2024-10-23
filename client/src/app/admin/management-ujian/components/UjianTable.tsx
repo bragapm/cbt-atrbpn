@@ -1,18 +1,13 @@
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import UjianDropdown from "./UjianDropdown";
 
 type IUjian = {
   idUjian: string;
@@ -20,14 +15,15 @@ type IUjian = {
   tanggalUjian: string;
   sesiUjian: string;
   pesertaUjian: string;
+  kategori: string;
 };
 
 const UjianTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const navigate = useNavigate();
 
+  // Dummy data dengan kategori "Soal" dan "Non-Soal"
   const UjianData: IUjian[] = [
     {
       idUjian: "728ed52f",
@@ -35,6 +31,7 @@ const UjianTable = () => {
       tanggalUjian: "01/01/2025",
       sesiUjian: "1",
       pesertaUjian: "Peserta 1",
+      kategori: "Soal",
     },
     {
       idUjian: "489e1d42",
@@ -42,6 +39,7 @@ const UjianTable = () => {
       tanggalUjian: "02/02/2025",
       sesiUjian: "2",
       pesertaUjian: "Peserta 2",
+      kategori: "",
     },
     {
       idUjian: "9b1d81a6",
@@ -49,6 +47,7 @@ const UjianTable = () => {
       tanggalUjian: "03/03/2025",
       sesiUjian: "3",
       pesertaUjian: "Peserta 3",
+      kategori: "Soal",
     },
   ];
 
@@ -87,7 +86,7 @@ const UjianTable = () => {
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
@@ -100,14 +99,7 @@ const UjianTable = () => {
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/edit")}>
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/preview")}>
-                Preview
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+            <UjianDropdown ujianData={[row.original]} />
           </DropdownMenu>
         </div>
       ),
@@ -121,7 +113,7 @@ const UjianTable = () => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Soal berhasil dihapus"
+        description="Ujian berhasil dihapus"
       />
       <DeleteDialogConfirm
         isOpen={isOpenDeleteConfirm}
@@ -131,7 +123,7 @@ const UjianTable = () => {
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
-        description="Apakah anda yakin ingin menghapus soal ini ?"
+        description="Apakah anda yakin ingin menghapus sesi ini ?"
       />
       <DataTable
         data={UjianData}
