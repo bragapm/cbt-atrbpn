@@ -14,41 +14,45 @@ import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-type BankSoal = {
-  idSoal: string;
-  namaSoal: string;
-  kategoriSoal: "sulit" | "mudah" | "sangat mudah";
-  materiSoal: string;
+type IUjian = {
+  idUjian: string;
+  namaUjian: string;
+  tanggalUjian: string;
+  sesiUjian: string;
+  pesertaUjian: string;
 };
 
-const BankSoalTable = () => {
+const UjianTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
-  const bankSoalData: BankSoal[] = [
+  const UjianData: IUjian[] = [
     {
-      idSoal: "728ed52f",
-      namaSoal: "Matematika Dasar",
-      kategoriSoal: "sulit",
-      materiSoal: "Persamaan Linear",
+      idUjian: "728ed52f",
+      namaUjian: "Tes Kemampuan Dasar 1",
+      tanggalUjian: "01/01/2025",
+      sesiUjian: "1",
+      pesertaUjian: "Peserta 1",
     },
     {
-      idSoal: "489e1d42",
-      namaSoal: "Bahasa Inggris",
-      kategoriSoal: "mudah",
-      materiSoal: "Grammar",
+      idUjian: "489e1d42",
+      namaUjian: "Tes Kemampuan Dasar 2",
+      tanggalUjian: "02/02/2025",
+      sesiUjian: "2",
+      pesertaUjian: "Peserta 2",
     },
     {
-      idSoal: "9b1d81a6",
-      namaSoal: "Ilmu Pengetahuan Alam",
-      kategoriSoal: "sangat mudah",
-      materiSoal: "Sistem Tata Surya",
+      idUjian: "9b1d81a6",
+      namaUjian: "Tes Kemampuan Dasar 3",
+      tanggalUjian: "03/03/2025",
+      sesiUjian: "3",
+      pesertaUjian: "Peserta 3",
     },
   ];
 
-  const columns: ColumnDef<BankSoal>[] = [
+  const columns: ColumnDef<IUjian>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -69,21 +73,16 @@ const BankSoalTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "namaSoal",
-      header: "Nama Soal",
+      accessorKey: "namaUjian",
+      header: "Nama Ujian",
     },
     {
-      accessorKey: "kategoriSoal",
-      header: "Kategori Soal",
-      cell: ({ row }) => {
-        const kategori = row.original.kategoriSoal;
-
-        return <Badge variant="outline">{kategori}</Badge>;
-      },
+      accessorKey: "tanggalUjian",
+      header: "Tanggal Ujian",
     },
     {
-      accessorKey: "materiSoal",
-      header: "Materi Soal",
+      accessorKey: "sesiUjian",
+      header: "Sesi Ujian",
     },
     {
       id: "actions",
@@ -135,7 +134,7 @@ const BankSoalTable = () => {
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={bankSoalData}
+        data={UjianData}
         columns={columns}
         pagination={{
           pageSize: 10,
@@ -148,4 +147,4 @@ const BankSoalTable = () => {
   );
 };
 
-export default BankSoalTable;
+export default UjianTable;
