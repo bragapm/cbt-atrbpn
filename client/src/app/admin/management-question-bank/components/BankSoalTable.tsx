@@ -13,42 +13,19 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { IQuestion } from "../hooks/useGetManagementBankSoal";
 
-type BankSoal = {
-  idSoal: string;
-  namaSoal: string;
-  kategoriSoal: "sulit" | "mudah" | "sangat mudah";
-  materiSoal: string;
+type IBankSoalTable = {
+  data: IQuestion[];
 };
 
-const BankSoalTable = () => {
+const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
-  const bankSoalData: BankSoal[] = [
-    {
-      idSoal: "728ed52f",
-      namaSoal: "Matematika Dasar",
-      kategoriSoal: "sulit",
-      materiSoal: "Persamaan Linear",
-    },
-    {
-      idSoal: "489e1d42",
-      namaSoal: "Bahasa Inggris",
-      kategoriSoal: "mudah",
-      materiSoal: "Grammar",
-    },
-    {
-      idSoal: "9b1d81a6",
-      namaSoal: "Ilmu Pengetahuan Alam",
-      kategoriSoal: "sangat mudah",
-      materiSoal: "Sistem Tata Surya",
-    },
-  ];
-
-  const columns: ColumnDef<BankSoal>[] = [
+  const columns: ColumnDef<IQuestion>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -76,7 +53,7 @@ const BankSoalTable = () => {
       accessorKey: "kategoriSoal",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategori = row.original.kategoriSoal;
+        const kategori = row.original.difficulty;
 
         return <Badge variant="outline">{kategori}</Badge>;
       },
@@ -135,7 +112,7 @@ const BankSoalTable = () => {
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={bankSoalData}
+        data={data || []}
         columns={columns}
         pagination={{
           pageSize: 10,
