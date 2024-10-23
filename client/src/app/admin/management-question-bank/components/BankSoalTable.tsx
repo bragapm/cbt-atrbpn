@@ -48,19 +48,26 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
     {
       accessorKey: "namaSoal",
       header: "Nama Soal",
+      cell: ({ row }) => {
+        const namaSoal = row.original.question_text;
+        return namaSoal;
+      },
     },
     {
       accessorKey: "kategoriSoal",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategori = row.original.difficulty;
-
+        const kategori = row.original.category;
         return <Badge variant="outline">{kategori}</Badge>;
       },
     },
     {
       accessorKey: "materiSoal",
       header: "Materi Soal",
+      cell: ({ row }) => {
+        const materi = row.original.materi;
+        return <Badge variant="outline">{materi}</Badge>;
+      },
     },
     {
       id: "actions",
