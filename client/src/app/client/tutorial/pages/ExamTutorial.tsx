@@ -4,11 +4,10 @@ import QuestDetailTutorial from "../components/QuestDetailTutorial";
 import TimeTutorial from "../components/TimeTutorial";
 import { useNavigate } from "react-router-dom";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Joyride, {
   CallBackProps,
   STATUS,
-  Step,
   TooltipRenderProps,
 } from "react-joyride";
 
