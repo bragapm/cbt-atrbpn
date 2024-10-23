@@ -96,6 +96,7 @@ export function Sidebar() {
             icon: <PenTool size={18} />,
             label: "Management Ujian",
             href: "/ujian",
+            activepath: "ujian",
           },
           {
             icon: <Monitor size={18} />,
