@@ -1,26 +1,36 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
-import { Formik, useFormikContext } from "formik";
-import { CreatePesertaCBTFormValue } from "../types";
-import { FormInput } from "@/components/forms/FormInput";
+import { FormProvider, useForm } from "react-hook-form";
+import { ImportPesertaCBTFormValue } from "../types";
+import { FormInputFile } from "@/components/forms/FormInputFile";
 
 const ImportPesertaFormInner = () => {
-  const { handleSubmit } = useFormikContext<CreatePesertaCBTFormValue>();
   return (
-    <form className="mt-4 space-y-2">
-      <FormInput name="idPeserta" placeholder="Add File" />
+    <>
+      <FormInputFile name="filePeserta" />
 
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
-        <Button onClick={() => handleSubmit()} type="submit" className="w-40">
-          Import Data Peserta
+        <Button type="submit" className="w-40">
+          Tambah Peserta
         </Button>
       </div>
-    </form>
+    </>
   );
 };
 
 export const ImportPesertaPage = () => {
+  const methods = useForm({
+    defaultValues: {
+      filePeserta: null,
+    },
+    mode: "onTouched",
+  });
+
+  const onSubmit = (data: ImportPesertaCBTFormValue) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <section>
       <Breadcrumbs
@@ -34,19 +44,14 @@ export const ImportPesertaPage = () => {
           <h1 className="text-lg">Import Peserta</h1>
           <h2 className="text-sm">Data Peserta Ujian CBT ATR/BPN</h2>
         </header>
-        <Formik<CreatePesertaCBTFormValue>
-          initialValues={{
-            idPeserta: "",
-            namaPeserta: "",
-            nomorKontak: "",
-            sesiUjian: "",
-          }}
-          onSubmit={(value: CreatePesertaCBTFormValue) => {
-            console.log(value);
-          }}
-        >
-          <ImportPesertaFormInner />
-        </Formik>
+        <FormProvider {...methods}>
+          <form
+            className="mt-4 space-y-2"
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <ImportPesertaFormInner />
+          </form>
+        </FormProvider>
       </div>
     </section>
   );

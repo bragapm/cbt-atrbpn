@@ -11,6 +11,10 @@ import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
 import AdminLayout from "@/layouts/AdminLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
+import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/ManagementPesertaList";
+import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
+import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
+import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 
 export const protectedRoutes = [
   {
@@ -48,6 +52,22 @@ export const protectedRoutes = [
       {
         path: "ujian/create",
         element: <UjianCreatePages />,
+      },
+      {
+        path: "peserta-cbt",
+        element: <ManagementPesertaList />,
+      },
+      {
+        path: "peserta-cbt/create",
+        element: <CreatePesertaPage />,
+      },
+      {
+        path: "peserta-cbt/edit/:pesertaId",
+        element: <EditPesertaPage />,
+      },
+      {
+        path: "peserta-cbt/import",
+        element: <ImportPesertaPage />,
       },
     ],
   },

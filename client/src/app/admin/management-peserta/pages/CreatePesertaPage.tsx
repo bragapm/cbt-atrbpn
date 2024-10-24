@@ -1,14 +1,13 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
-import { Formik, useFormikContext } from "formik";
-import { CreatePesertaCBTFormValue } from "../types";
 import { FormInput } from "@/components/forms/FormInput";
-import { Dropdown } from "@/components/ui/dropdown";
+import { FormProvider, useForm } from "react-hook-form";
+import { CreatePesertaCBTFormValue } from "../types";
+import { FormSelect } from "@/components/forms/FormSelect";
 
 const CreatePesertaFormInner = () => {
-  const { handleSubmit } = useFormikContext<CreatePesertaCBTFormValue>();
   return (
-    <form className="mt-4 space-y-2">
+    <>
       <div className="flex gap-3">
         <FormInput
           name="idPeserta"
@@ -21,26 +20,47 @@ const CreatePesertaFormInner = () => {
           label="Nama Peserta"
         />
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-start">
         <FormInput
           name="nomorKontak"
           placeholder="Masukan Nomor Kontak"
           label="Nomor Kontak"
         />
-        <Dropdown />
+        <FormSelect
+          label="Sesi Ujian"
+          options={[
+            { label: "Sesi 1", value: "1" },
+            { label: "Sesi 2", value: "2" },
+          ]}
+          name="sesiUjian"
+        />
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
-        <Button onClick={() => handleSubmit()} type="submit" className="w-40">
+        <Button type="submit" className="w-40">
           Tambah Peserta
         </Button>
       </div>
-    </form>
+    </>
   );
 };
 
 export const CreatePesertaPage = () => {
+  const methods = useForm({
+    defaultValues: {
+      idPeserta: "",
+      namaPeserta: "",
+      nomorKontak: "",
+      sesiUjian: "",
+    },
+    mode: "onTouched",
+  });
+
+  const onSubmit = (data: CreatePesertaCBTFormValue) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <section>
       <Breadcrumbs
@@ -54,19 +74,14 @@ export const CreatePesertaPage = () => {
           <h1 className="text-lg">Tambah Peserta</h1>
           <h2 className="text-sm">Data Peserta Ujian CBT ATR/BPN</h2>
         </header>
-        <Formik<CreatePesertaCBTFormValue>
-          initialValues={{
-            idPeserta: "",
-            namaPeserta: "",
-            nomorKontak: "",
-            sesiUjian: "",
-          }}
-          onSubmit={(value: CreatePesertaCBTFormValue) => {
-            console.log(value);
-          }}
-        >
-          <CreatePesertaFormInner />
-        </Formik>
+        <FormProvider {...methods}>
+          <form
+            className="mt-4 space-y-2"
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <CreatePesertaFormInner />
+          </form>
+        </FormProvider>
       </div>
     </section>
   );
