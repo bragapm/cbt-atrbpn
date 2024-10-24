@@ -7,13 +7,13 @@ const MainLayout: React.FC<{
 }> = ({ children, variant }) => {
   return (
     <div
-      className={cn("flex min-h-screen w-full flex-col", {
+      className={cn("flex min-h-screen w-full flex-col ", {
         "bg-muted": variant === "admin",
         "bg-white": variant === "auth",
       })}
     >
       <Navbar variant={variant} />
-      <div className="w-full h-full px-6">{children}</div>
+      <div className="w-full h-full px-6 z-40">{children}</div>
     </div>
   );
 };

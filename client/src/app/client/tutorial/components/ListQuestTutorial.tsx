@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const ListQuestionNumbers = () => {
+const ListQuestTutorial = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
-  const [numberSelect, setNumberSelect] = useState(1);
-  const legenda = [
-    { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
-    { color: "bg-primary", title: "Soal sedang diisi" },
-    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
-  ];
 
   useEffect(() => {
     const newNumbers = [];
@@ -17,27 +11,34 @@ const ListQuestionNumbers = () => {
     setNumbers(newNumbers);
   }, []);
 
-  const handleclickSoal = (number) => {
-    setNumberSelect(number);
-  };
+  const legenda = [
+    { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
+    { color: "bg-primary", title: "Soal sedang diisi" },
+    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
+  ];
 
   return (
-    <div className="w-full bg-white border rounded-lg p-3 flex-1 flex flex-col gap-4">
+    <div className="demo_listquest w-full bg-white border rounded-lg p-3 flex-1 flex flex-col gap-4">
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
       <div className="flex flex-wrap gap-2 flex-1">
         {numbers.map((number) => (
           <div
             key={number}
-            onClick={() => handleclickSoal(number)}
-            className={`${
-              numberSelect === number ? "bg-primary text-white" : ""
-            } w-8 h-8 rounded-lg bg-gray-200 flex cursor-pointer hover:bg-gray-100`}
+            className={`w-8 h-8 rounded-lg flex ${
+              number === 1
+                ? legenda[0].color
+                : number === 2
+                ? legenda[2].color
+                : number === 3
+                ? `${legenda[1].color} text-white`
+                : "bg-gray-200"
+            }`}
           >
             <p className="m-auto text-[11px]">{number}</p>
           </div>
         ))}
       </div>
-      <div className="space-y-2 mt-10">
+      <div className="space-y-2 mt-10 demo_ket">
         {legenda.map((el) => (
           <div
             key={el.title}
@@ -52,4 +53,4 @@ const ListQuestionNumbers = () => {
   );
 };
 
-export default ListQuestionNumbers;
+export default ListQuestTutorial;
