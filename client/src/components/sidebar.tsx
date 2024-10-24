@@ -1,4 +1,12 @@
-import { FileCheck, FileText, Home, PenTool, User, Users } from "lucide-react";
+import {
+  FileCheck,
+  FileText,
+  Home,
+  Monitor,
+  PenTool,
+  User,
+  Users,
+} from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -88,6 +96,12 @@ export function Sidebar() {
             icon: <PenTool size={18} />,
             label: "Management Ujian",
             href: "/ujian",
+          },
+          {
+            icon: <Monitor size={18} />,
+            label: "Pendistribusian Soal",
+            href: "/pendistribusian-soal",
+            activepath: "pendistribusian-soal",
           },
         ],
       },
