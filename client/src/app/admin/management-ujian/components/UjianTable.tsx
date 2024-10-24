@@ -8,48 +8,18 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import UjianDropdown from "./UjianDropdown";
+import { IUjian } from "../hooks/useGetManagementUjian";
+import { useNavigate } from "react-router-dom";
 
-type IUjian = {
-  idUjian: string;
-  namaUjian: string;
-  tanggalUjian: string;
-  sesiUjian: string;
-  pesertaUjian: string;
-  kategori: string;
+type IUjianTable = {
+  data: IUjian[];
 };
 
-const UjianTable = () => {
+const UjianTable: React.FC<IUjianTable> = ({ data }) => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-
-  // Dummy data dengan kategori "Soal" dan "Non-Soal"
-  const UjianData: IUjian[] = [
-    {
-      idUjian: "728ed52f",
-      namaUjian: "Tes Kemampuan Dasar 1",
-      tanggalUjian: "01/01/2025",
-      sesiUjian: "1",
-      pesertaUjian: "Peserta 1",
-      kategori: "Soal",
-    },
-    {
-      idUjian: "489e1d42",
-      namaUjian: "Tes Kemampuan Dasar 2",
-      tanggalUjian: "02/02/2025",
-      sesiUjian: "2",
-      pesertaUjian: "Peserta 2",
-      kategori: "",
-    },
-    {
-      idUjian: "9b1d81a6",
-      namaUjian: "Tes Kemampuan Dasar 3",
-      tanggalUjian: "03/03/2025",
-      sesiUjian: "3",
-      pesertaUjian: "Peserta 3",
-      kategori: "Soal",
-    },
-  ];
+  //const navigate = useNavigate();
 
   const columns: ColumnDef<IUjian>[] = [
     {
@@ -74,10 +44,25 @@ const UjianTable = () => {
     {
       accessorKey: "namaUjian",
       header: "Nama Ujian",
+      cell: ({ row }) => {
+        const namaUjian = row.original.name;
+        return namaUjian;
+      },
     },
     {
       accessorKey: "tanggalUjian",
       header: "Tanggal Ujian",
+      cell: ({ row }) => {
+        const tanggalUjian = row.original.start_time;
+        const date = new Date(tanggalUjian);
+        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}/${date.getFullYear()}`;
+
+        return formattedDate;
+      },
     },
     {
       accessorKey: "sesiUjian",
@@ -126,7 +111,7 @@ const UjianTable = () => {
         description="Apakah anda yakin ingin menghapus sesi ini ?"
       />
       <DataTable
-        data={UjianData}
+        data={data || []}
         columns={columns}
         pagination={{
           pageSize: 10,
