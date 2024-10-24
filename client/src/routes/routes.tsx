@@ -9,6 +9,10 @@ import AuthLayout from "@/layouts/AuthLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import { createBrowserRouter } from "react-router-dom";
 import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
+import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/ManagementPesertaList";
+import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
+import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
+import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +30,22 @@ const router = createBrowserRouter([
       {
         path: "bank-soal/import",
         element: <BankSoalImportPage />,
+      },
+      {
+        path: "peserta-cbt",
+        element: <ManagementPesertaList />,
+      },
+      {
+        path: "peserta-cbt/create",
+        element: <CreatePesertaPage />,
+      },
+      {
+        path: "peserta-cbt/edit/:pesertaId",
+        element: <EditPesertaPage />,
+      },
+      {
+        path: "peserta-cbt/import",
+        element: <ImportPesertaPage />,
       },
     ],
   },
