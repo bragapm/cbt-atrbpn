@@ -11,6 +11,7 @@ import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
 import AdminLayout from "@/layouts/AdminLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
+import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
 
 export const protectedRoutes = [
   {
@@ -48,6 +49,10 @@ export const protectedRoutes = [
       {
         path: "ujian/create",
         element: <UjianCreatePages />,
+      },
+      {
+        path: "pendistribusian-soal",
+        element: <DistribusiSoalPage />,
       },
     ],
   },

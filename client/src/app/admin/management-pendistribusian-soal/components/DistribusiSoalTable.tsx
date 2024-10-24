@@ -1,100 +1,20 @@
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
+import { IDistribusiSoal } from "../hooks/useGetManagementDistribusiSoal";
 
-type IDistribusiSoal = {
-  idDistribusi: number;
-  userCreated: string;
-  userUpdated: string;
-  dateCreated: string;
-  dateUpdated: string;
-  kategoriId: IKategoriSoal[];
-  materiId: IMateriSoal[];
-  jumlahSoal: number;
+type IDistribusiTable = {
+  data: IDistribusiSoal[];
 };
 
-type IKategoriSoal = {
-  idKategori: number;
-  userCreated: string;
-  userUpdated: string;
-  dateCreated: string;
-  dateUpdated: string;
-  bobotBenar: number;
-  bobotSalah: number;
-  tidakMenjawab: number;
-};
-
-type IMateriSoal = {
-  idMateri: number;
-  userCreated: string;
-  userUpdated: string;
-  dateCreated: string;
-  dateUpdated: string;
-  materi: string;
-};
-
-const DistribusiSoalTable = () => {
+const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-
-  const distribusiSoalData: IDistribusiSoal[] = [
-    {
-      idDistribusi: 100,
-      userCreated: "admin",
-      userUpdated: "admin",
-      dateCreated: "2023-05-01",
-      dateUpdated: "2023-05-01",
-      kategoriId: [
-        {
-          idKategori: 1,
-          userCreated: "admin",
-          userUpdated: "admin",
-          dateCreated: "2023-05-01",
-          dateUpdated: "2023-05-01",
-          bobotBenar: 1,
-          bobotSalah: 1,
-          tidakMenjawab: 1,
-        },
-        {
-          idKategori: 2,
-          userCreated: "admin",
-          userUpdated: "admin",
-          dateCreated: "2023-05-01",
-          dateUpdated: "2023-05-01",
-          bobotBenar: 1,
-          bobotSalah: 1,
-          tidakMenjawab: 1,
-        },
-        {
-          idKategori: 3,
-          userCreated: "admin",
-          userUpdated: "admin",
-          dateCreated: "2023-05-01",
-          dateUpdated: "2023-05-01",
-          bobotBenar: 1,
-          bobotSalah: 1,
-          tidakMenjawab: 1,
-        },
-      ],
-      materiId: [
-        {
-          idMateri: 1,
-          userCreated: "admin",
-          userUpdated: "admin",
-          dateCreated: "2023-05-01",
-          dateUpdated: "2023-05-01",
-          materi: "Materi 1",
-        },
-      ],
-      jumlahSoal: 1,
-    },
-  ];
 
   const columns: ColumnDef<IDistribusiSoal>[] = [
     {
@@ -120,7 +40,7 @@ const DistribusiSoalTable = () => {
       accessorKey: "materiSoal",
       header: "Materi Soal",
       cell: ({ row }) => {
-        const materiSoal = row.original.materiId.map((item) => item.materi);
+        const materiSoal = row.original.materi_id.map((item) => item.materi);
         return (
           <div className="flex flex-col gap-2">
             {materiSoal.map((item) => {
@@ -134,9 +54,7 @@ const DistribusiSoalTable = () => {
       accessorKey: "kategoriSoal",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategoriSoal = row.original.kategoriId.map(
-          (item) => item.idKategori
-        );
+        const kategoriSoal = row.original.kategori_id.map((item) => item.id);
 
         return (
           <div className="w-full flex flex-col gap-3">
@@ -151,9 +69,7 @@ const DistribusiSoalTable = () => {
       accessorKey: "distribusiSoal",
       header: "Distribusi Soal",
       cell: ({ row }) => {
-        const distribusiSoal = row.original.kategoriId.map(
-          (item) => item.idKategori
-        );
+        const distribusiSoal = row.original.kategori_id.map((item) => item.id);
         return (
           <div className="w-full flex flex-col gap-3">
             {distribusiSoal.map((item) => {
@@ -167,8 +83,8 @@ const DistribusiSoalTable = () => {
       accessorKey: "bobotBenar",
       header: "Bobot Nilai Benar",
       cell: ({ row }) => {
-        const bobotBenar = row.original.kategoriId.map(
-          (item) => item.bobotBenar
+        const bobotBenar = row.original.kategori_id.map(
+          (item) => item.bobot_benar
         );
         return (
           <div className="w-full flex flex-col gap-3">
@@ -183,8 +99,8 @@ const DistribusiSoalTable = () => {
       accessorKey: "bobotSalah",
       header: "Bobot Nilai Salah",
       cell: ({ row }) => {
-        const bobotSalah = row.original.kategoriId.map(
-          (item) => item.bobotSalah
+        const bobotSalah = row.original.kategori_id.map(
+          (item) => item.bobot_salah
         );
         return (
           <div className="w-full flex flex-col gap-3">
@@ -199,8 +115,8 @@ const DistribusiSoalTable = () => {
       accessorKey: "tidakMenjawab",
       header: "Tidak Menjawab",
       cell: ({ row }) => {
-        const tidakMenjawab = row.original.kategoriId.map(
-          (item) => item.tidakMenjawab
+        const tidakMenjawab = row.original.kategori_id.map(
+          (item) => item.tidak_menjawab
         );
         return (
           <div className="w-full flex flex-col gap-3">
@@ -249,7 +165,7 @@ const DistribusiSoalTable = () => {
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={distribusiSoalData}
+        data={data || []}
         columns={columns}
         pagination={{
           pageSize: 10,

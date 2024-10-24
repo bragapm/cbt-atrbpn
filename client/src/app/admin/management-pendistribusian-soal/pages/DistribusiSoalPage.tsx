@@ -1,10 +1,12 @@
 import TableActions from "@/components/table-actions";
-//import BankSoalTable from "../components/BankSoalTable";
 import { Button } from "@/components/ui/button";
 import { Cloud, Plus } from "lucide-react";
 import DistribusiSoalTable from "../components/DistribusiSoalTable";
+import useGetManagementDistribusiSoal from "../hooks/useGetManagementDistribusiSoal";
 
 const DistribusiSoalPage = () => {
+  const { data } = useGetManagementDistribusiSoal();
+
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions
@@ -22,7 +24,7 @@ const DistribusiSoalPage = () => {
           </div>
         }
       />
-      <DistribusiSoalTable />
+      <DistribusiSoalTable data={data?.data?.data} />
     </div>
   );
 };
