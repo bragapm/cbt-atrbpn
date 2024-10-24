@@ -31,8 +31,8 @@
       },
       {
         "type": "endpoint",
-        "name": "user-tests",
-        "source": "src/user-tests/index.js"
+        "name": "user-session-tests",
+        "source": "src/user-session-tests/index.js"
       }
     ],
     "host": "10.8.2"
