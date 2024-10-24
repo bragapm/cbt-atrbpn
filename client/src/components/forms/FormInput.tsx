@@ -1,38 +1,39 @@
-import { useField, useFormikContext } from "formik";
 import { FC } from "react";
+import { useFormContext, Controller } from "react-hook-form";
 import { Input, InputProps } from "../ui/input";
 
-export type FormInputProps = InputProps;
+export type FormInputProps = InputProps & {
+  label?: string;
+};
 
 export const FormInput: FC<FormInputProps> = ({
   name,
   type = "text",
+  label,
   ...props
 }) => {
-  const { handleBlur } = useFormikContext();
-  const [field, meta, helpers] = useField({ name });
-  const { setValue } = helpers;
-
-  let error = "";
-
-  if (!meta.touched && meta.initialError) {
-    if (meta.initialValue === meta.value) {
-      error = meta.initialError;
-    }
-  }
-  if (meta.touched && meta.error) {
-    error = meta.error;
-  }
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
-    <Input
-      name={name}
-      value={field.value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={handleBlur(name)}
-      error={error}
-      type={type}
-      {...props}
-    />
+    <div className="w-full border border-gray-400 py-1 px-3 rounded-xl">
+      {label && <label className="text-xs text-gray-500 ">{label}</label>}
+
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Input
+            {...field}
+            type={type}
+            className="w-full bg-transparent focus:outline-none border-none  focus:border-none focus-visible:ring-0 h-[24px] p-0 shadow-none"
+            error={errors[name]?.message?.toString() || ""}
+            {...props}
+          />
+        )}
+      />
+    </div>
   );
 };
