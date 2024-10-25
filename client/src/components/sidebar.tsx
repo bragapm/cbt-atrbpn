@@ -1,4 +1,12 @@
-import { FileCheck, FileText, Home, PenTool, User, Users } from "lucide-react";
+import {
+  FileCheck,
+  FileText,
+  Home,
+  Info,
+  PenTool,
+  User,
+  Users,
+} from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -108,6 +116,11 @@ export function Sidebar() {
             icon: <FileCheck size={18} />,
             label: "Management Hasil Ujian",
             href: "/hasil-ujian",
+          },
+          {
+            icon: <Info size={18} />,
+            label: "Management Tata Tertib",
+            href: "/tatib",
           },
         ],
       },
