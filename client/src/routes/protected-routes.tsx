@@ -15,6 +15,7 @@ import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/Mana
 import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
+import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 
 export const protectedRoutes = [
   {
@@ -68,6 +69,10 @@ export const protectedRoutes = [
       {
         path: "peserta-cbt/import",
         element: <ImportPesertaPage />,
+      },
+      {
+        path: "hasil-ujian",
+        element: <ManagementHasilUjianPage />,
       },
     ],
   },
