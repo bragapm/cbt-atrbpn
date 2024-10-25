@@ -17,6 +17,7 @@ import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesert
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
 import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
+import TatibPages from "@/app/admin/management-tatib/pages/TatibPages";
 
 export const protectedRoutes = [
   {
@@ -78,6 +79,10 @@ export const protectedRoutes = [
       {
         path: "hasil-ujian",
         element: <ManagementHasilUjianPage />,
+      },
+      {
+        path: "tatib",
+        element: <TatibPages />,
       },
     ],
   },
