@@ -1,54 +1,46 @@
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
-type BankSoal = {
-  idSoal: string;
-  namaSoal: string;
-  kategoriSoal: "sulit" | "mudah" | "sangat mudah";
-  materiSoal: string;
+type HasilAkhirUjianPeserta = {
+  idPeserta: string;
+  namaPeserta: string;
+  skor: number;
 };
 
-const BankSoalTable = () => {
+export const DataHasilAkhirUjianPesertaTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const navigate = useNavigate();
 
-  const bankSoalData: BankSoal[] = [
+  const hasilUjianDummy: HasilAkhirUjianPeserta[] = [
     {
-      idSoal: "728ed52f",
-      namaSoal: "Matematika Dasar",
-      kategoriSoal: "sulit",
-      materiSoal: "Persamaan Linear",
+      idPeserta: "ID3211820001",
+      namaPeserta: "Ahmad Ansorudin",
+      skor: 90,
     },
     {
-      idSoal: "489e1d42",
-      namaSoal: "Bahasa Inggris",
-      kategoriSoal: "mudah",
-      materiSoal: "Grammar",
+      idPeserta: "ID3211820001",
+      namaPeserta: "Ahmad Ansorudin",
+      skor: 100,
     },
     {
-      idSoal: "9b1d81a6",
-      namaSoal: "Ilmu Pengetahuan Alam",
-      kategoriSoal: "sangat mudah",
-      materiSoal: "Sistem Tata Surya",
+      idPeserta: "ID3211820001",
+      namaPeserta: "Ahmad Ansorudin",
+      skor: 80,
+    },
+    {
+      idPeserta: "ID3211820001",
+      namaPeserta: "Ahmad Ansorudin",
+      skor: 70,
     },
   ];
 
-  const columns: ColumnDef<BankSoal>[] = [
+  const columns: ColumnDef<HasilAkhirUjianPeserta>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -69,21 +61,16 @@ const BankSoalTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "namaSoal",
-      header: "Nama Soal",
+      accessorKey: "idPeserta",
+      header: "ID Peseta",
     },
     {
-      accessorKey: "kategoriSoal",
-      header: "Kategori Soal",
-      cell: ({ row }) => {
-        const kategori = row.original.kategoriSoal;
-
-        return <Badge variant="outline">{kategori}</Badge>;
-      },
+      accessorKey: "namaPeserta",
+      header: "Nama Peserta",
     },
     {
-      accessorKey: "materiSoal",
-      header: "Materi Soal",
+      accessorKey: "skor",
+      header: "Skor",
     },
     {
       id: "actions",
@@ -97,19 +84,7 @@ const BankSoalTable = () => {
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/edit")}>
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/preview")}>
-                Preview
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),
       enableSorting: false,
@@ -122,7 +97,7 @@ const BankSoalTable = () => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Soal berhasil dihapus"
+        description="Peserta berhasil dihapus"
       />
       <DeleteDialogConfirm
         isOpen={isOpenDeleteConfirm}
@@ -132,10 +107,10 @@ const BankSoalTable = () => {
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
-        description="Apakah anda yakin ingin menghapus soal ini ?"
+        description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
-        data={bankSoalData}
+        data={hasilUjianDummy}
         columns={columns}
         pagination={{
           pageSize: 10,
@@ -147,5 +122,3 @@ const BankSoalTable = () => {
     </>
   );
 };
-
-export default BankSoalTable;

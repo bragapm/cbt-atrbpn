@@ -1,42 +1,47 @@
 import TableActions from "@/components/table-actions";
-import BankSoalTable from "../components/BankSoalTable";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
+import PesertaCBTTable from "../components/PesertaTable";
 import { useNavigate } from "react-router-dom";
 
-const BankSoalPages = () => {
+export const ManagementPesertaList = () => {
   const navigate = useNavigate();
-
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions
-        title="Daftar Soal"
+        title="Data Peserta CBT"
         description="Data ditampilkan sesuai dengan filter"
         actions={
           <div className="flex gap-2">
             <Button
               variant="actions"
               size="actions"
-              startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/import")}
+              startContent={<Upload size="14" />}
             >
-              Import Soal
+              Export Data Peserta
             </Button>
 
             <Button
               variant="actions"
               size="actions"
-              startContent={<Plus />}
-              onClick={() => navigate("/bank-soal/create")}
+              startContent={<Upload size="14" />}
+              onClick={() => navigate("/peserta-cbt/import")}
             >
-              Tambah Soal
+              Import Data Peserta
+            </Button>
+
+            <Button
+              onClick={() => navigate("/peserta-cbt/create")}
+              variant="actions"
+              size="actions"
+              startContent={<Plus />}
+            >
+              Tambah Peserta
             </Button>
           </div>
         }
       />
-      <BankSoalTable />
+      <PesertaCBTTable />
     </div>
   );
 };
-
-export default BankSoalPages;

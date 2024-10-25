@@ -11,7 +11,11 @@ import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
 import AdminLayout from "@/layouts/AdminLayout";
 import ExamLayout from "@/layouts/ExamLayout";
 import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
-import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
+import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/ManagementPesertaList";
+import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
+import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
+import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
+import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 
 export const protectedRoutes = [
   {
@@ -51,8 +55,24 @@ export const protectedRoutes = [
         element: <UjianCreatePages />,
       },
       {
-        path: "pendistribusian-soal",
-        element: <DistribusiSoalPage />,
+        path: "peserta-cbt",
+        element: <ManagementPesertaList />,
+      },
+      {
+        path: "peserta-cbt/create",
+        element: <CreatePesertaPage />,
+      },
+      {
+        path: "peserta-cbt/edit/:pesertaId",
+        element: <EditPesertaPage />,
+      },
+      {
+        path: "peserta-cbt/import",
+        element: <ImportPesertaPage />,
+      },
+      {
+        path: "hasil-ujian",
+        element: <ManagementHasilUjianPage />,
       },
     ],
   },
