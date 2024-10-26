@@ -1,36 +1,19 @@
 import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseResponse } from "@/types/base-response";
+import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { useQuery } from "react-query";
-
-export type IQuestion = {
-  id: number;
-  status: string;
-  sort: number | null;
-  user_created: string | null;
-  date_created: string;
-  user_updated: string | null;
-  date_updated: string | null;
-  category: string | null;
-  random_options: boolean;
-  is_required: boolean;
-  difficulty: string | null;
-  question_text: string;
-  question: string | null;
-  random_question: string | null;
-  materi: string | null;
-};
 
 const useGetManagementBankSoal = () => {
   const service = new DirectusInterceptor();
 
   return useQuery({
     queryKey: ["management-bank-soal"],
-    queryFn: () => {
-      const response = service.sendGetRequest<IBaseResponse<IQuestion[]>>(
+    queryFn: async () => {
+      const response = await service.sendGetRequest<IBaseResponse<IBankSoal[]>>(
         "/items/questions_bank",
+        { fields: ["*.*"] },
       );
-
-      return response;
+      return response?.data;
     },
   });
 };

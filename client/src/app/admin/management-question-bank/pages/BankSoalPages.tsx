@@ -37,7 +37,7 @@ const BankSoalPages = () => {
           </div>
         }
       />
-      <BankSoalTable data={data?.data?.data} />
+      <BankSoalTable data={data?.data} />
     </div>
   );
 };
