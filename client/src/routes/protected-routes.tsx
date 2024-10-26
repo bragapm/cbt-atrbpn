@@ -16,6 +16,7 @@ import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePe
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
+import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 
 export const protectedRoutes = [
   {
@@ -73,6 +74,10 @@ export const protectedRoutes = [
       {
         path: "pendistribusian-soal",
         element: <DistribusiSoalPage />,
+      },
+      {
+        path: "hasil-ujian",
+        element: <ManagementHasilUjianPage />,
       },
     ],
   },
