@@ -2,6 +2,7 @@ import BadgeCategory from "@/components/badge-category";
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
+import { PaginationTableProps } from "@/components/table-pagination";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -17,10 +18,15 @@ import { useNavigate } from "react-router-dom";
 
 type IBankSoalTable = {
   data: IBankSoal[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
 };
 
-const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const BankSoalTable: React.FC<IBankSoalTable> = ({
+  data,
+  isLoading,
+  pagination,
+}) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
@@ -117,7 +123,6 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
@@ -126,12 +131,8 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );
