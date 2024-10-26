@@ -15,6 +15,7 @@ import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/Mana
 import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
+import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
 
 export const protectedRoutes = [
   {
@@ -68,6 +69,10 @@ export const protectedRoutes = [
       {
         path: "peserta-cbt/import",
         element: <ImportPesertaPage />,
+      },
+      {
+        path: "pendistribusian-soal",
+        element: <DistribusiSoalPage />,
       },
     ],
   },
