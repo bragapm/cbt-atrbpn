@@ -1,26 +1,20 @@
 import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseResponse } from "@/types/base-response";
 import { useQuery } from "react-query";
-export type IUjian = {
-  id: number;
-  status: string | null;
-  name: string;
-  start_time: string;
-  end_time: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-  PIN: number | null;
-};
-const useGetManagementUjian = () => {
+import { IUjian } from "@/types/collection/ujian.type";
+import { IDirectusQueryParams } from "@/types/directus.type";
+
+const useGetManagementUjian = ({ page, limit }: IDirectusQueryParams) => {
   const service = new DirectusInterceptor();
+
   return useQuery({
-    queryKey: ["management-ujian"],
-    queryFn: () => {
-      const response = service.sendGetRequest<IBaseResponse<IUjian[]>>(
-        "/items/session_test"
+    queryKey: ["management-ujian", page, limit],
+    queryFn: async () => {
+      const response = await service.sendGetRequest<IBaseResponse<IUjian[]>>(
+        "/items/session_test",
+        { fields: ["*.*"], meta: "*", page, limit }
       );
-      return response;
+      return response?.data;
     },
   });
 };

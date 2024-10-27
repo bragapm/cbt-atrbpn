@@ -8,15 +8,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import UjianDropdown from "./UjianDropdown";
-import { IUjian } from "../hooks/useGetManagementUjian";
-import { useNavigate } from "react-router-dom";
+import { IUjian } from "@/types/collection/ujian.type";
+// import { useNavigate } from "react-router-dom";
+import { PaginationTableProps } from "@/components/table-pagination";
 
 type IUjianTable = {
   data: IUjian[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
 };
 
-const UjianTable: React.FC<IUjianTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   //const navigate = useNavigate();
@@ -67,6 +69,10 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
     {
       accessorKey: "sesiUjian",
       header: "Sesi Ujian",
+      cell: ({ row }) => {
+        const sesiUjian = row.original.id;
+        return sesiUjian;
+      },
     },
     {
       id: "actions",
@@ -113,12 +119,8 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );
