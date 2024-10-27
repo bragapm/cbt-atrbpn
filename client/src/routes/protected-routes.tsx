@@ -84,6 +84,10 @@ export const protectedRoutes = [
         path: "tatib",
         element: <TatibPages />,
       },
+      {
+        path: "pendistribusian-soal",
+        element: <DistribusiSoalPage />,
+      },
     ],
   },
   {
