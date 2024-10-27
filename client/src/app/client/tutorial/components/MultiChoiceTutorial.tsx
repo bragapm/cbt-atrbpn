@@ -22,7 +22,7 @@ const MultiChoiceTutorial = () => {
         >
           <div
             className={`${
-              idx === 4 ? "bg-[#2A6083]" : "bg-primary"
+              idx === 4 ? "bg-[#2A6083]" : "bg-primary "
             } w-6 h-6 text-white rounded-lg flex text-x`}
           >
             <p className="m-auto">{el}</p>

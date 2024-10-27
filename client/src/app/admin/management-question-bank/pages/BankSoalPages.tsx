@@ -4,11 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Cloud, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
+import { useState } from "react";
+
+const limit: number = 10;
 
 const BankSoalPages = () => {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
 
-  const { data } = useGetManagementBankSoal();
+  const { data, isLoading } = useGetManagementBankSoal({
+    page: page,
+    limit: limit,
+  });
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
@@ -37,7 +44,16 @@ const BankSoalPages = () => {
           </div>
         }
       />
-      <BankSoalTable data={data?.data?.data} />
+      <BankSoalTable
+        data={data?.data}
+        isLoading={isLoading}
+        pagination={{
+          pageSize: limit,
+          totalItems: data?.meta.total_count,
+          onPageChange: (page) => setPage(page),
+          currentPage: page,
+        }}
+      />
     </div>
   );
 };

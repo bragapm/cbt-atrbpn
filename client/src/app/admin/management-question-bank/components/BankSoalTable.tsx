@@ -1,31 +1,37 @@
+import BadgeCategory from "@/components/badge-category";
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Badge } from "@/components/ui/badge";
+import { PaginationTableProps } from "@/components/table-pagination";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
+  DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { IQuestion } from "../hooks/useGetManagementBankSoal";
 
 type IBankSoalTable = {
-  data: IQuestion[];
+  data: IBankSoal[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
 };
 
-const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const BankSoalTable: React.FC<IBankSoalTable> = ({
+  data,
+  isLoading,
+  pagination,
+}) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
-  const columns: ColumnDef<IQuestion>[] = [
+  const columns: ColumnDef<IBankSoal>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -46,27 +52,32 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "namaSoal",
-      header: "Nama Soal",
+      accessorKey: "id",
+      header: "ID Soal",
+    },
+    {
+      accessorKey: "question",
+      header: "Soal",
       cell: ({ row }) => {
-        const namaSoal = row.original.question_text;
-        return namaSoal;
+        return (
+          <div dangerouslySetInnerHTML={{ __html: row.original.question }} />
+        );
       },
     },
     {
-      accessorKey: "kategoriSoal",
+      accessorKey: "category",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategori = row.original.category;
-        return <Badge variant="outline">{kategori}</Badge>;
+        const kategori = row.original.kategori_id.nama_kategori;
+
+        return <BadgeCategory name={kategori} />;
       },
     },
     {
       accessorKey: "materiSoal",
       header: "Materi Soal",
       cell: ({ row }) => {
-        const materi = row.original.materi;
-        return <Badge variant="outline">{materi}</Badge>;
+        return <p>{row.original.materi_id.materi}</p>;
       },
     },
     {
@@ -112,7 +123,6 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
@@ -121,12 +131,8 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({ data }) => {
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );

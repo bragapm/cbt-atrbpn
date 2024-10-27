@@ -12,7 +12,7 @@ const LoginParticipant: React.FC = () => {
 
   const TestRule = ({ check, setChecked }) => {
     return (
-      <div className="w-full h-full flex gap-4 flex-col">
+      <div className="w-full h-full flex gap-4 flex-col ">
         <div className="flex gap-2 items-center justify-between ">
           <img src="/images/logo.svg" alt="logo" />
           <p className="text-xl text-light font-semibold">Peraturan Ujian</p>

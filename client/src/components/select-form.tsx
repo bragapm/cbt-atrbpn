@@ -6,26 +6,46 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import React from "react";
+import { Skeleton } from "./ui/skeleton";
 
 type ISelectForm = {
   title: string;
+  isLoading?: boolean;
+  data: {
+    value: string;
+    label: string;
+  }[];
+  value: string;
+  onChange: (value: string) => void;
 };
 
-const SelectForm: React.FC<ISelectForm> = ({ title }) => {
+const SelectForm: React.FC<ISelectForm> = ({
+  title,
+  isLoading,
+  data,
+  value,
+  onChange,
+}) => {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <div className="flex flex-col items-start gap-1">
-          <span className="text-xs text-gray-500">{title}</span>
-          <SelectValue placeholder="Pilihan" />
-        </div>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
-        <SelectItem value="system">System</SelectItem>
-      </SelectContent>
-    </Select>
+    <>
+      {isLoading ? (
+        <Skeleton className="w-[180px] h-full rounded-2xl" />
+      ) : (
+        <Select value={value} onValueChange={onChange}>
+          <SelectTrigger className="w-[180px]">
+            <div className="flex flex-col items-start gap-1">
+              <span className="text-xs text-gray-500">{title}</span>
+              <SelectValue placeholder="Pilihan" />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            {data?.map((item) => {
+              return <SelectItem value={item.value}>{item.label}</SelectItem>;
+            })}
+          </SelectContent>
+        </Select>
+      )}
+    </>
   );
 };
 
