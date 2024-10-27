@@ -18,3 +18,11 @@ export type IBankSoal = {
   random_question: string | null;
   materi_id: IMateri | null;
 };
+
+export type IBankSoalRequest = {
+  kategori_id: string | null;
+  random_options: string;
+  random_question: string;
+  materi_id: string | null;
+  question: string | null;
+};
