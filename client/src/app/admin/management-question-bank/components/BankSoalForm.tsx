@@ -26,37 +26,6 @@ const booleanData = [
   },
 ];
 
-const choices = [
-  {
-    question_id: "",
-    option_text: "",
-    is_correct: false,
-    order: 1,
-    option_image: null,
-  },
-  {
-    question_id: "",
-    option_text: "",
-    is_correct: false,
-    order: 2,
-    option_image: null,
-  },
-  {
-    question_id: "",
-    option_text: "",
-    is_correct: false,
-    order: 3,
-    option_image: null,
-  },
-  {
-    question_id: "",
-    option_text: "",
-    is_correct: false,
-    order: 4,
-    option_image: null,
-  },
-];
-
 const BankSoalForm: React.FC = () => {
   const { data: dataMateri, isLoading: isLoadingMateri } = useGetMateriSoal();
   const { data: dataKategori, isLoading: isLoadingKategori } =
