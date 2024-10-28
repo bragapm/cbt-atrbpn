@@ -24,11 +24,15 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination: PaginationTableProps;
+  labelButtonAction?: string;
+  buttonAction?: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  buttonAction,
+  labelButtonAction = "Load More Data",
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const table = useReactTable({
@@ -54,7 +58,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 );
@@ -99,8 +103,9 @@ export function DataTable<TData, TValue>({
             variant="actions"
             size="actions"
             startContent={<RefreshCw className="w-5 h-5" />}
+            onClick={buttonAction}
           >
-            Load More Data
+            {labelButtonAction}
           </Button>
         </div>
       </div>

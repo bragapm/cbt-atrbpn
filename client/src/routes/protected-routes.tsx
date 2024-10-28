@@ -74,6 +74,10 @@ export const protectedRoutes = [
         path: "hasil-ujian",
         element: <ManagementHasilUjianPage />,
       },
+      {
+        path: "distribusi-soal/create",
+        element: <ManagementHasilUjianPage />,
+      },
     ],
   },
   {

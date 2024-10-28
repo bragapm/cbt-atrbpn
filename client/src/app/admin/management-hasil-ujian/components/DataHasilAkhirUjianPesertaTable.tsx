@@ -118,6 +118,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        labelButtonAction="Lihat Hasil Ujian"
       />
     </>
   );
