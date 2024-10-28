@@ -1,4 +1,6 @@
+import { FOLDER_KEY } from "@/services/constants/folder-key";
 import { DirectusInterceptor } from "@/services/directus-interceptors";
+import DirectusUpload from "@/services/directus-upload";
 import { IBankSoalRequest } from "@/types/collection/bank-soal.type";
 import { IBaseErrorResponse } from "@/types/errors";
 import { AxiosError } from "axios";
@@ -15,9 +17,20 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
   return useMutation({
     mutationFn: async (data: IBankSoalRequest) => {
+      const file = data.image as File;
+      const fileResponse = await DirectusUpload({
+        file,
+        folderKey: FOLDER_KEY.question_image,
+      });
+
+      const insertImage = {
+        ...data,
+        image: fileResponse.filename_disk,
+      };
+
       const response = await service.sendPostRequest(
         "/items/questions_bank",
-        data,
+        insertImage,
       );
 
       return response;

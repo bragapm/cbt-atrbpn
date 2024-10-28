@@ -25,4 +25,5 @@ export type IBankSoalRequest = {
   random_question: string;
   materi_id: string | null;
   question: string | null;
+  image: string | File | null;
 };

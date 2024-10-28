@@ -36,7 +36,7 @@ const BankSoalForm: React.FC = () => {
   return (
     <Form {...form}>
       <div className="w-full flex gap-3 flex-col pb-6">
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <FormField
             control={form.control}
             name="materi_id"
@@ -120,7 +120,18 @@ const BankSoalForm: React.FC = () => {
             )}
           />
 
-          <UploadFile />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem className="w-full h-full">
+                <FormControl className="w-full h-full">
+                  <UploadFile value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="w-full h-[250px]">
