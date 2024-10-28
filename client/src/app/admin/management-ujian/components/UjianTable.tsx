@@ -1,25 +1,56 @@
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
-import UjianDropdown from "./UjianDropdown";
-import { IUjian } from "../hooks/useGetManagementUjian";
 import { useNavigate } from "react-router-dom";
 
-type IUjianTable = {
-  data: IUjian[];
+type IUjian = {
+  idUjian: string;
+  namaUjian: string;
+  tanggalUjian: string;
+  sesiUjian: string;
+  pesertaUjian: string;
 };
 
-const UjianTable: React.FC<IUjianTable> = ({ data }) => {
+const UjianTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const UjianData: IUjian[] = [
+    {
+      idUjian: "728ed52f",
+      namaUjian: "Tes Kemampuan Dasar 1",
+      tanggalUjian: "01/01/2025",
+      sesiUjian: "1",
+      pesertaUjian: "Peserta 1",
+    },
+    {
+      idUjian: "489e1d42",
+      namaUjian: "Tes Kemampuan Dasar 2",
+      tanggalUjian: "02/02/2025",
+      sesiUjian: "2",
+      pesertaUjian: "Peserta 2",
+    },
+    {
+      idUjian: "9b1d81a6",
+      namaUjian: "Tes Kemampuan Dasar 3",
+      tanggalUjian: "03/03/2025",
+      sesiUjian: "3",
+      pesertaUjian: "Peserta 3",
+    },
+  ];
 
   const columns: ColumnDef<IUjian>[] = [
     {
@@ -44,25 +75,10 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
     {
       accessorKey: "namaUjian",
       header: "Nama Ujian",
-      cell: ({ row }) => {
-        const namaUjian = row.original.name;
-        return namaUjian;
-      },
     },
     {
       accessorKey: "tanggalUjian",
       header: "Tanggal Ujian",
-      cell: ({ row }) => {
-        const tanggalUjian = row.original.start_time;
-        const date = new Date(tanggalUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
-
-        return formattedDate;
-      },
     },
     {
       accessorKey: "sesiUjian",
@@ -71,7 +87,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
+      cell: () => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
@@ -84,7 +100,14 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
-            <UjianDropdown ujianData={[row.original]} />
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem onClick={() => navigate("/bank-soal/edit")}>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/bank-soal/preview")}>
+                Preview
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       ),
@@ -98,7 +121,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Ujian berhasil dihapus"
+        description="Soal berhasil dihapus"
       />
       <DeleteDialogConfirm
         isOpen={isOpenDeleteConfirm}
@@ -108,10 +131,10 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
-        description="Apakah anda yakin ingin menghapus sesi ini ?"
+        description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={data || []}
+        data={UjianData}
         columns={columns}
         pagination={{
           pageSize: 10,
