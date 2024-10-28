@@ -23,6 +23,21 @@
         "type": "endpoint",
         "name": "hello",
         "source": "src/hello/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "coupon",
+        "source": "src/coupon/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-session-tests",
+        "source": "src/user-session-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-tests",
+        "source": "src/user-tests/index.js"
       }
     ],
     "host": "10.8.2"
@@ -35,7 +50,10 @@
     "add": "directus-extension add"
   },
   "dependencies": {
-    "@directus/extensions-sdk": "12.1.0"
+    "@directus/exceptions": "^10.0.3",
+    "@directus/extensions-sdk": "12.1.0",
+    "@directus/sdk": "^17.0.2",
+    "uuid": "7"
   },
   "devDependencies": {
     "directus": "10.8.2"
