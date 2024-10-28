@@ -10,7 +10,7 @@ import {
 import UploadFile from "@/components/upload-file";
 import { IBankSoalRequest } from "@/types/collection/bank-soal.type";
 import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import useGetKategoriSoal from "../hooks/useGetKategoriSoal";
 import useGetMateriSoal from "../hooks/useGetMateriSoal";
 import BankSoalOptionForm from "./BankSoalOptionForm";
@@ -66,6 +66,12 @@ const BankSoalForm: React.FC = () => {
   const handleOnChangeOption = (value: string, index: number) => {
     const newValue = [...form.getValues("choice")];
     newValue[index].option_text = value;
+    form.setValue("choice", newValue);
+  };
+
+  const handleOnSelectChange = (value: string, index: number) => {
+    const newValue = [...form.getValues("choice")];
+    newValue[index].is_correct = value === "true" ? true : false;
     form.setValue("choice", newValue);
   };
 
@@ -200,6 +206,10 @@ const BankSoalForm: React.FC = () => {
                       <FormItem className="w-full h-full">
                         <FormControl className="h-full w-full">
                           <BankSoalOptionForm
+                            selectValue={item.is_correct ? "true" : "false"}
+                            onChangeSelectValue={(value: string) =>
+                              handleOnSelectChange(value, index)
+                            }
                             title={`Pilihan ${index + 1}`}
                             value={item.option_text}
                             onChange={(value: string) =>

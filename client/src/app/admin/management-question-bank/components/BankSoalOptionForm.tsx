@@ -6,12 +6,27 @@ type IBankSoalOptionForm = {
   title: string;
   value: string;
   onChange: (value: string) => void;
+  selectValue: string;
+  onChangeSelectValue: (value: string) => void;
 };
+
+const booleanData = [
+  {
+    value: "true",
+    label: "Benar",
+  },
+  {
+    value: "false",
+    label: "Salah",
+  },
+];
 
 const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
   title,
   value,
   onChange,
+  selectValue,
+  onChangeSelectValue,
 }) => {
   return (
     <div className="flex flex-col gap-2 h-full">
@@ -25,7 +40,12 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
             onChange={(e) => onChange(e.target.value)}
           />
         </div>
-        <SelectForm title="Benar/Salah" />
+        <SelectForm
+          data={booleanData}
+          title="Benar/Salah"
+          onChange={onChangeSelectValue}
+          value={selectValue}
+        />
       </div>
     </div>
   );
