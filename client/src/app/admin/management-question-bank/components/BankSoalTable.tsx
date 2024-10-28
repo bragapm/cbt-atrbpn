@@ -1,54 +1,37 @@
+import BadgeCategory from "@/components/badge-category";
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Badge } from "@/components/ui/badge";
+import { PaginationTableProps } from "@/components/table-pagination";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
+  DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-type BankSoal = {
-  idSoal: string;
-  namaSoal: string;
-  kategoriSoal: "sulit" | "mudah" | "sangat mudah";
-  materiSoal: string;
+type IBankSoalTable = {
+  data: IBankSoal[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
 };
 
-const BankSoalTable = () => {
-  const [page, setPage] = React.useState(1);
+const BankSoalTable: React.FC<IBankSoalTable> = ({
+  data,
+  isLoading,
+  pagination,
+}) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
-  const bankSoalData: BankSoal[] = [
-    {
-      idSoal: "728ed52f",
-      namaSoal: "Matematika Dasar",
-      kategoriSoal: "sulit",
-      materiSoal: "Persamaan Linear",
-    },
-    {
-      idSoal: "489e1d42",
-      namaSoal: "Bahasa Inggris",
-      kategoriSoal: "mudah",
-      materiSoal: "Grammar",
-    },
-    {
-      idSoal: "9b1d81a6",
-      namaSoal: "Ilmu Pengetahuan Alam",
-      kategoriSoal: "sangat mudah",
-      materiSoal: "Sistem Tata Surya",
-    },
-  ];
-
-  const columns: ColumnDef<BankSoal>[] = [
+  const columns: ColumnDef<IBankSoal>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -69,21 +52,33 @@ const BankSoalTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "namaSoal",
-      header: "Nama Soal",
+      accessorKey: "id",
+      header: "ID Soal",
     },
     {
-      accessorKey: "kategoriSoal",
+      accessorKey: "question",
+      header: "Soal",
+      cell: ({ row }) => {
+        return (
+          <div dangerouslySetInnerHTML={{ __html: row.original.question }} />
+        );
+      },
+    },
+    {
+      accessorKey: "category",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategori = row.original.kategoriSoal;
+        const kategori = row.original.kategori_id.nama_kategori;
 
-        return <Badge variant="outline">{kategori}</Badge>;
+        return <BadgeCategory name={kategori} />;
       },
     },
     {
       accessorKey: "materiSoal",
       header: "Materi Soal",
+      cell: ({ row }) => {
+        return <p>{row.original.materi_id.materi}</p>;
+      },
     },
     {
       id: "actions",
@@ -128,21 +123,16 @@ const BankSoalTable = () => {
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
           setIsOpenDeleteConfirm(false);
           setIsShowSuccessDialog(true);
         }}
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={bankSoalData}
+        data={data}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );

@@ -13,7 +13,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const TatibPages: FC = () => {
   const [numPages, setNumPages] = useState<number>(1);
   const [file, setFile] = useState(null);
-
   const onDocumentLoadSuccess = (nextNumPages) => {
     setNumPages(nextNumPages);
   };

@@ -1,11 +1,11 @@
 import { Input } from "@/components/ui/input";
 import React from "react";
 
-type IUjianInputForm = {
+type IUjianPesertaInputForm = {
   title: string;
 };
 
-const UjianInputForm: React.FC<IUjianInputForm> = ({ title }) => {
+const UjianPesertaInputForm: React.FC<IUjianPesertaInputForm> = ({ title }) => {
   return (
     <div className="w-full border border-gray-400 py-1 px-2 rounded-xl flex flex-col">
       <p className="text-xs text-gray-500 ">{title}</p>
@@ -14,4 +14,4 @@ const UjianInputForm: React.FC<IUjianInputForm> = ({ title }) => {
   );
 };
 
-export default UjianInputForm;
+export default UjianPesertaInputForm;
