@@ -10,7 +10,7 @@ import {
 import UploadFile from "@/components/upload-file";
 import { IBankSoalRequest } from "@/types/collection/bank-soal.type";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import useGetKategoriSoal from "../hooks/useGetKategoriSoal";
 import useGetMateriSoal from "../hooks/useGetMateriSoal";
 import BankSoalOptionForm from "./BankSoalOptionForm";
@@ -61,9 +61,13 @@ const BankSoalForm: React.FC = () => {
   const { data: dataMateri, isLoading: isLoadingMateri } = useGetMateriSoal();
   const { data: dataKategori, isLoading: isLoadingKategori } =
     useGetKategoriSoal();
-
   const form = useFormContext<IBankSoalRequest>();
-  // const choices = form.getValues("choice");
+
+  const handleOnChangeOption = (value: string, index: number) => {
+    const newValue = [...form.getValues("choice")];
+    newValue[index].option_text = value;
+    form.setValue("choice", newValue);
+  };
 
   return (
     <Form {...form}>
@@ -185,26 +189,32 @@ const BankSoalForm: React.FC = () => {
         </div>
 
         <div className="w-full flex flex-col gap-2 mt-12">
-          {choices?.map((choice, index) => {
-            return (
-              <FormField
-                control={form.control}
-                name={"choice." + index + ".option_text"}
-                render={({ field }) => (
-                  <FormItem className="w-full h-full">
-                    <FormControl className="h-full w-full">
-                      <BankSoalOptionForm
-                        title={`Pilihan ${index + 1}`}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            );
-          })}
+          <FormField
+            control={form.control}
+            name="choice"
+            render={({ field }) => {
+              return (
+                <>
+                  {field.value.map((item, index) => {
+                    return (
+                      <FormItem className="w-full h-full">
+                        <FormControl className="h-full w-full">
+                          <BankSoalOptionForm
+                            title={`Pilihan ${index + 1}`}
+                            value={item.option_text}
+                            onChange={(value: string) =>
+                              handleOnChangeOption(value, index)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  })}
+                </>
+              );
+            }}
+          />
         </div>
       </div>
     </Form>

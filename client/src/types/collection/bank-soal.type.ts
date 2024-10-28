@@ -27,5 +27,5 @@ export type IBankSoalRequest = {
   materi_id: string | null;
   question: string | null;
   image: string | File | null;
-  choice: IQuestionChoiceRequest[] | null;
+  choice?: IQuestionChoiceRequest[] | null;
 };
