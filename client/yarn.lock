@@ -5325,6 +5325,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "zod@npm:^3.23.8":
   version: 3.23.8
   resolution: "zod@npm:3.23.8"
@@ -5332,6 +5333,8 @@ __metadata:
   languageName: node
   linkType: hard
 
+=======
+>>>>>>> f2283d78226ee9cda89a299f4688b9f39d909dae
 "zustand@npm:^5.0.0":
   version: 5.0.0
   resolution: "zustand@npm:5.0.0"

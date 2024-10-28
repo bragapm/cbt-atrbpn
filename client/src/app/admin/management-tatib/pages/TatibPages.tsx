@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
-// import { Document, Page, pdfjs } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   "npm:pdfjs-dist/build/pdf.worker.min.mjs",
-//   import.meta.url
-// ).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "npm:pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 const TatibPages: FC = () => {
   const [numPages, setNumPages] = useState<number>(1);
@@ -59,11 +59,11 @@ const TatibPages: FC = () => {
           </Button>
         </CardFooter>
       </Card>
-      {/* {file && (
+      {file && (
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
           <Page pageNumber={numPages} />
         </Document>
-      )} */}
+      )}
     </div>
   );
 };
