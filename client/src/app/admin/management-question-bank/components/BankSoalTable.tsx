@@ -15,6 +15,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";
 
 type IBankSoalTable = {
   data: IBankSoal[];
@@ -28,8 +29,18 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
   pagination,
 }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
+  const [id, setId] = React.useState<string | number>("");
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeleteMutationBankSoal({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IBankSoal>[] = [
     {
@@ -83,12 +94,13 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -118,13 +130,14 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
         description="Soal berhasil dihapus"
+        onSubmit={() => navigate("/bank-soal")}
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
