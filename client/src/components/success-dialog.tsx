@@ -8,12 +8,14 @@ type DeleteDialogConfirmProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   description?: string;
+  onSubmit?: () => void;
 };
 
 const SuccessDialog: React.FC<DeleteDialogConfirmProps> = ({
   isOpen,
   onOpenChange,
   description,
+  onSubmit,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -25,7 +27,13 @@ const SuccessDialog: React.FC<DeleteDialogConfirmProps> = ({
         <p className="text-sm text-gray-500">{description}</p>
         <DialogFooter className="w-full">
           <div className="w-full flex gap-2">
-            <Button className="w-full h-12" onClick={() => onOpenChange(false)}>
+            <Button
+              className="w-full h-12"
+              onClick={() => {
+                onOpenChange(false);
+                onSubmit?.();
+              }}
+            >
               Kembali
             </Button>
           </div>
