@@ -26,12 +26,44 @@ const booleanData = [
   },
 ];
 
+const choices = [
+  {
+    question_id: "",
+    option_text: "",
+    is_correct: false,
+    order: 1,
+    option_image: null,
+  },
+  {
+    question_id: "",
+    option_text: "",
+    is_correct: false,
+    order: 2,
+    option_image: null,
+  },
+  {
+    question_id: "",
+    option_text: "",
+    is_correct: false,
+    order: 3,
+    option_image: null,
+  },
+  {
+    question_id: "",
+    option_text: "",
+    is_correct: false,
+    order: 4,
+    option_image: null,
+  },
+];
+
 const BankSoalForm: React.FC = () => {
   const { data: dataMateri, isLoading: isLoadingMateri } = useGetMateriSoal();
   const { data: dataKategori, isLoading: isLoadingKategori } =
     useGetKategoriSoal();
 
   const form = useFormContext<IBankSoalRequest>();
+  // const choices = form.getValues("choice");
 
   return (
     <Form {...form}>
@@ -153,10 +185,26 @@ const BankSoalForm: React.FC = () => {
         </div>
 
         <div className="w-full flex flex-col gap-2 mt-12">
-          <BankSoalOptionForm title="Pilihan A" />
-          <BankSoalOptionForm title="Pilihan B" />
-          <BankSoalOptionForm title="Pilihan C" />
-          <BankSoalOptionForm title="Pilihan D" />
+          {choices?.map((choice, index) => {
+            return (
+              <FormField
+                control={form.control}
+                name={"choice." + index + ".option_text"}
+                render={({ field }) => (
+                  <FormItem className="w-full h-full">
+                    <FormControl className="h-full w-full">
+                      <BankSoalOptionForm
+                        title={`Pilihan ${index + 1}`}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            );
+          })}
         </div>
       </div>
     </Form>

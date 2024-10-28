@@ -11,7 +11,40 @@ import { useNavigate } from "react-router-dom";
 import SuccessDialog from "@/components/success-dialog";
 
 const BankSoalCreatePage: React.FC = () => {
-  const form = useForm();
+  const form = useForm<IBankSoalRequest>({
+    defaultValues: {
+      choice: [
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 1,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 2,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 3,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 4,
+          option_image: null,
+        },
+      ],
+    },
+  });
   const [confirmationDialog, setConfirmationDialog] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigation = useNavigate();

@@ -30,7 +30,7 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
       const response = await service.sendPostRequest(
         "/items/questions_bank",
-        insertImage,
+        insertImage
       );
 
       return response;
