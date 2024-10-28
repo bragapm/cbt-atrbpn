@@ -19,13 +19,6 @@ import PinPage from "@/app/client/test-cbt/pages/PinPage";
 import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
 import AdminLayout from "@/layouts/AdminLayout";
 import ExamLayout from "@/layouts/ExamLayout";
-import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
-import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/ManagementPesertaList";
-import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
-import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
-import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
-import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
-import TatibPages from "@/app/admin/management-tatib/pages/TatibPages";
 
 export const protectedRoutes = [
   {

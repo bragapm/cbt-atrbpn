@@ -3,7 +3,7 @@ import BankSoalTable from "../components/BankSoalTable";
 import { Button } from "@/components/ui/button";
 import { Cloud, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
+// import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
 import { useState } from "react";
 
 const limit: number = 10;
