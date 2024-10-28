@@ -1,11 +1,13 @@
 import TableActions from "@/components/table-actions";
 import UjianTable from "../components/UjianTable";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useGetManagementUjian from "../hooks/useGetManagementUjian";
 
 const UjianPages = () => {
   const navigate = useNavigate();
+  const { data } = useGetManagementUjian();
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
@@ -25,7 +27,7 @@ const UjianPages = () => {
           </div>
         }
       />
-      <UjianTable />
+      <UjianTable data={data?.data?.data} />
     </div>
   );
 };
