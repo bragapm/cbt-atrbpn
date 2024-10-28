@@ -1,19 +1,10 @@
+import { authMiddleware } from "../middleware/auth";
+
 export default (router, { services }) => {
   const { ItemsService } = services;
-  router.get("/", async (req, res) => {
+  router.get("/", authMiddleware, async (req, res) => {
     try {
-      // Check for Bearer Token Authorization
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new Error("Missing or invalid authorization token.");
-      }
-      const user = req.accountability.user; // Assuming accountability middleware handles token
-
-      if (!user) {
-        throw new Error("User is not authorized.");
-      }
-
-      // Service for user_session_test
+      const user = req.user;
       const userSessionService = new ItemsService("user_session_test", {
         schema: req.schema,
       });
@@ -53,21 +44,10 @@ export default (router, { services }) => {
     }
   });
 
-  router.post("/start", async (req, res) => {
+  router.post("/start", authMiddleware, async (req, res) => {
     try {
-      const { id } = req.body;
-
-      // Check for Bearer Token Authorization
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new Error("Missing or invalid authorization token.");
-      }
-      const user = req.accountability.user; // Assuming accountability middleware handles token
-
-      if (!user) {
-        throw new Error("User is not authorized.");
-      }
-
+      const { user_session_id } = req.body;
+      const user = req.user;
       // Service for user_session_test
       const userSessionService = new ItemsService("user_session_test", {
         schema: req.schema,
@@ -80,7 +60,14 @@ export default (router, { services }) => {
           user: user, // Ensure it belongs to the current user
           deleted_at: { _null: true }, // Ensure session is not deleted
         },
-        fields: ["id", "start_attempt_at", "problems"], // Retrieve necessary fields
+        fields: [
+          "id",
+          "start_attempt_at",
+          "session.start_time",
+          "end_time",
+          "session.start_attempt_at",
+          "problems",
+        ], // Retrieve necessary fields
       });
 
       // Check if the session test exists and is valid
@@ -109,6 +96,19 @@ export default (router, { services }) => {
         });
       }
 
+      if (session.start_attempt_at !== null) {
+        res.json({
+          status: "success",
+          data: {
+            session_test_id: session.id,
+            start_attempt_at: session.start_attempt_at,
+            problems: JSON.parse(session.problems),
+          },
+        });
+
+        return;
+      }
+
       await userSessionService.updateOne(session.id, {
         start_attempt_at: now,
         updated_at: now,
@@ -120,7 +120,7 @@ export default (router, { services }) => {
         data: {
           session_test_id: session.id,
           start_attempt_at: now,
-          problems: session.problems,
+          problems: JSON.parse(session.problems),
         },
       });
     } catch (error) {
@@ -129,6 +129,70 @@ export default (router, { services }) => {
         status: "error",
         message: new Error(error).message,
       });
+    }
+  });
+
+  router.post("/finish", authMiddleware, async (req, res) => {
+    const { user_session_id } = req.body; // Assumes user_session_id is provided in the request body
+
+    try {
+      const userTestService = new ItemsService("user_test", {
+        schema: req.schema,
+      });
+      const userSessionService = new ItemsService("user_session_test", {
+        schema: req.schema,
+      });
+
+      // Fetch all answers for the user session
+      const userAnswers = await userTestService.readByQuery({
+        filter: { user_session_id: user_session_id },
+        fields: ["score_category", "score"],
+      });
+
+      if (!userAnswers.length) {
+        return res.status(404).json({
+          status: "error",
+          message: "No answers found for this session",
+        });
+      }
+
+      // Calculate score summary
+      let correctAnswers = 0;
+      let incorrectAnswers = 0;
+      let unanswered = 0;
+      let totalScore = 0;
+
+      userAnswers.forEach((answer) => {
+        if (answer.score_category === 1) correctAnswers += 1;
+        else if (answer.score_category === -1) incorrectAnswers += 1;
+        else unanswered += 1;
+
+        totalScore += answer.score;
+      });
+
+      // Update `end_attempt_at` in `user_session_test`
+      const endAttemptAt = new Date();
+      await userSessionService.updateOne(user_session_id, {
+        end_attempt_at: endAttemptAt,
+        score: totalScore,
+        score_summary: JSON.stringify({
+          correct_answers: correctAnswers,
+          wrong_answers: incorrectAnswers,
+          not_answers: unanswered,
+        }),
+      });
+
+      // Prepare the response
+      const response = {
+        status: "success",
+        data: {
+          totalScore,
+        },
+      };
+
+      res.json(response);
+    } catch (err) {
+      res.status(500).json({ status: "error", message: err.message });
     }
   });
 };

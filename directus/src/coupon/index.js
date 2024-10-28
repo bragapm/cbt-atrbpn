@@ -58,7 +58,7 @@ export default (router, { services, exceptions, getSchema }) => {
       });
     } catch (error) {
       console.error(error);
-      res.json({
+      res.status(500).json({
         status: "error",
         error: new Error(error).message,
       });
