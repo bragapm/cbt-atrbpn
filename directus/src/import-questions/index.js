@@ -55,10 +55,15 @@ export default (router, { services, exceptions, getSchema }) => {
                 const materi_id = materiRecord[0].id;
                 const kategori_id = kategoriRecord[0].id;
 
+                const randomQuestion = row.getCell(headers['random_question']).value === 'Yes';
+                const randomOption = row.getCell(headers['random_option']).value === 'Yes';
+
                 const newQuestion = await questionService.createOne({
                     question: questionText,
                     materi_id: materi_id,
-                    kategori_id: kategori_id
+                    kategori_id: kategori_id,
+                    random_question: randomQuestion,
+                    random_options: randomOption
                 });
    
                
