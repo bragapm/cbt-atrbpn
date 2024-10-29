@@ -15,7 +15,7 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({ title }) => {
           <p className="text-xs text-gray-500 ">Pertanyaan</p>
           <Input className="w-full bg-transparent focus:outline-none border-none  focus:border-none focus-visible:ring-0 h-[30px] p-0 shadow-none" />
         </div>
-        <SelectForm title="Benar/Salah" />
+        {/* <SelectForm title="Benar/Salah" /> */}
       </div>
     </div>
   );
