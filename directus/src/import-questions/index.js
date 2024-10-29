@@ -1,13 +1,11 @@
 import ExcelJS from 'exceljs';
 import fileUpload from 'express-fileupload';
-import Busboy from 'busboy';
+import { uploadImage } from '../../utils/uploadImage';
 
-// Endpoint to upload and process Excel file
 export default (router, { services, exceptions, getSchema }) => {
     const { ItemsService, FilesService } = services;
-    router.use(fileUpload());  //file upload middleware
-    
-    
+    router.use(fileUpload());  
+
     router.post('/', async (req, res, next) => {
         try {
             const file = req.files.file;
@@ -34,14 +32,10 @@ export default (router, { services, exceptions, getSchema }) => {
             });
 
             for (const row of worksheet.getRows(2, worksheet.rowCount - 1)) { 
-                
                 const questionText = row.getCell(headers['question']).value;
-
+                if (!questionText) break;  // Stop processing
                 const materiName = row.getCell(headers['material']).value;
-
                 const kategoriName = row.getCell(headers['category']).value;
- 
-
                 const materiRecord = await materiService.readByQuery({
                     filter: { materi: materiName },
                     limit: 1
@@ -58,11 +52,9 @@ export default (router, { services, exceptions, getSchema }) => {
                 if (kategoriRecord.length === 0) {
                     return res.status(400).send({ message: `Kategori "${kategoriName}" not found in database.` });
                 }
-
                 const materi_id = materiRecord[0].id;
                 const kategori_id = kategoriRecord[0].id;
- 
-                
+
                 const newQuestion = await questionService.createOne({
                     question: questionText,
                     materi_id: materi_id,
@@ -70,42 +62,32 @@ export default (router, { services, exceptions, getSchema }) => {
                 });
    
                
+                
                 const options = ['option_a', 'option_b', 'option_c', 'option_d', 'option_e'];
                 for (const option of options) {
                     const optionCell = row.getCell(headers[option]);
                     let optionRecord = { question_id: newQuestion, is_correct: row.getCell(headers['correct_answer']).value === option };
 
-
                     const images = worksheet.getImages();
                     const imageInCell = images.find(image => {
-                        const { tl } = image.range; 
+                        const { tl } = image.range;
                         return tl.nativeRow === optionCell.row - 1 && tl.nativeCol === optionCell.col - 1;
                     });
                     
-                    console.log("imageInCell", imageInCell);
 
+                   
                     if (imageInCell) {
+                        console.log("imageInCell", imageInCell);
                         const imageData = workbook.getImage(imageInCell.imageId);
                         console.log("imageData", imageData);
-                        
-                        const busboy = new Busboy({ headers: req.headers });
-                        
-                        busboy.on('file', async (fieldname, fileStream) => {
-                            const mimeType = `image/${imageData.extension}`;
-                            const uploadedImage = await fileService.uploadOne({
-                                data: imageData.buffer,
-                                filename_download: `question_${newQuestion.id}_${option}.${imageData.extension}`,
-                                type: mimeType, 
-                                storage: 'local',
-                                folder:'d26a0a1b-7df8-43ee-85d3-876f0695c3b1'
-                            });
-                            optionRecord.option_image = uploadedImage.id;
-                        });
-                        
-                        req.pipe(busboy);
+                        const uploadedImage = await uploadImage(fileService, imageData.buffer, imageData.extension);
+                        console.log("uploadedImage", uploadedImage);
+                        optionRecord.option_image = uploadedImage.id;
                     } else {
                         optionRecord.option_text = optionCell.value;
                     }
+
+                    await optionService.createOne(optionRecord);
                 }
             }
 

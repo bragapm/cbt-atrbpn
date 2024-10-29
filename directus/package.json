@@ -49,7 +49,7 @@
   },
   "scripts": {
     "start": "npx directus start",
-    "build": "directus-extension build",
+    "build": "directus-extension build --no-minify",
     "dev": "directus-extension build -w --no-minify",
     "link": "directus-extension link",
     "add": "directus-extension add"
