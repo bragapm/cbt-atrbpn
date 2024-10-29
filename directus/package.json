@@ -58,6 +58,7 @@
     "@directus/exceptions": "^10.0.3",
     "@directus/extensions-sdk": "12.1.0",
     "@directus/sdk": "^17.0.2",
+    "busboy": "^1.6.0",
     "exceljs": "^4.4.0",
     "express-fileupload": "^1.5.1",
     "uuid": "7",

@@ -1,11 +1,13 @@
 import ExcelJS from 'exceljs';
 import fileUpload from 'express-fileupload';
+import Busboy from 'busboy';
 
+// Endpoint to upload and process Excel file
 export default (router, { services, exceptions, getSchema }) => {
     const { ItemsService, FilesService } = services;
     router.use(fileUpload());  //file upload middleware
-
-    // Endpoint to upload and process Excel file
+    
+    
     router.post('/', async (req, res, next) => {
         try {
             const file = req.files.file;
@@ -84,18 +86,23 @@ export default (router, { services, exceptions, getSchema }) => {
 
                     if (imageInCell) {
                         const imageData = workbook.getImage(imageInCell.imageId);
-                        console.log("imageData", imageData); 
-
-                        if (imageData && imageData.buffer) {
+                        console.log("imageData", imageData);
+                        
+                        const busboy = new Busboy({ headers: req.headers });
+                        
+                        busboy.on('file', async (fieldname, fileStream) => {
+                            const mimeType = `image/${imageData.extension}`;
                             const uploadedImage = await fileService.uploadOne({
                                 data: imageData.buffer,
-                                filename_disk: `question_${newQuestion.id}_${option}.png`,
-                                //folder: 'd26a0a1b-7df8-43ee-85d3-876f0695c3b1' // Ensure this folder exists
+                                filename_download: `question_${newQuestion.id}_${option}.${imageData.extension}`,
+                                type: mimeType, 
+                                storage: 'local',
+                                folder:'d26a0a1b-7df8-43ee-85d3-876f0695c3b1'
                             });
                             optionRecord.option_image = uploadedImage.id;
-                        } else {
-                            console.warn(`Image data missing for option ${option}`);
-                        }
+                        });
+                        
+                        req.pipe(busboy);
                     } else {
                         optionRecord.option_text = optionCell.value;
                     }
