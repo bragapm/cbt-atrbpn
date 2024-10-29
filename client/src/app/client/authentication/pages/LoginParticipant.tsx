@@ -1,14 +1,47 @@
-import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useState, FC } from "react";
+import { z } from "zod";
+
+import useAuth, { formAuthUser, IAuthUserRequest } from "../hooks/useAuth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorDialog from "@/components/error-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Form,
+} from "@/components/ui/form";
 
-const LoginParticipant: React.FC = () => {
-  const [pin, setpin] = useState("");
+const LoginParticipant: FC = () => {
+  const [errorDialog, setErrorDialog] = useState<string>("");
   const [checked, setChecked] = useState(false);
   const [login, setLogin] = useState(false);
   const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof formAuthUser>>({
+    resolver: zodResolver(formAuthUser),
+    defaultValues: {
+      id: "",
+    },
+  });
+
+  const { mutate, isLoading } = useAuth({
+    onSuccess: () => {
+      setLogin(true);
+    },
+    onError: (error) => {
+      setErrorDialog(error);
+    },
+  });
+
+  function onSubmit(values: IAuthUserRequest) {
+    mutate(values);
+  }
 
   const TestRule = ({ check, setChecked }) => {
     return (
@@ -61,50 +94,63 @@ const LoginParticipant: React.FC = () => {
           <TestRule check={checked} setChecked={setChecked} />
         ) : (
           <div className="w-full h-full flex gap-4 flex-col px-20 justify-center">
-            <HeaderLogin />
-            <div className="flex flex-col gap-4">
-              <Input
-                name="PIN"
-                type="text"
-                placeholder="masukan PIN"
-                className="h-14"
-                value={pin}
-                onChange={(e) => setpin(e.target.value)}
-              />
-              <Button
-                variant="default"
-                className="h-14"
-                disabled={pin === ""}
-                onClick={() => setLogin(true)}
-              >
-                Log In
-              </Button>
+            <div className="w-full flex gap-2.5 flex-col">
+              <p className="text-center text-sm w-full">Masuk</p>
+              <div className="w-full flex justify-center">
+                <div className="flex gap-2 items-center ">
+                  <img src="/images/logo.svg" alt="logo" />
+                  <p className="text-2xl text-light font-semibold">ATR/BPN</p>
+                </div>
+              </div>
+              <h1 className="text-center text-4xl font-semibold">
+                Computer Based Test
+                <br />
+                PPAT
+              </h1>
+              <p className="text-center text-sm w-full">
+                Computer Based Test Pejabat Pembuat Akta Tanah{" "}
+              </p>
             </div>
+            <Form {...form}>
+              <ErrorDialog
+                description={errorDialog}
+                isOpen={errorDialog !== ""}
+                onOpenChange={() => {
+                  setErrorDialog("");
+                }}
+              />
+              <div className="flex flex-col gap-2">
+                <FormField
+                  control={form.control}
+                  name="id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          name="id"
+                          type="text"
+                          placeholder="Masukan id"
+                          className="h-14"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage /> {/* Displays the validation message */}
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  variant="default"
+                  className="h-14"
+                  onClick={form.handleSubmit(onSubmit)}
+                  isLoading={isLoading}
+                >
+                  Log In
+                </Button>
+              </div>
+            </Form>
           </div>
         )}
       </Card>
-    </div>
-  );
-};
-
-const HeaderLogin = () => {
-  return (
-    <div className="w-full flex gap-2.5 flex-col">
-      <p className="text-center text-sm w-full">Masuk</p>
-      <div className="w-full flex justify-center">
-        <div className="flex gap-2 items-center ">
-          <img src="/images/logo.svg" alt="logo" />
-          <p className="text-2xl text-light font-semibold">ATR/BPN</p>
-        </div>
-      </div>
-      <h1 className="text-center text-4xl font-semibold">
-        Computer Based Test
-        <br />
-        PPAT
-      </h1>
-      <p className="text-center text-sm w-full">
-        Computer Based Test Pejabat Pembuat Akta Tanah{" "}
-      </p>
     </div>
   );
 };
