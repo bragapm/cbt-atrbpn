@@ -46,7 +46,7 @@ export default (router, { services }) => {
 
   router.post("/start", authMiddleware, async (req, res) => {
     try {
-      const { user_session_id } = req.body;
+      const { user_session_id, pin } = req.body;
       const user = req.user;
       // Service for user_session_test
       const userSessionService = new ItemsService("user_session_test", {
@@ -56,7 +56,7 @@ export default (router, { services }) => {
       // Fetch the session test by ID and make sure it belongs to the user
       const userSession = await userSessionService.readByQuery({
         filter: {
-          id: id,
+          id: user_session_id,
           user: user, // Ensure it belongs to the current user
           deleted_at: { _null: true }, // Ensure session is not deleted
         },
@@ -66,6 +66,7 @@ export default (router, { services }) => {
           "session.start_time",
           "end_time",
           "session.start_attempt_at",
+          "session.PIN",
           "problems",
         ], // Retrieve necessary fields
       });
@@ -79,6 +80,13 @@ export default (router, { services }) => {
       }
 
       const session = userSession[0]; // There should be only one result
+
+      if (session.session.PIN !== pin) {
+        return res.status(403).json({
+          status: "error",
+          message: "Incorrect Pin",
+        });
+      }
 
       // Update start_attempt_at and updated_at
       const now = new Date();
