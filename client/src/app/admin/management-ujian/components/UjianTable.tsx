@@ -9,8 +9,9 @@ import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import UjianDropdown from "./UjianDropdown";
 import { IUjian } from "@/types/collection/ujian.type";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PaginationTableProps } from "@/components/table-pagination";
+import useDeleteMutationUjian from "../hooks/useDeleteMutationUjian";
 
 type IUjianTable = {
   data: IUjian[];
@@ -20,8 +21,18 @@ type IUjianTable = {
 
 const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
+  const [id, setId] = React.useState<string | number>("");
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeleteMutationUjian({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IUjian>[] = [
     {
@@ -83,6 +94,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -105,14 +117,14 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
         description="Ujian berhasil dihapus"
+        onSubmit={() => navigate("/ujian")}
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus sesi ini ?"
       />
