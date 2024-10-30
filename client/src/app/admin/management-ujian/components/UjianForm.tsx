@@ -58,7 +58,13 @@ const UjianForm: React.FC = () => {
             />
           </div>
           <div className="w-1/3">
-            <UjianSelectForm title="Sesi Ujian" />
+            <UjianSelectForm
+              // TODO: should refactor this component
+              title="Sesi Ujian"
+              data={[{ label: "Sesi 1", value: "Sesi 1" }]}
+              onChange={() => {}}
+              value=""
+            />
           </div>
         </div>
 
