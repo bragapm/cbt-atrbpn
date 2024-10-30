@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import useGetUserUjian from "../hooks/useGetUserUjian";
 import { useFormContext } from "react-hook-form";
+import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
 
 const UjianForm: React.FC = () => {
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian();
@@ -75,18 +76,7 @@ const UjianForm: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <UjianSelectForm
-                    title="Peserta Ujian"
-                    value={field.value}
-                    onChange={field.onChange}
-                    isLoading={isLoadingUser}
-                    data={dataUser?.data?.map((item) => {
-                      return {
-                        value: String(item.id),
-                        label: item.first_name + " " + item.last_name,
-                      };
-                    })}
-                  />
+                  <UjianTablePeserta />
                 </FormControl>
                 <FormMessage />
               </FormItem>
