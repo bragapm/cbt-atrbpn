@@ -13,10 +13,16 @@ import {
 import useGetUserUjian from "../hooks/useGetUserUjian";
 import { useFormContext } from "react-hook-form";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
+import { useState } from "react";
 
 const UjianForm: React.FC = () => {
-  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian();
   const form = useFormContext<IUjianRequest>();
+  const limit: number = 10;
+  const [page, setPage] = useState(1);
+  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
+    page: page,
+    limit: limit,
+  });
 
   return (
     <Form {...form}>
@@ -73,10 +79,19 @@ const UjianForm: React.FC = () => {
           <FormField
             control={form.control}
             name="user"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormControl>
-                  <UjianTablePeserta />
+                  <UjianTablePeserta
+                    data={dataUser?.data}
+                    isLoading={isLoadingUser}
+                    pagination={{
+                      pageSize: limit,
+                      totalItems: dataUser?.meta.total_count,
+                      onPageChange: (page) => setPage(page),
+                      currentPage: page,
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
