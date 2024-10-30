@@ -112,7 +112,11 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
               <DropdownMenuItem onClick={() => navigate("/bank-soal/edit")}>
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/preview")}>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(`/bank-soal/preview/${row.original.id}`)
+                }
+              >
                 Preview
               </DropdownMenuItem>
             </DropdownMenuContent>
