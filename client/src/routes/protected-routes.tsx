@@ -1,9 +1,5 @@
 import DashboardPage from "@/app/admin/dashboard/pages/DashboardPage";
-import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 import DistribusiSoalPage from "@/app/admin/management-pendistribusian-soal/pages/DistribusiSoalPage";
-import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
-import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
-import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 import { ManagementPesertaList } from "@/app/admin/management-peserta/pages/ManagementPesertaList";
 import BankSoalCreatePage from "@/app/admin/management-question-bank/pages/BankSoalCreatePages";
 import BankSoalEditPage from "@/app/admin/management-question-bank/pages/BankSoalEditPage";
@@ -13,12 +9,11 @@ import BankSoalPreview from "@/app/admin/management-question-bank/pages/BankSoal
 import TatibPages from "@/app/admin/management-tatib/pages/TatibPages";
 import UjianCreatePages from "@/app/admin/management-ujian/pages/UjianCreatePages";
 import UjianPages from "@/app/admin/management-ujian/pages/UjianPages";
-import ExamCbtPage from "@/app/client/test-cbt/pages/ExamCbtPage";
-import FinishExam from "@/app/client/test-cbt/pages/FinishExam";
-import PinPage from "@/app/client/test-cbt/pages/PinPage";
-import ExamTutorial from "@/app/client/tutorial/pages/ExamTutorial";
 import AdminLayout from "@/layouts/AdminLayout";
-import ExamLayout from "@/layouts/ExamLayout";
+import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
+import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
+import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
+import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 
 export const protectedRoutes = [
   {
@@ -88,28 +83,6 @@ export const protectedRoutes = [
       {
         path: "pendistribusian-soal",
         element: <DistribusiSoalPage />,
-      },
-    ],
-  },
-  {
-    path: "/exam",
-    element: <ExamLayout />,
-    children: [
-      {
-        index: true,
-        element: <ExamCbtPage />,
-      },
-      {
-        path: "finish",
-        element: <FinishExam />,
-      },
-      {
-        path: "tutorial",
-        element: <ExamTutorial />,
-      },
-      {
-        path: "pin",
-        element: <PinPage />,
       },
     ],
   },

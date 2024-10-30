@@ -16,6 +16,7 @@ services:
     depends_on:
       - cache
     environment:
+      - LOG_LEVEL=debug
       # accounnt
       - ADMIN_EMAIL
       - ADMIN_PASSWORD
@@ -64,6 +65,7 @@ services:
       - EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID=${STORAGE_S3_KEY}
       - EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY=${STORAGE_S3_SECRET}
       - EMAIL_SES_REGION=${STORAGE_S3_REGION}
+      - DIRECTUS_AUTH_PROVIDERS_EMAIL_ENABLED=true
     restart: unless-stopped
 
   nginx:

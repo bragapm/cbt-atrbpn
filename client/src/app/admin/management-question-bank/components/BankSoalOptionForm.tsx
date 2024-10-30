@@ -40,12 +40,14 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
             onChange={(e) => onChange(e.target.value)}
           />
         </div>
+
         <SelectForm
           data={booleanData}
           title="Benar/Salah"
           onChange={onChangeSelectValue}
           value={selectValue}
         />
+
       </div>
     </div>
   );

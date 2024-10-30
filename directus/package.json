@@ -23,6 +23,26 @@
         "type": "endpoint",
         "name": "hello",
         "source": "src/hello/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "coupon",
+        "source": "src/coupon/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-session-tests",
+        "source": "src/user-session-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-tests",
+        "source": "src/user-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "import-questions",
+        "source": "src/import-questions/index.js"
       }
     ],
     "host": "10.8.2"
@@ -35,7 +55,13 @@
     "add": "directus-extension add"
   },
   "dependencies": {
-    "@directus/extensions-sdk": "12.1.0"
+    "@directus/exceptions": "^10.0.3",
+    "@directus/extensions-sdk": "12.1.0",
+    "@directus/sdk": "^17.0.2",
+    "exceljs": "^4.4.0",
+    "express-fileupload": "^1.5.1",
+    "uuid": "7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "directus": "10.8.2"

@@ -12,6 +12,26 @@
         "type": "endpoint",
         "name": "hello",
         "source": "src/hello/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "coupon",
+        "source": "src/coupon/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-session-tests",
+        "source": "src/user-session-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "user-tests",
+        "source": "src/user-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "import-questions",
+        "source": "src/import-questions/index.js"
       }
     ],
     "host": "10.8.2"

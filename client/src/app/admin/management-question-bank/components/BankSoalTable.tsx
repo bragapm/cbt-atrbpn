@@ -146,7 +146,7 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
         description="Apakah anda yakin ingin menghapus soal ini ?"
       />
       <DataTable
-        data={data || []}
+        data={data}
         columns={columns}
         isLoading={isLoading}
         pagination={pagination}
