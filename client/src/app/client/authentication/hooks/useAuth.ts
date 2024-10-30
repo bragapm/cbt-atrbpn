@@ -1,13 +1,11 @@
+import { setUserToken } from "@/midlewares/userToken";
 import { DirectusInterceptor } from "@/services/directus-interceptors";
-import { setAccessToken } from "@/midlewares/token";
-import { IBaseErrorResponse } from "@/types/errors";
 import { AxiosError, AxiosResponse } from "axios";
 import { useMutation } from "react-query";
 import { z } from "zod";
-// import { useNavigate } from "react-router-dom";
 
 export const formAuthUser = z.object({
-  id: z.string().min(1, "id is required")
+  coupon_code: z.string().min(1, "id is required")
 });
 
 interface IAuthToken {
@@ -25,20 +23,20 @@ export type IUseAuthUser = {
 
 const useAuth = ({ onSuccess, onError }: IUseAuthUser) => {
   const service = new DirectusInterceptor();
-  // const navigation = useNavigate();
   return useMutation({
     mutationFn: async (data: IAuthUserRequest) => {
       const response = await service.sendPostRequest("/coupon/login", data);
       return response;
     },
     onSuccess: (response: AxiosResponse<{ data: IAuthToken }>) => {
-      setAccessToken(response?.data?.data?.access_token);
-      // navigation("/exam");
+      setUserToken(response?.data?.data?.access_token)
+      localStorage.setItem("refresh_token_user", response?.data?.data?.refresh_token)
       onSuccess?.();
     },
-    onError: (error: AxiosError<IBaseErrorResponse>) => {
+    onError: (error: AxiosError<any>) => {
       const errorMessage =
-        error.response.data?.errors?.[0]?.message ?? "Coba Sesaat Lagi";
+        error.response.data?.message ?? "Coba Sesaat Lagi";
+        console.log(errorMessage)
       onError?.(errorMessage);
     },
   });
