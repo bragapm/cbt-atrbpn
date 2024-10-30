@@ -41,7 +41,7 @@ export const protectedRoutes = [
         element: <BankSoalEditPage />,
       },
       {
-        path: "bank-soal/preview",
+        path: "bank-soal/preview/:id",
         element: <BankSoalPreview />,
       },
       {

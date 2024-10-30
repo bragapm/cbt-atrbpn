@@ -78,7 +78,7 @@ export class DirectusInterceptor {
     url: string,
     data?: B,
     params?: AxiosRequestConfig["params"],
-    config?: InternalAxiosRequestConfig,
+    config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {
     return this.adapter.post<B, AxiosResponse<T>>(url, data, {
       ...config,
