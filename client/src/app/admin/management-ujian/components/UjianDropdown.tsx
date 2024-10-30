@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 
 type IUjianPopupProps = {
-  ujianData: { namaUjian: string; kategori: string }[];
+  ujianData: { name: string; status: string }[];
 };
 
 const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
   const navigate = useNavigate();
 
-  const hasSoal = ujianData.some((ujian) => ujian.kategori === "Soal");
+  const hasSoal = ujianData.some((ujian) => ujian.status === "Soal");
 
   return (
     <DropdownMenuContent className="bg-white p-2">
