@@ -7,6 +7,21 @@ type IBankSoalChoices = {
 };
 
 const BankSoalChoices: React.FC<IBankSoalChoices> = ({ data }) => {
+  const getOrderOption = (option: IQuestionChoice["order"]) => {
+    switch (option) {
+      case 1:
+        return "A";
+      case 2:
+        return "B";
+      case 3:
+        return "C";
+      case 4:
+        return "D";
+      case 5:
+        return "E";
+    }
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -23,7 +38,7 @@ const BankSoalChoices: React.FC<IBankSoalChoices> = ({ data }) => {
             >
               <div className="w-12 h-fit flex-grow-0 flex-shrink-0">
                 <div className="flex w-6 h-6 text-sm items-center justify-center rounded-full font-semibold bg-primary text-white">
-                  {option.id.toUpperCase()}
+                  {getOrderOption(option.order)}
                 </div>
               </div>
               <p className="text-xs">{option.option_text}</p>

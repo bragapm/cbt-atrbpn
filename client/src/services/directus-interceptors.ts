@@ -22,12 +22,12 @@ export class DirectusInterceptor {
     this.adapter.interceptors.request.use(this.interceptRequest);
     this.adapter.interceptors.response.use(
       this.interceptResponse,
-      this.interceptError,
+      this.interceptError
     );
   }
 
   private async interceptRequest(
-    config: InternalAxiosRequestConfig,
+    config: InternalAxiosRequestConfig
   ): Promise<InternalAxiosRequestConfig> {
     {
       const access_token = getAccessToken();
@@ -41,7 +41,7 @@ export class DirectusInterceptor {
   }
 
   private async interceptResponse(
-    response: AxiosResponse,
+    response: AxiosResponse
   ): Promise<AxiosResponse> {
     {
       if (response.status === 401 || response.status === 403) {
@@ -66,7 +66,7 @@ export class DirectusInterceptor {
   public sendGetRequest<T>(
     url: string,
     params?: AxiosRequestConfig["params"],
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.adapter.get<T, AxiosResponse<T>>(url, {
       ...config,
@@ -78,7 +78,7 @@ export class DirectusInterceptor {
     url: string,
     data?: B,
     params?: AxiosRequestConfig["params"],
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.adapter.post<B, AxiosResponse<T>>(url, data, {
       ...config,
@@ -89,7 +89,7 @@ export class DirectusInterceptor {
   public sendPutRequest<B, T>(
     url: string,
     data?: B,
-    config?: InternalAxiosRequestConfig,
+    config?: InternalAxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.adapter.put<B, AxiosResponse<T>>(url, data, config);
   }
@@ -97,7 +97,7 @@ export class DirectusInterceptor {
   public sendPatchRequest<B, T>(
     url: string,
     data?: B,
-    config?: InternalAxiosRequestConfig,
+    config?: InternalAxiosRequestConfig
   ): Promise<AxiosResponse<B>> {
     return this.adapter.patch<T, AxiosResponse<B>>(url, data, config);
   }
@@ -105,7 +105,7 @@ export class DirectusInterceptor {
   public sendDeleteRequest<B, T>(
     url: string,
     data?: B,
-    config?: InternalAxiosRequestConfig,
+    config?: InternalAxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     return this.adapter.delete<T, AxiosResponse<T>>(url, { data, ...config });
   }

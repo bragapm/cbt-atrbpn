@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
+import BadgeCategory from "@/components/badge-category";
 
 type IBankSoalPreviewSoal = {
   data: IBankSoal;
@@ -13,11 +14,8 @@ const BankSoalPreviewSoal: React.FC<IBankSoalPreviewSoal> = ({ data }) => {
     <Card className="w-full flex flex-col gap-2 ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="flex gap-2 items-center">
-          <div className="w-fit h-fit px-4 py-2 text-xs bg-primary/10 text-primary rounded-xl ">
-            {data.difficulty}
-          </div>
+          <BadgeCategory name={data.kategori_id.nama_kategori} />
           <p className="text-sm font-medium text-primary">
-            {" "}
             Soal No. {data.id || ""}
           </p>
         </CardTitle>

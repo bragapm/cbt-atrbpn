@@ -47,7 +47,6 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
           onChange={onChangeSelectValue}
           value={selectValue}
         />
-
       </div>
     </div>
   );

@@ -14,7 +14,9 @@ const useGetBankSoalPreview = (id: string | undefined) => {
 
       const questionBankResponse = await service.sendGetRequest<
         IBaseResponse<IBankSoal>
-      >(`/items/questions_bank/${id}`);
+      >(`/items/questions_bank/${id}`, {
+        fields: ["*.*"],
+      });
 
       const questionChoicesResponse = await service.sendGetRequest<
         IBaseResponse<IQuestionChoice[]>
