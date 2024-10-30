@@ -1,17 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Info, RefreshCcw } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 
-const MultipleChoice = () => {
-  const [answer, setAnswer] = useState("");
-  const handleClearAnswer = () => {
-    setAnswer("");
-  };
+interface IMultiChoice {
+  answer: any;
+  listJawaban: any[];
+  handleClearAnswer: () => void;
+  handleSelectAnswer: (val: any) => void;
+}
 
-  const handleSelectAnswer = (answer) => {
-    setAnswer(answer);
-  };
-
+const MultipleChoice: FC<IMultiChoice> = ({
+  answer,
+  listJawaban,
+  handleClearAnswer,
+  handleSelectAnswer,
+}) => {
   return (
     <div className="w-full bg-white border rounded-2xl p-3 grid gap-2">
       <p className="text-primary font-medium">Pilih Jawaban Anda</p>

@@ -1,12 +1,49 @@
-import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { FC, useState } from "react";
+import { z } from "zod";
+
+import ErrorDialog from "@/components/error-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Form,
+} from "@/components/ui/form";
+import usePin, { formPinUser, IPINRequest } from "../hooks/usePin";
 
-const PinPage: React.FC = () => {
-  const [pin, setpin] = useState("");
+const PinPage: FC = () => {
+  const [errorDialog, setErrorDialog] = useState<string>("");
   const navigate = useNavigate();
+  const form = useForm<z.infer<typeof formPinUser>>({
+    resolver: zodResolver(formPinUser),
+    defaultValues: {
+      user_session_id: "",
+      pin: "",
+    },
+  });
+
+  const { mutate, isLoading } = usePin({
+    onSuccess: () => {
+      navigate("/exam");
+    },
+    onError: (error) => {
+      setErrorDialog(error);
+    },
+  });
+
+  function onSubmit(values: IPINRequest) {
+    const obj = {
+      use_session_id: "as",
+      pin: values.pin,
+    };
+    mutate(obj);
+  }
 
   return (
     <div className={`w-full h-full flex justify-end items-center`}>
@@ -31,22 +68,43 @@ const PinPage: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col gap-4">
-            <Input
-              name="PIN"
-              type="text"
-              placeholder="Masukan PIN"
-              className="h-14"
-              value={pin}
-              onChange={(e) => setpin(e.target.value)}
-            />
-            <Button
-              variant="default"
-              className="h-14"
-              disabled={pin === ""}
-              onClick={() => navigate("/exam")}
-            >
-              Mulai Ujian{" "}
-            </Button>
+            <Form {...form}>
+              <ErrorDialog
+                description={errorDialog}
+                isOpen={errorDialog !== ""}
+                onOpenChange={() => {
+                  setErrorDialog("");
+                }}
+              />
+              <div className="flex flex-col gap-2">
+                <FormField
+                  control={form.control}
+                  name="pin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          name="pin"
+                          type="text"
+                          placeholder="Masukan PIN"
+                          className="h-14"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  variant="default"
+                  className="h-14"
+                  onClick={form.handleSubmit(onSubmit)}
+                  isLoading={isLoading}
+                >
+                  Mulai Ujian
+                </Button>
+              </div>
+            </Form>
           </div>
         </div>
       </Card>

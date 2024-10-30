@@ -1,8 +1,20 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-const ListQuestionNumbers = () => {
+interface IListQuestion {
+  selectSoal: any;
+  setSelectSoal: (value: any) => void;
+  listSoal: any[];
+  listAnswer: any[];
+}
+
+const ListQuestionNumbers: FC<IListQuestion> = ({
+  selectSoal,
+  setSelectSoal,
+  listSoal,
+  listAnswer,
+}) => {
   const [numbers, setNumbers] = useState<number[]>([]);
-  const [numberSelect, setNumberSelect] = useState(1);
+
   const legenda = [
     { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
     { color: "bg-primary", title: "Soal sedang diisi" },
@@ -17,10 +29,6 @@ const ListQuestionNumbers = () => {
     setNumbers(newNumbers);
   }, []);
 
-  const handleclickSoal = (number) => {
-    setNumberSelect(number);
-  };
-
   return (
     <div className="w-full bg-white border rounded-lg p-3 flex-1 flex flex-col gap-4">
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
@@ -28,9 +36,9 @@ const ListQuestionNumbers = () => {
         {numbers.map((number) => (
           <div
             key={number}
-            onClick={() => handleclickSoal(number)}
+            onClick={() => setSelectSoal(number)}
             className={`${
-              numberSelect === number ? "bg-primary text-white" : ""
+              selectSoal === number ? "bg-primary text-white" : ""
             } w-8 h-8 rounded-lg bg-gray-200 flex cursor-pointer hover:bg-gray-100`}
           >
             <p className="m-auto text-[11px]">{number}</p>
