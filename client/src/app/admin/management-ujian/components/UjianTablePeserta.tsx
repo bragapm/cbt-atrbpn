@@ -13,7 +13,7 @@ import React from "react";
 const UjianTablePeserta = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger className="w-full">
         <Button
           variant="outline"
           className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
