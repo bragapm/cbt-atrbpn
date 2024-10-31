@@ -6,9 +6,10 @@ import React, { useRef } from "react";
 type IUploadFile = {
   value: File | null | string;
   onChange: (file: File | null | string) => void;
+  className?: string;
 };
 
-const UploadFile: React.FC<IUploadFile> = ({ value, onChange }) => {
+const UploadFile: React.FC<IUploadFile> = ({ value, onChange, className }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const file = value as File;
 
@@ -34,7 +35,7 @@ const UploadFile: React.FC<IUploadFile> = ({ value, onChange }) => {
         variant="upload"
         size="upload"
         onClick={triggerFileInput}
-        className={cn("", {
+        className={cn(className, {
           "bg-primary/10 border-primary": file?.name,
         })}
       >
