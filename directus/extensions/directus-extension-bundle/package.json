@@ -32,6 +32,11 @@
         "type": "endpoint",
         "name": "import-questions",
         "source": "src/import-questions/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-peserta",
+        "source": "src/export-peserta/index.js"
       }
     ],
     "host": "10.8.2"
