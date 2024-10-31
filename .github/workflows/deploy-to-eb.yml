@@ -40,6 +40,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install and build client
+        env:
+          VITE_DIRECTUS_PUBLIC_URL: https://cbt-atrbpn.braga.co.id/panel
+          VITE_ACCESS_TOKEN_KEY: token
         run: |
           pnpm install
           pnpm build
