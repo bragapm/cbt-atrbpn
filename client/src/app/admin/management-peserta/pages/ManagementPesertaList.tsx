@@ -3,9 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Plus, Upload } from "lucide-react";
 import PesertaCBTTable from "../components/PesertaTable";
 import { useNavigate } from "react-router-dom";
+import useGetUserSessionTestQueries from "../hooks/useGetUserSessionTestQueries";
+import { useState } from "react";
+
+const PAGE_LIMIT = 10;
 
 export const ManagementPesertaList = () => {
+  const [page, setPage] = useState<number>(1);
+
   const navigate = useNavigate();
+
+  const { data: pesertaCbt } = useGetUserSessionTestQueries({
+    limit: PAGE_LIMIT,
+    page,
+  });
+
+  if (!pesertaCbt) {
+    return null;
+  }
+
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions
@@ -41,7 +57,13 @@ export const ManagementPesertaList = () => {
           </div>
         }
       />
-      <PesertaCBTTable />
+      <PesertaCBTTable
+        userSessionTest={pesertaCbt?.data?.data}
+        currentPage={page}
+        pageLimit={PAGE_LIMIT}
+        totalData={pesertaCbt.data.meta.total_count}
+        onChangePage={(val) => setPage(val)}
+      />
     </div>
   );
 };
