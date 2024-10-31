@@ -8,18 +8,31 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import UjianDropdown from "./UjianDropdown";
-import { IUjian } from "../hooks/useGetManagementUjian";
+import { IUjian } from "@/types/collection/ujian.type";
 import { useNavigate } from "react-router-dom";
+import { PaginationTableProps } from "@/components/table-pagination";
+import useDeleteMutationUjian from "../hooks/useDeleteMutationUjian";
 
 type IUjianTable = {
   data: IUjian[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
 };
 
-const UjianTable: React.FC<IUjianTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
+  const [id, setId] = React.useState<string | number>("");
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeleteMutationUjian({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IUjian>[] = [
     {
@@ -67,6 +80,10 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
     {
       accessorKey: "sesiUjian",
       header: "Sesi Ujian",
+      cell: ({ row }) => {
+        const sesiUjian = row.original.id;
+        return sesiUjian;
+      },
     },
     {
       id: "actions",
@@ -77,6 +94,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -84,7 +102,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
-            <UjianDropdown ujianData={[row.original]} />
+            {/* <UjianDropdown ujianData={[row.original]} /> */}
           </DropdownMenu>
         </div>
       ),
@@ -99,26 +117,22 @@ const UjianTable: React.FC<IUjianTable> = ({ data }) => {
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
         description="Ujian berhasil dihapus"
+        onSubmit={() => navigate("/ujian")}
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus sesi ini ?"
       />
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );

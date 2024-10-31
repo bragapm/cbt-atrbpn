@@ -1,5 +1,6 @@
 import { IKategori } from "./kategori.type";
 import { IMateri } from "./materi.type";
+import { IQuestionChoiceRequest } from "./question-choice.type";
 
 export type IBankSoal = {
   id: number;
@@ -25,4 +26,6 @@ export type IBankSoalRequest = {
   random_question: string;
   materi_id: string | null;
   question: string | null;
+  image: string | File | null;
+  choice?: IQuestionChoiceRequest[] | null;
 };

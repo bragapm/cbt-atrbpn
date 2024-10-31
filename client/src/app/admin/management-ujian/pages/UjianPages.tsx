@@ -4,10 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGetManagementUjian from "../hooks/useGetManagementUjian";
+import { useState } from "react";
+
+const limit: number = 10;
 
 const UjianPages = () => {
   const navigate = useNavigate();
-  const { data } = useGetManagementUjian();
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useGetManagementUjian({
+    page: page,
+    limit: limit,
+  });
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
@@ -27,7 +35,16 @@ const UjianPages = () => {
           </div>
         }
       />
-      <UjianTable data={data?.data?.data} />
+      <UjianTable
+        data={data?.data}
+        isLoading={isLoading}
+        pagination={{
+          pageSize: limit,
+          totalItems: data?.meta.total_count,
+          onPageChange: (page) => setPage(page),
+          currentPage: page,
+        }}
+      />
     </div>
   );
 };

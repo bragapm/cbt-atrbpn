@@ -30,13 +30,24 @@ const BankSoalForm: React.FC = () => {
   const { data: dataMateri, isLoading: isLoadingMateri } = useGetMateriSoal();
   const { data: dataKategori, isLoading: isLoadingKategori } =
     useGetKategoriSoal();
-
   const form = useFormContext<IBankSoalRequest>();
+
+  const handleOnChangeOption = (value: string, index: number) => {
+    const newValue = [...form.getValues("choice")];
+    newValue[index].option_text = value;
+    form.setValue("choice", newValue);
+  };
+
+  const handleOnSelectChange = (value: string, index: number) => {
+    const newValue = [...form.getValues("choice")];
+    newValue[index].is_correct = value === "true" ? true : false;
+    form.setValue("choice", newValue);
+  };
 
   return (
     <Form {...form}>
       <div className="w-full flex gap-3 flex-col pb-6">
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <FormField
             control={form.control}
             name="materi_id"
@@ -120,7 +131,18 @@ const BankSoalForm: React.FC = () => {
             )}
           />
 
-          <UploadFile />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem className="w-full h-full">
+                <FormControl className="w-full h-full">
+                  <UploadFile value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="w-full h-[250px]">
@@ -142,10 +164,36 @@ const BankSoalForm: React.FC = () => {
         </div>
 
         <div className="w-full flex flex-col gap-2 mt-12">
-          <BankSoalOptionForm title="Pilihan A" />
-          <BankSoalOptionForm title="Pilihan B" />
-          <BankSoalOptionForm title="Pilihan C" />
-          <BankSoalOptionForm title="Pilihan D" />
+          <FormField
+            control={form.control}
+            name="choice"
+            render={({ field }) => {
+              return (
+                <>
+                  {field.value.map((item, index) => {
+                    return (
+                      <FormItem className="w-full h-full">
+                        <FormControl className="h-full w-full">
+                          <BankSoalOptionForm
+                            selectValue={item.is_correct ? "true" : "false"}
+                            onChangeSelectValue={(value: string) =>
+                              handleOnSelectChange(value, index)
+                            }
+                            title={`Pilihan ${index + 1}`}
+                            value={item.option_text}
+                            onChange={(value: string) =>
+                              handleOnChangeOption(value, index)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  })}
+                </>
+              );
+            }}
+          />
         </div>
       </div>
     </Form>

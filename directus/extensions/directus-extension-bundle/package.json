@@ -27,6 +27,11 @@
         "type": "endpoint",
         "name": "user-tests",
         "source": "src/user-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "import-questions",
+        "source": "src/import-questions/index.js"
       }
     ],
     "host": "10.8.2"

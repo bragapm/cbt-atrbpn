@@ -9,6 +9,7 @@ type DeleteDialogConfirmProps = {
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
   description?: string;
+  isLoading?: boolean;
 };
 
 const DeleteDialogConfirm: React.FC<DeleteDialogConfirmProps> = ({
@@ -16,6 +17,7 @@ const DeleteDialogConfirm: React.FC<DeleteDialogConfirmProps> = ({
   onOpenChange,
   onSubmit,
   description,
+  isLoading,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -37,7 +39,11 @@ const DeleteDialogConfirm: React.FC<DeleteDialogConfirmProps> = ({
               Batal
             </Button>
 
-            <Button className="w-full h-12" onClick={onSubmit}>
+            <Button
+              className="w-full h-12"
+              onClick={onSubmit}
+              isLoading={isLoading}
+            >
               Hapus
             </Button>
           </div>

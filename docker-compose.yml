@@ -16,6 +16,7 @@ services:
     depends_on:
       - cache
     environment:
+      - LOG_LEVEL=debug
       # accounnt
       - ADMIN_EMAIL
       - ADMIN_PASSWORD
