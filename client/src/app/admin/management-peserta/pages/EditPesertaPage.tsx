@@ -4,25 +4,28 @@ import { FormInput } from "@/components/forms/FormInput";
 import { FormProvider, useForm } from "react-hook-form";
 import { EditPesertaCBTFormValue } from "../types";
 import { FormSelect } from "@/components/forms/FormSelect";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import useGetUserSessionTestQuery from "../hooks/useGetUserSessionTestQuery";
 
 const EditPesertaFormInner = () => {
   return (
     <>
       <div className="flex gap-3">
         <FormInput
-          name="idPeserta"
+          name="code"
           placeholder="Masukan ID Peserta"
           label="ID Peserta"
         />
         <FormInput
-          name="namaPeserta"
+          name="nama_peserta"
           placeholder="Masukan Nama Peserta"
           label="Nama Peserta"
         />
       </div>
       <div className="flex gap-3 items-start">
         <FormInput
-          name="nomorKontak"
+          name="nomor_kontak"
           placeholder="Masukan Nomor Kontak"
           label="Nomor Kontak"
         />
@@ -32,7 +35,7 @@ const EditPesertaFormInner = () => {
             { label: "Sesi 1", value: "1" },
             { label: "Sesi 2", value: "2" },
           ]}
-          name="sesiUjian"
+          name="sesi_ujian"
         />
       </div>
 
@@ -47,15 +50,31 @@ const EditPesertaFormInner = () => {
 };
 
 export const EditPesertaPage = () => {
+  const params = useParams();
+  const { data: peserta, isLoading } = useGetUserSessionTestQuery(
+    params?.pesertaId
+  );
+
   const methods = useForm({
     defaultValues: {
-      idPeserta: "",
-      namaPeserta: "",
-      nomorKontak: "",
-      sesiUjian: "",
+      code: "",
+      nama_peserta: "",
+      nomor_kontak: "",
+      sesi_ujian: "",
     },
     mode: "onTouched",
   });
+
+  useEffect(() => {
+    if (!isLoading && peserta?.data?.data) {
+      methods.reset({
+        code: peserta?.data?.data?.info_peserta.code,
+        nama_peserta: peserta?.data?.data?.info_peserta.nama_peserta,
+        nomor_kontak: peserta?.data?.data?.info_peserta.nomor_kontak,
+        sesi_ujian: peserta?.data?.data?.session?.name,
+      });
+    }
+  }, [methods, isLoading, peserta?.data?.data]);
 
   const onSubmit = (data: EditPesertaCBTFormValue) => {
     console.log("Form Data:", data);

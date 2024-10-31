@@ -81,8 +81,8 @@ export const protectedRoutes = [
         element: <TatibPages />,
       },
       {
-        path: "pendistribusian-soal",
-        element: <DistribusiSoalPage />,
+        path: "pendistribusian-soal/create",
+        element: <ManagementHasilUjianPage />,
       },
     ],
   },
