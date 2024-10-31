@@ -1,32 +1,37 @@
+import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
+import useGetUserUjian from "@/app/admin/management-ujian/hooks/useGetUserUjian";
+import { DataTable } from "@/components/data-table";
+import SearchBox from "@/components/search-box";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
-  DialogFooter,
-  DialogHeader,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import React from "react";
-import UjianInputForm from "./UjianInputForm";
-import { DataTable } from "@/components/data-table";
 import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { PaginationTableProps } from "@/components/table-pagination";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Lock } from "lucide-react";
+import React, { useState } from "react";
 
 type IUjianTablePeserta = {
-  data: IUser[];
-  isLoading: boolean;
-  pagination: PaginationTableProps;
+  triggerButton: React.ReactNode;
+  isDetail?: boolean;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
-  data,
-  isLoading,
-  pagination,
+  triggerButton,
+  isDetail = false,
 }) => {
+  const limit: number = 10;
+  const [page, setPage] = useState(1);
+  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
+    page: page,
+    limit: limit,
+  });
+
   const columns: ColumnDef<IUser>[] = [
     {
       id: "select",
@@ -83,42 +88,55 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full">
-        <Button
-          variant="outline"
-          className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
-        >
-          <p className="text-gray-500 font-light text-xs">Peserta Ujian</p>
-          <p>Buka Data Peserta Ujian</p>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="pt-10 max-w-2xl">
+      <DialogTrigger className="w-full">{triggerButton}</DialogTrigger>
+      <DialogContent className="pt-10 max-w-4xl">
         <div className="w-full flex flex-row justify-between items-center">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col  gap-1">
             <DialogTitle>Data Peserta CBT</DialogTitle>
             <DialogDescription>
               Data ditampilkan sesuai dengan filter
             </DialogDescription>
           </div>
 
-          <div>
-            <UjianInputForm title="Cari Peserta" />
+          <div className="w-1/2">
+            <SearchBox />
           </div>
         </div>
 
-        <div className="w-full h-full bg-gray-200 rounded-lg p-2">
+        <div className="p-2 w-full h-full">
           <DataTable
-            data={data || []}
+            actionButton={
+              <>
+                {isDetail ? (
+                  <UjianPIN
+                    triggerButton={
+                      <Button
+                        variant="actions"
+                        size="actions"
+                        startContent={<Lock />}
+                      >
+                        Generate Pin Ujian
+                      </Button>
+                    }
+                  />
+                ) : (
+                  <Button variant="actions" size="actions">
+                    Pilih Peserta
+                  </Button>
+                )}
+              </>
+            }
+            data={dataUser?.data || []}
             columns={columns}
-            isLoading={isLoading}
-            pagination={pagination}
+            isLoading={isLoadingUser}
+            pagination={{
+              pageSize: limit,
+              totalItems: dataUser?.meta.total_count,
+              onPageChange: (page) => setPage(page),
+              currentPage: page,
+            }}
           />
         </div>
-        <DialogFooter>
-          <Button variant="actions" size="actions">
-            Pilih Peserta
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import UjianInputForm from "./UjianInputForm";
-import UjianSelectForm from "./UjianSelectForm";
 import { DatePicker } from "@/components/ui/date-picker";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import {
@@ -14,15 +13,11 @@ import useGetUserUjian from "../hooks/useGetUserUjian";
 import { useFormContext } from "react-hook-form";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
 import { useState } from "react";
+import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelectForm";
+import { Button } from "@/components/ui/button";
 
 const UjianForm: React.FC = () => {
   const form = useFormContext<IUjianRequest>();
-  const limit: number = 10;
-  const [page, setPage] = useState(1);
-  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
-    page: page,
-    limit: limit,
-  });
 
   return (
     <Form {...form}>
@@ -83,14 +78,17 @@ const UjianForm: React.FC = () => {
               <FormItem>
                 <FormControl>
                   <UjianTablePeserta
-                    data={dataUser?.data}
-                    isLoading={isLoadingUser}
-                    pagination={{
-                      pageSize: limit,
-                      totalItems: dataUser?.meta.total_count,
-                      onPageChange: (page) => setPage(page),
-                      currentPage: page,
-                    }}
+                    triggerButton={
+                      <Button
+                        variant="outline"
+                        className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
+                      >
+                        <p className="text-gray-500 font-light text-xs">
+                          Peserta Ujian
+                        </p>
+                        <p>Buka Data Peserta Ujian</p>
+                      </Button>
+                    }
                   />
                 </FormControl>
                 <FormMessage />

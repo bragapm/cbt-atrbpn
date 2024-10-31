@@ -102,7 +102,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
-            {/* <UjianDropdown ujianData={[row.original]} /> */}
+            <UjianDropdown ujianData={row.original} />
           </DropdownMenu>
         </div>
       ),
