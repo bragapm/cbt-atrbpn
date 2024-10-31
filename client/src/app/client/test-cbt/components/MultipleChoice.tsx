@@ -3,46 +3,65 @@ import { Info, RefreshCcw } from "lucide-react";
 import { FC, useState } from "react";
 
 interface IMultiChoice {
+  loading: boolean;
   answer: any;
   listJawaban: any[];
+  listSubmitAnswer: any[];
   handleClearAnswer: () => void;
   handleSelectAnswer: (val: any) => void;
 }
 
 const MultipleChoice: FC<IMultiChoice> = ({
+  loading,
   answer,
   listJawaban,
+  listSubmitAnswer,
   handleClearAnswer,
   handleSelectAnswer,
 }) => {
+  const listalpabet = ["A", "B", "C", "D", "E"];
+
   return (
-    <div className="w-full bg-white border rounded-2xl p-3 grid gap-2">
+    <div className="w-full bg-white border rounded-2xl p-3 grid gap-2 flex-1">
       <p className="text-primary font-medium">Pilih Jawaban Anda</p>
-      {["A", "B", "C", "D", "E"].map((el) => (
-        <div
-          className={`flex gap-2 border p-2 rounded-xl hover:bg-primary/20 cursor-pointer ${
-            answer === el ? "bg-[#F5FBFB] border-[#2A6083]" : ""
-          }`}
-          key={el}
-          onClick={() => handleSelectAnswer(el)}
-        >
-          <div
-            className={`${
-              answer === el ? "bg-[#2A6083]" : "bg-primary"
-            } w-6 h-6 text-white rounded-lg flex text-xs`}
-          >
-            <p className="m-auto">{el}</p>
-          </div>
-          <div className="flex-1">
-            <p>
-              Surat Keterangan Waris dari para ahli waris Nyonya Siti Amalia,
-              Spd. yang disaksikan oleh Kelurahan Prafi Mulya, dikuatkan oleh
-              Distrik/Camat Prafi dan Bukti identitas para ahliwaris. yang
-              disaksikan oleh Kelurahan Prafi Mulya, dikuatkan oleh
-            </p>
-          </div>
-        </div>
-      ))}
+      {loading ? (
+        <>
+          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+        </>
+      ) : listJawaban ? (
+        listJawaban.map((el, idx) => {
+          const isSelected = listSubmitAnswer?.some(
+            (answer) => answer.answer === el.id
+          );
+          return (
+            <div
+              key={el.id}
+              className={`flex gap-2 border p-2 rounded-xl hover:bg-primary/20 cursor-pointer ${
+                isSelected ? "bg-[#F5FBFB] border-[#2A6083]" : ""
+              }`}
+              onClick={() => handleSelectAnswer(el.id)}
+            >
+              <div
+                className={`${
+                  isSelected ? "bg-[#2A6083]" : "bg-primary"
+                } w-6 h-6 text-white rounded-lg flex text-xs`}
+              >
+                <p className="m-auto">{listalpabet[idx]}</p>
+              </div>
+              <div className="flex-1">
+                <p>{el.text}</p>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="h-10"></div>
+      )}
+
       <div className="flex gap-4 items-center mt-4">
         <Button className="rounded-xl gap-2" onClick={handleClearAnswer}>
           Clear Jawaban

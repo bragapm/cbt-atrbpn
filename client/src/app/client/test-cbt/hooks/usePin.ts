@@ -1,45 +1,62 @@
-import { DirectusInterceptor } from "@/services/directus-interceptors";
-import { AxiosError, AxiosResponse } from "axios";
-import { useMutation } from "react-query";
+import axios from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { z } from "zod";
 
+
 export const formPinUser = z.object({
-    user_session_id: z.string(),
-    pin: z.string().min(1, "PIN Wajib Diisi")
+  user_session_id: z.string(),
+  pin: z.string().min(1, "PIN Wajib Diisi")
 });
 
-interface IAuthToken {
-  access_token: string;
-  expires: number;
-  refresh_token: string;
-}
-
 export type IPINRequest = z.infer<typeof formPinUser>;
-
 export type IPINAuthUser = {
-  onSuccess?: () => void;
-  onError?: (error: string) => void;
+onSuccess?: () => void;
+onError?: (error: string) => void;
 };
 
-const usePin = ({ onSuccess, onError }: IPINAuthUser) => {
-  const service = new DirectusInterceptor();
-  return useMutation({
-    mutationFn: async (data: IPINRequest) => {
-      const response = await service.sendPostRequest("/user-session-tests/start", data);
-      return response;
-    },
-    onSuccess: (response: AxiosResponse<{ data: IAuthToken }>) => {
-    //   setUserToken(response?.data?.data?.access_token)
-    //   localStorage.setItem("refresh_token_user", response?.data?.data?.refresh_token)
-      onSuccess?.();
-    },
-    onError: (error: AxiosError<any>) => {
-      const errorMessage =
-        error.response.data?.message ?? "Coba Sesaat Lagi";
-        console.log(errorMessage)
-      onError?.(errorMessage);
-    },
-  });
+
+interface PostDataProps {
+  user_session_id: number;
+  pin: number;
+}
+
+const usePin = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const auth = localStorage.getItem("user_token")
+  const navigate = useNavigate();
+
+  const postData = async (data: PostDataProps) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
+        '/user-session-tests/start',
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${auth}`,
+          },
+        }
+      );
+      console.log('Data berhasil dikirim:', response.data.data);
+      localStorage.setItem("dataTest",JSON.stringify(response.data.data))
+      navigate("/exam");
+    } catch (error: any) {
+      setError(error.message);
+      console.error('Terjadi kesalahan:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    isLoading,
+    error,
+    postData,
+  };
 };
 
 export default usePin;

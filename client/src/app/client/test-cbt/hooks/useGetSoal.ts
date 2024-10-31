@@ -1,13 +1,16 @@
 import { useCallback, useState } from "react";
 
 export const useGetSoal = () => {
-  const [data, setData] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const sesiId = localStorage.getItem("sesi_id")
+  const [data, setData] = useState<any | null>(null);
+  const sesiId = localStorage.getItem("session_id")
 
-  const fetchData = useCallback(async (problem_id:any) => {
-    setIsLoading(true);
+  const fetchData = useCallback(async (problem_id:any,notClear=true) => {
+    if(notClear){
+      setData(null)
+      setIsLoading(true);
+    }
     setError(null);
     try {
       const response = await fetch(
@@ -22,7 +25,7 @@ export const useGetSoal = () => {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
-      setData(result);
+      setData(result?.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -30,6 +33,6 @@ export const useGetSoal = () => {
     }
   }, []);
 
-  return { data, error, getSoal: fetchData };
+  return { data,isLoading, error, getSoal: fetchData };
 };
 

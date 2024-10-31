@@ -13,37 +13,33 @@ const ListQuestionNumbers: FC<IListQuestion> = ({
   listSoal,
   listAnswer,
 }) => {
-  const [numbers, setNumbers] = useState<number[]>([]);
-
   const legenda = [
     { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
     { color: "bg-primary", title: "Soal sedang diisi" },
-    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
+    { color: "bg-gray-200", title: "Soal belum diisi" },
   ];
-
-  useEffect(() => {
-    const newNumbers = [];
-    for (let i = 1; i <= 100; i++) {
-      newNumbers.push(i);
-    }
-    setNumbers(newNumbers);
-  }, []);
 
   return (
     <div className="w-full bg-white border rounded-lg p-3 flex-1 flex flex-col gap-4">
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
-      <div className="flex flex-wrap gap-2 flex-1">
-        {numbers.map((number) => (
-          <div
-            key={number}
-            onClick={() => setSelectSoal(number)}
-            className={`${
-              selectSoal === number ? "bg-primary text-white" : ""
-            } w-8 h-8 rounded-lg bg-gray-200 flex cursor-pointer hover:bg-gray-100`}
-          >
-            <p className="m-auto text-[11px]">{number}</p>
-          </div>
-        ))}
+      <div className="flex-1">
+        <div className="flex flex-wrap gap-2 ">
+          {listSoal?.map((value, idx) => (
+            <div
+              key={value}
+              onClick={() => setSelectSoal(value)}
+              className={`${
+                selectSoal === value ? "bg-primary text-white" : ""
+              } ${
+                listAnswer?.some((answer) => answer.problem === value)
+                  ? "bg-[#7ADC98]"
+                  : "bg-gray-200"
+              } w-8 h-8 rounded-lg  flex cursor-pointer hover:bg-gray-100`}
+            >
+              <p className="m-auto text-[11px]">{idx + 1}</p>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="space-y-2 mt-10">
         {legenda.map((el) => (

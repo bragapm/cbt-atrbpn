@@ -18,8 +18,8 @@ import {
 import usePin, { formPinUser, IPINRequest } from "../hooks/usePin";
 
 const PinPage: FC = () => {
+  const sessionId = localStorage.getItem("session_id");
   const [errorDialog, setErrorDialog] = useState<string>("");
-  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formPinUser>>({
     resolver: zodResolver(formPinUser),
     defaultValues: {
@@ -27,22 +27,14 @@ const PinPage: FC = () => {
       pin: "",
     },
   });
-
-  const { mutate, isLoading } = usePin({
-    onSuccess: () => {
-      navigate("/exam");
-    },
-    onError: (error) => {
-      setErrorDialog(error);
-    },
-  });
+  const { isLoading, error, postData } = usePin();
 
   function onSubmit(values: IPINRequest) {
     const obj = {
-      use_session_id: "as",
-      pin: values.pin,
+      user_session_id: Number(sessionId),
+      pin: Number(values.pin),
     };
-    mutate(obj);
+    postData(obj);
   }
 
   return (
@@ -85,7 +77,7 @@ const PinPage: FC = () => {
                       <FormControl>
                         <Input
                           name="pin"
-                          type="text"
+                          type="number"
                           placeholder="Masukan PIN"
                           className="h-14"
                           {...field}

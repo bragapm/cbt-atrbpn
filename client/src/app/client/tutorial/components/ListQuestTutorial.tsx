@@ -14,7 +14,7 @@ const ListQuestTutorial = () => {
   const legenda = [
     { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
     { color: "bg-primary", title: "Soal sedang diisi" },
-    { color: "bg-[#EF957C]", title: "Soal tidak diisi" },
+    { color: "bg-gray-200", title: "Soal belum diisi" },
   ];
 
   return (

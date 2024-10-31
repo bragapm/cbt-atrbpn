@@ -21,7 +21,10 @@ export const useGetSessionUser = () => {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
-      setData(result);
+      setData(result?.data[0]);
+      if(result?.data[0]){
+        localStorage.setItem("session_id",result?.data[0]["session-id"])
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
