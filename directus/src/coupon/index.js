@@ -126,6 +126,8 @@ export default (router, { services, exceptions, getSchema }) => {
         status: "success",
         data: {
           email: user.email,
+          full_name: couponData.nama_peserta,
+          phone_number: couponData.nomor_kontak,
           last_login_at: now,
           access_token: authData.accessToken,
           refresh_token: authData.refreshToken,
