@@ -44,6 +44,12 @@ const BankSoalForm: React.FC = () => {
     form.setValue("choice", newValue);
   };
 
+  const handleFileChange = (file: File | null | string, index: number) => {
+    const newValue = [...form.getValues("choice")];
+    newValue[index].option_image = file;
+    form.setValue("choice", newValue);
+  };
+
   return (
     <Form {...form}>
       <div className="w-full flex gap-3 flex-col pb-6">
@@ -136,7 +142,7 @@ const BankSoalForm: React.FC = () => {
             name="image"
             render={({ field }) => (
               <FormItem className="w-full h-full">
-                <FormControl className="w-full h-full">
+                <FormControl>
                   <UploadFile value={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
@@ -175,6 +181,10 @@ const BankSoalForm: React.FC = () => {
                       <FormItem className="w-full h-full">
                         <FormControl className="h-full w-full">
                           <BankSoalOptionForm
+                            fileValue={item.option_image}
+                            onChangeFileValue={(file: File | null | string) =>
+                              handleFileChange(file, index)
+                            }
                             selectValue={item.is_correct ? "true" : "false"}
                             onChangeSelectValue={(value: string) =>
                               handleOnSelectChange(value, index)

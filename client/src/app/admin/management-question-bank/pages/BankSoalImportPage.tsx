@@ -12,9 +12,12 @@ import UploadFile from "@/components/upload-file";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const BankSoalImportPage: React.FC = () => {
   const form = useForm({});
+
+  const navigation = useNavigate();
 
   return (
     <Form {...form}>
@@ -63,7 +66,12 @@ const BankSoalImportPage: React.FC = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-end gap-2">
-            <Button variant="actions" size="actions" className="w-44">
+            <Button
+              variant="actions"
+              size="actions"
+              className="w-44"
+              onClick={() => navigation("/bank-soal")}
+            >
               Batal
             </Button>
             <Button variant="actions" size="actions" className="w-44">

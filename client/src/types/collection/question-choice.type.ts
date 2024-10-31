@@ -16,5 +16,5 @@ export type IQuestionChoiceRequest = {
   option_text: string | null | undefined;
   is_correct: boolean;
   order: number;
-  option_image?: File | null;
+  option_image?: File | null | string;
 };
