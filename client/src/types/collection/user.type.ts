@@ -1,0 +1,28 @@
+export type IUser = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+  password: string;
+  location: string | null;
+  title: string | null;
+  description: string | null;
+  tags: string | null;
+  avatar: string | null;
+  language: string | null;
+  tfa_secret: string | null;
+  status: "active" | "inactive" | "suspended";
+  role: string | null;
+  token: string | null;
+  last_access: string;
+  last_page: string | null;
+  provider: string;
+  external_identifier: string | null;
+  auth_data: string | null;
+  email_notifications: boolean;
+  appearance: string | null;
+  theme_dark: string | null;
+  theme_light: string | null;
+  theme_light_overrides: string | null;
+  theme_dark_overrides: string | null;
+};

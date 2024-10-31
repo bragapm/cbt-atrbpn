@@ -7,8 +7,10 @@ import { FormInputFile } from "@/components/forms/FormInputFile";
 const ImportPesertaFormInner = () => {
   return (
     <>
-      <FormInputFile name="filePeserta" />
-
+      <FormInputFile
+        name="filePeserta"
+        description="Supported File or Maximum Size Here lorem ipsum dolor sit Amet"
+      />
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
         <Button type="submit" className="w-40">

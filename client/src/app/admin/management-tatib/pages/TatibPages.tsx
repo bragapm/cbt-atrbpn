@@ -13,16 +13,13 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 const TatibPages: FC = () => {
   const [numPages, setNumPages] = useState<number>(1);
   const [file, setFile] = useState(null);
-  console.log(file);
   const onDocumentLoadSuccess = (nextNumPages) => {
     setNumPages(nextNumPages);
   };
 
   function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
-
     const nextFile = files?.[0];
-
     if (nextFile) {
       setFile(nextFile);
     }

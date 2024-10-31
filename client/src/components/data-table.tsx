@@ -25,12 +25,16 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination: PaginationTableProps;
+  labelButtonAction?: string;
+  buttonAction?: () => void;
   isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  buttonAction,
+  labelButtonAction = "Load More Data",
   isLoading,
   pagination,
 }: DataTableProps<TData, TValue>) {
@@ -64,7 +68,7 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                       </TableHead>
                     );
@@ -83,7 +87,7 @@ export function DataTable<TData, TValue>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}
@@ -117,8 +121,9 @@ export function DataTable<TData, TValue>({
                 variant="actions"
                 size="actions"
                 startContent={<RefreshCw className="w-5 h-5" />}
+                onClick={buttonAction}
               >
-                Load More Data
+                {labelButtonAction}
               </Button>
             </div>
           </div>

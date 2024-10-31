@@ -4,43 +4,34 @@ import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
-import React from "react";
-
-type HasilAkhirUjianPeserta = {
-  idPeserta: string;
-  namaPeserta: string;
-  skor: number;
-};
+import React, { useState } from "react";
+import { ModalDataHasilAkhirUjian } from "./ModalDetailHasilAkhirUjian";
+import useGetUserSessionTestQueries, {
+  IUserSessionTest,
+} from "../../management-peserta/hooks/useGetUserSessionTestQueries";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const DataHasilAkhirUjianPesertaTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
 
-  const hasilUjianDummy: HasilAkhirUjianPeserta[] = [
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      skor: 90,
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      skor: 100,
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      skor: 80,
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      skor: 70,
-    },
-  ];
+  const { data: userSessionTest } = useGetUserSessionTestQueries({
+    page,
+    limit: 10,
+  });
 
-  const columns: ColumnDef<HasilAkhirUjianPeserta>[] = [
+  if (!userSessionTest) {
+    return null;
+  }
+
+  const columns: ColumnDef<IUserSessionTest>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -61,15 +52,15 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "idPeserta",
+      accessorKey: "info_peserta.code",
       header: "ID Peseta",
     },
     {
-      accessorKey: "namaPeserta",
+      accessorKey: "info_peserta.nama_peserta",
       header: "Nama Peserta",
     },
     {
-      accessorKey: "skor",
+      accessorKey: "score",
       header: "Skor",
     },
     {
@@ -84,7 +75,16 @@ export const DataHasilAkhirUjianPesertaTable = () => {
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem onClick={() => {}}>
+                Lihat Detail Peserta
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,
@@ -110,14 +110,20 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
-        data={hasilUjianDummy}
+        data={userSessionTest?.data?.data}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: 60,
+          totalItems: userSessionTest?.data?.meta?.total_count,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        labelButtonAction="Lihat Hasil Ujian"
+        buttonAction={() => setIsOpenModalDetail(true)}
+      />
+      <ModalDataHasilAkhirUjian
+        isOpen={isOpenModalDetail}
+        onOpenChange={() => setIsOpenModalDetail(!isOpenModalDetail)}
       />
     </>
   );
