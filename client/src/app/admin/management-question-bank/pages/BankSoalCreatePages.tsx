@@ -92,20 +92,31 @@ const BankSoalCreatePage: React.FC = () => {
             </p>
             <p className="text-sm  font-light">Soal No. 13 / 20</p>
           </div>
-
-          <Button
-            variant="actions"
-            size="actions"
-            onClick={() => setConfirmationDialog(true)}
-          >
-            Simpan
-          </Button>
         </CardTitle>
 
         <CardContent className="w-full px-2 flex flex-col gap-2">
           <FormProvider {...form}>
             <BankSoalForm />
           </FormProvider>
+
+          <div className="w-full flex justify-end gap-2">
+            <Button
+              className="w-[130px]"
+              variant="actions"
+              size="actions"
+              onClick={() => navigation("/bank-soal")}
+            >
+              Kembali
+            </Button>
+            <Button
+              className="w-[130px]"
+              variant="actions"
+              size="actions"
+              onClick={() => setConfirmationDialog(true)}
+            >
+              Simpan
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -47,7 +47,7 @@ const BankSoalForm: React.FC = () => {
   return (
     <Form {...form}>
       <div className="w-full flex gap-3 flex-col pb-6">
-        <div className="w-full flex gap-2 items-center">
+        <div className="w-full flex gap-2 items-center flex-wrap">
           <FormField
             control={form.control}
             name="materi_id"
