@@ -6,10 +6,10 @@ export type CreatePesertaCBTFormValue = {
 };
 
 export type EditPesertaCBTFormValue = {
-  idPeserta?: string;
-  namaPeserta?: string;
-  nomorKontak?: string;
-  sesiUjian?: string;
+  code?: string;
+  nama_peserta?: string;
+  nomor_kontak?: string;
+  sesi_ujian?: string;
 };
 
 export type ImportPesertaCBTFormValue = {

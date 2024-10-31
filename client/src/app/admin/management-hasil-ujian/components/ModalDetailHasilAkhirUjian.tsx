@@ -2,30 +2,33 @@ import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
-import React, { useState } from "react";
-import { ModalDataHasilAkhirUjian } from "./ModalDetailHasilAkhirUjian";
+import React, { FC } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-export const DataHasilAkhirUjianPesertaTable = () => {
+type ModalDataHasilAkhirUjianProps = {
+  isOpen: boolean;
+  onOpenChange: () => void;
+};
+
+export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
+  isOpen,
+  onOpenChange,
+}) => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
     limit: 10,
   });
+
+  console.log(userSessionTest);
 
   if (!userSessionTest) {
     return null;
@@ -52,16 +55,20 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "info_peserta.code",
-      header: "ID Peseta",
-    },
-    {
       accessorKey: "info_peserta.nama_peserta",
       header: "Nama Peserta",
     },
     {
-      accessorKey: "score",
-      header: "Skor",
+      accessorKey: "score_summary.correct_answers",
+      header: "Jawaban Benar",
+    },
+    {
+      accessorKey: "score_summary.wrong_answers",
+      header: "Jawaban Salah",
+    },
+    {
+      accessorKey: "score_summary.not_answers",
+      header: "Tidak Menjawab",
     },
     {
       id: "actions",
@@ -75,16 +82,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => {}}>
-                Lihat Detail Peserta
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),
       enableSorting: false,
@@ -93,38 +91,34 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   ];
 
   return (
-    <>
-      <SuccessDialog
-        isOpen={isShowSuccessDialog}
-        onOpenChange={setIsShowSuccessDialog}
-        description="Peserta berhasil dihapus"
-      />
-      <DeleteDialogConfirm
-        isOpen={isOpenDeleteConfirm}
-        onOpenChange={setIsOpenDeleteConfirm}
-        onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
-        }}
-        description="Apakah anda yakin ingin menghapus peserta ini ?"
-      />
-      <DataTable
-        data={userSessionTest?.data?.data}
-        columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: userSessionTest?.data?.meta?.total_count,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
-        labelButtonAction="Lihat Hasil Ujian"
-        buttonAction={() => setIsOpenModalDetail(true)}
-      />
-      <ModalDataHasilAkhirUjian
-        isOpen={isOpenModalDetail}
-        onOpenChange={() => setIsOpenModalDetail(!isOpenModalDetail)}
-      />
-    </>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-screen-lg">
+        <SuccessDialog
+          isOpen={isShowSuccessDialog}
+          onOpenChange={setIsShowSuccessDialog}
+          description="Peserta berhasil dihapus"
+        />
+        <DeleteDialogConfirm
+          isOpen={isOpenDeleteConfirm}
+          onOpenChange={setIsOpenDeleteConfirm}
+          onSubmit={() => {
+            console.log("delete");
+            setIsOpenDeleteConfirm(false);
+            setIsShowSuccessDialog(true);
+          }}
+          description="Apakah anda yakin ingin menghapus peserta ini ?"
+        />
+        <DataTable
+          data={userSessionTest?.data?.data}
+          columns={columns}
+          pagination={{
+            pageSize: 10,
+            totalItems: userSessionTest?.data?.meta?.total_count,
+            onPageChange: (page) => setPage(page),
+            currentPage: page,
+          }}
+        />
+      </DialogContent>
+    </Dialog>
   );
 };

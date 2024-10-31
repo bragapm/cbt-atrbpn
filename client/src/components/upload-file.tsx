@@ -1,48 +1,20 @@
-import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { CloudUpload } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CloudUpload } from "lucide-react";
+import React, { useRef } from "react";
 
-const UploadFile: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+type IUploadFile = {
+  value: File | null | string;
+  onChange: (file: File | null | string) => void;
+};
+
+const UploadFile: React.FC<IUploadFile> = ({ value, onChange }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  console.log({ file });
+  const file = value as File;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0]);
-      handleUpload(event.target.files[0]);
-    }
-  };
-
-  const handleUpload = async (fileToUpload: File) => {
-    setUploading(true);
-
-    // Create a FormData object to send the file
-    const formData = new FormData();
-    formData.append("file", fileToUpload);
-
-    try {
-      // Replace 'your-upload-endpoint' with your actual API endpoint
-      const response = await fetch("your-upload-endpoint", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log("File uploaded successfully");
-        // You can add user feedback here
-      } else {
-        console.error("File upload failed");
-        // You can add error feedback here
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      // You can add error feedback here
-    } finally {
-      setUploading(false);
+      onChange(event.target.files[0]);
     }
   };
 
@@ -51,7 +23,7 @@ const UploadFile: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="w-full h-full">
       <input
         type="file"
         onChange={handleFileChange}
@@ -62,7 +34,6 @@ const UploadFile: React.FC = () => {
         variant="upload"
         size="upload"
         onClick={triggerFileInput}
-        disabled={uploading}
         className={cn("", {
           "bg-primary/10 border-primary": file?.name,
         })}
@@ -73,7 +44,7 @@ const UploadFile: React.FC = () => {
         </div>
         <CloudUpload className="ml-2" />
       </Button>
-    </>
+    </div>
   );
 };
 

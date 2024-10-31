@@ -4,48 +4,37 @@ import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
-import React from "react";
+import React, { FC } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { IUserSessionTest } from "../hooks/useGetUserSessionTestQueries";
 
-type PesertaCBT = {
-  idPeserta: string;
-  namaPeserta: string;
-  sesiUjian: string;
-  nomorKontak: string;
+type PesertaCBTTableProps = {
+  userSessionTest?: IUserSessionTest[];
+  pageLimit: number;
+  totalData: number;
+  currentPage: number;
+  onChangePage: (page: number) => void;
 };
 
-const PesertaCBTTable = () => {
-  const [page, setPage] = React.useState(1);
+const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
+  userSessionTest,
+  pageLimit,
+  totalData,
+  currentPage,
+  onChangePage,
+}) => {
+  const navigate = useNavigate();
+
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
-  const PesertaDataDummy: PesertaCBT[] = [
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      sesiUjian: "1",
-      nomorKontak: "082111014768",
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      sesiUjian: "1",
-      nomorKontak: "082111014768",
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      sesiUjian: "1",
-      nomorKontak: "082111014768",
-    },
-    {
-      idPeserta: "ID3211820001",
-      namaPeserta: "Ahmad Ansorudin",
-      sesiUjian: "1",
-      nomorKontak: "082111014768",
-    },
-  ];
-
-  const columns: ColumnDef<PesertaCBT>[] = [
+  const columns: ColumnDef<IUserSessionTest>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -66,25 +55,25 @@ const PesertaCBTTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "idPeserta",
+      accessorKey: "info_peserta.code",
       header: "ID Peseta",
     },
     {
-      accessorKey: "namaPeserta",
+      accessorKey: "info_peserta.nama_peserta",
       header: "Nama Peserta",
     },
     {
-      accessorKey: "sesiUjian",
+      accessorKey: "session.name",
       header: "Sesi Ujian",
     },
     {
-      accessorKey: "nomorKontak",
+      accessorKey: "info_peserta.nomor_kontak",
       header: "Nomor Kontak",
     },
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
@@ -93,7 +82,18 @@ const PesertaCBTTable = () => {
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() => navigate(`/peserta-cbt/edit/${row.original.id}`)}
+              >
+                Lihat Detail Peserta
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,
@@ -119,13 +119,13 @@ const PesertaCBTTable = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
-        data={PesertaDataDummy}
+        data={userSessionTest || []}
         columns={columns}
         pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
+          pageSize: pageLimit,
+          totalItems: totalData,
+          onPageChange: onChangePage,
+          currentPage: currentPage,
         }}
       />
     </>
