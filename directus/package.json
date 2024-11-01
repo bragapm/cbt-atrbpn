@@ -48,6 +48,21 @@
         "type": "endpoint",
         "name": "export-peserta",
         "source": "src/export-peserta/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-distribusi",
+        "source": "src/export-distribusi/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-pertanyaan",
+        "source": "src/export-pertanyaan/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-hasil",
+        "source": "src/export-hasil/index.js"
       }
     ],
     "host": "10.8.2"

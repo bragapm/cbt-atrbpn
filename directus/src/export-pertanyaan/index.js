@@ -6,13 +6,13 @@ export default function registerEndpoint(router, { database, exceptions, logger 
     router.get('/', async (req, res, next) => {
       try {
         const result = await database.raw(`
-          SELECT code, nama_peserta, nomor_kontak, session 
-          FROM user_session_test st 
-          JOIN coupon c ON st.info_peserta = c.id
+            select ms.materi ,ks.nama_kategori AS kategori, question as pertanyaan from questions_bank qb 
+            join materi_soal ms on  ms.id = qb.materi_id
+            join kategori_soal ks on ks.id = qb.kategori_id 
         `);
         const rows = result[0] || result.rows || result;
         // console.log(rows);
-        await generateAndPipeSpreadsheet(rows, res, 'user_info', logger);
+        await generateAndPipeSpreadsheet(rows, res, 'pertanyaan', logger);
   
       } catch (error) {
         logger.error("Error occurred:", error);
@@ -20,4 +20,9 @@ export default function registerEndpoint(router, { database, exceptions, logger 
       }
     });
   }
+
+
+
+
+
 
