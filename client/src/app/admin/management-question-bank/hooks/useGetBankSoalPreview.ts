@@ -27,7 +27,7 @@ const useGetBankSoalPreview = (id: string | undefined) => {
         questionChoices: questionChoicesResponse.data,
       };
     },
-    enabled: !!id, // Hanya fetch jika id tersedia
+    enabled: !!id,
   });
 };
 

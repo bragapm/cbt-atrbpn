@@ -2,8 +2,45 @@ import BreadcrumbAdmin from "@/components/breadcrumb-admin";
 import { Card, CardTitle, CardContent } from "@/components/ui/card";
 import React from "react";
 import BankSoalForm from "../components/BankSoalForm";
+import { FormProvider, useForm } from "react-hook-form";
+import { IBankSoal, IBankSoalRequest } from "@/types/collection/bank-soal.type";
 
 const BankSoalEditPage: React.FC = () => {
+  const form = useForm<IBankSoalRequest>({
+    defaultValues: {
+      choice: [
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 1,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 2,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 3,
+          option_image: null,
+        },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 4,
+          option_image: null,
+        },
+      ],
+    },
+  });
+
   return (
     <div className="flex flex-col gap-2">
       <BreadcrumbAdmin
@@ -18,11 +55,12 @@ const BankSoalEditPage: React.FC = () => {
           <p className="text-base font-light">
             Mata Ujian Peraturan Jabatan PPAT
           </p>
-          <p className="text-sm  font-light">Soal No. 13 / 20</p>
         </CardTitle>
 
         <CardContent className="w-full px-2 flex flex-col gap-2">
-          <BankSoalForm />
+          <FormProvider {...form}>
+            <BankSoalForm />
+          </FormProvider>
         </CardContent>
       </Card>
     </div>

@@ -79,7 +79,7 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       accessorKey: "category",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategori = row.original.kategori_id.nama_kategori;
+        const kategori = row?.original.kategori_id?.nama_kategori;
 
         return <BadgeCategory name={kategori} />;
       },
@@ -88,7 +88,7 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       accessorKey: "materiSoal",
       header: "Materi Soal",
       cell: ({ row }) => {
-        return <p>{row.original.materi_id.materi}</p>;
+        return <p>{row?.original?.materi_id?.materi || "-"}</p>;
       },
     },
     {
@@ -109,7 +109,9 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => navigate("/bank-soal/edit")}>
+              <DropdownMenuItem
+                onClick={() => navigate(`/bank-soal/edit/${row.original.id}`)}
+              >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem

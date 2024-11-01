@@ -12,7 +12,7 @@ export type IQuestionChoice = {
 };
 
 export type IQuestionChoiceRequest = {
-  question_id: string;
+  question_id: string | number;
   option_text: string | null | undefined;
   is_correct: boolean;
   order: number;

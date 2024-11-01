@@ -14,6 +14,11 @@ import { useFormContext } from "react-hook-form";
 import useGetKategoriSoal from "../hooks/useGetKategoriSoal";
 import useGetMateriSoal from "../hooks/useGetMateriSoal";
 import BankSoalOptionForm from "./BankSoalOptionForm";
+import useGetBankSoalPreview from "@/app/admin/management-question-bank/hooks/useGetBankSoalPreview";
+import { useParams } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AlertCircle } from "lucide-react";
+import ErrorPlaceholder from "@/components/error-placeholder";
 
 const booleanData = [
   {
@@ -32,6 +37,10 @@ const BankSoalForm: React.FC = () => {
     useGetKategoriSoal();
   const form = useFormContext<IBankSoalRequest>();
 
+  const { id } = useParams();
+
+  const { data, isLoading, isError } = useGetBankSoalPreview(id);
+
   const handleOnChangeOption = (value: string, index: number) => {
     const newValue = [...form.getValues("choice")];
     newValue[index].option_text = value;
@@ -49,6 +58,44 @@ const BankSoalForm: React.FC = () => {
     newValue[index].option_image = file;
     form.setValue("choice", newValue);
   };
+
+  React.useEffect(() => {
+    if (id && data) {
+      form.setValue(
+        "materi_id",
+        data?.questionBank.data.materi_id?.id as string
+      );
+      form.setValue(
+        "kategori_id",
+        data?.questionBank?.data?.kategori_id?.id as string
+      );
+      form.setValue(
+        "random_question",
+        data?.questionBank?.data?.random_question ? "true" : "false"
+      );
+      form.setValue(
+        "random_options",
+        data.questionBank.data.random_options ? "true" : "false"
+      );
+      form.setValue("question", data.questionBank.data.question);
+      form.setValue(
+        "choice",
+        data.questionChoices.data?.map((item) => {
+          return {
+            question_id: item.question_id,
+            option_text: item.option_text,
+            is_correct: item.is_correct,
+            order: item.order,
+            option_image: item.option_image,
+          };
+        })
+      );
+    }
+  }, [id, data]);
+
+  if (isLoading) return <Skeleton className="w-full h-[65vh]" />;
+
+  if (isError) return <ErrorPlaceholder />;
 
   return (
     <Form {...form}>
