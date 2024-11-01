@@ -15,7 +15,14 @@ const ExamCbtPage = () => {
   const [selectSoal, setSelectSoal] = useState(listSoal[0]);
   const [oneget, setOneget] = useState<boolean>(false);
   const [answer, setAnswer] = useState<string>("");
-  console.log(data);
+
+  function addhour(isoString, hoursToAdd) {
+    const date = new Date(isoString);
+    date.setHours(date.getHours() + hoursToAdd);
+    return date.toISOString();
+  }
+
+  const remaintime = addhour(dataCbt?.start_attempt_at, 2);
 
   const handleNextQuestion = () => {
     const currentIndex = listSoal.findIndex((item) => item === selectSoal);
@@ -77,7 +84,7 @@ const ExamCbtPage = () => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <RemainingTime />
+        <RemainingTime endTime={remaintime} />
         <ListQuestionNumbers
           selectSoal={selectSoal}
           setSelectSoal={handleclickSoal}

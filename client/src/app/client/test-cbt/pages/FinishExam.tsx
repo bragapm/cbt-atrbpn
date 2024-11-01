@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import useFinish from "../hooks/useFinish";
 import { useNavigate } from "react-router-dom";
+import MemoLoader from "@/components/ui/Loader";
 
 const FinishExam: FC = () => {
   const sesiId = localStorage.getItem("session_id");
@@ -71,12 +72,14 @@ const FinishExam: FC = () => {
                 rows={6}
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
-                className=" w-full border rounded-lg p-2"
+                className=" w-full border rounded-lg p- bg-transparent p-2"
                 placeholder="Tuliskan feedback anda"
               ></textarea>
               <div className="flex gap-2 items-center">
                 <Info size={16} />{" "}
-                <p className=" text-sm w-full space-x-3">wadah wadah</p>
+                <p className=" text-sm w-full space-x-3">
+                  Kirim Feedback untuk melihat hasil Ujian.
+                </p>
               </div>
             </div>
             <Button
@@ -84,7 +87,11 @@ const FinishExam: FC = () => {
               className="h-14 w-fit mx-auto px-10 rounded-xl"
               onClick={handleSendFeedBack}
             >
-              Kirim Feedback
+              {loadingFinish ? (
+                <MemoLoader width={35} height={35} color={"white"} />
+              ) : (
+                "Kirim Feedback"
+              )}
             </Button>
           </div>
         ) : (
@@ -102,8 +109,8 @@ const FinishExam: FC = () => {
             </div>
             <div className="border-b text-center grid gap-2.5">
               <p className="text-xs">Nama Peserta</p>
-              <p className="text-xl font-semibold">Gunawan Wibisaaja</p>
-              <p>No ID 124567</p>
+              <p className="text-xl font-semibold">{data?.fullname}</p>
+              <p>No ID {data?.code}</p>
               <p>Telah menyelesaikan ujian CBT Ujian Pejabat dengan nilai</p>
               <p className="text-[#2A6083] text-[64px] font-medium">
                 {data?.totalScore}
