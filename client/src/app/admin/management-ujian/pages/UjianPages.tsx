@@ -1,7 +1,7 @@
 import TableActions from "@/components/table-actions";
 import UjianTable from "../components/UjianTable";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGetManagementUjian from "../hooks/useGetManagementUjian";
 import { useState } from "react";
@@ -24,6 +24,14 @@ const UjianPages = () => {
         description="Data ditampilkan sesuai dengan filter"
         actions={
           <div className="flex gap-2">
+            <Button
+              variant="actions"
+              size="actions"
+              startContent={<Upload size="14" />}
+              onClick={() => navigate("/ujian/create")}
+            >
+              Export Sesi Ujian
+            </Button>
             <Button
               variant="actions"
               size="actions"

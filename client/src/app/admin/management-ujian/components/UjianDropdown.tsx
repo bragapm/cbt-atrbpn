@@ -15,12 +15,13 @@ type IUjianPopupProps = {
 
 const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
   const navigate = useNavigate();
-  const hasSoal = ujianData?.status === "published";
+  const endTime = new Date(ujianData?.end_time);
+  const now = new Date();
 
   return (
     <>
       <DropdownMenuContent className="bg-white p-2">
-        {hasSoal ? (
+        {now > endTime ? (
           <>
             <UjianTablePeserta
               isDetail

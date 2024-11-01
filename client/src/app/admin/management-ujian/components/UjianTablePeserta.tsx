@@ -27,10 +27,17 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
 }) => {
   const limit: number = 10;
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
+    search: search,
   });
+
+  const handleSearchChange = (searchTerm: string) => {
+    setSearch(searchTerm);
+    setPage(1);
+  };
 
   const columns: ColumnDef<IUser>[] = [
     {
@@ -99,7 +106,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
           </div>
 
           <div className="w-1/2">
-            <SearchBox />
+            <SearchBox onSearch={handleSearchChange} />
           </div>
         </div>
 

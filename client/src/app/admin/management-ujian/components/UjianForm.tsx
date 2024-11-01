@@ -9,7 +9,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import useGetUserUjian from "../hooks/useGetUserUjian";
 import { useFormContext } from "react-hook-form";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
 import { useState } from "react";
@@ -17,6 +16,7 @@ import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelect
 import { Button } from "@/components/ui/button";
 
 const UjianForm: React.FC = () => {
+  const [selectedSession, setSelectedSession] = useState<string>("");
   const form = useFormContext<IUjianRequest>();
 
   return (
@@ -63,9 +63,17 @@ const UjianForm: React.FC = () => {
             <UjianSelectForm
               // TODO: should refactor this component
               title="Sesi Ujian"
-              data={[{ label: "Sesi 1", value: "Sesi 1" }]}
-              onChange={() => {}}
-              value=""
+              data={[
+                { label: "Sesi 1", value: "1" },
+                { label: "Sesi 2", value: "2" },
+                { label: "Sesi 3", value: "3" },
+                { label: "Sesi 4", value: "4" },
+                { label: "Sesi 5", value: "5" },
+              ]}
+              onChange={(value) => {
+                setSelectedSession(value);
+              }}
+              value={selectedSession}
             />
           </div>
         </div>

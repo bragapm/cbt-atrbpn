@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import UjianDropdown from "./UjianDropdown";
 import { IUjian } from "@/types/collection/ujian.type";
@@ -97,7 +97,6 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
               setId(row.original.id);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
