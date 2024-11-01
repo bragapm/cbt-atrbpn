@@ -1,20 +1,5 @@
-import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { z } from "zod";
-
-
-export const formPinUser = z.object({
-  user_session_id: z.string(),
-  pin: z.string().min(1, "PIN Wajib Diisi")
-});
-
-export type IPINRequest = z.infer<typeof formPinUser>;
-export type IPINAuthUser = {
-onSuccess?: () => void;
-onError?: (error: string) => void;
-};
-
+import axios from 'axios';
 
 interface PostDataProps {
   problem_id: number;
@@ -24,8 +9,8 @@ interface PostDataProps {
 const useSubmitAnswer = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingAnswer, setIsLoading] = useState(false);
-  const auth = localStorage.getItem("user_token")
   const sesiId = localStorage.getItem("session_id")
+  const auth = localStorage.getItem("user_token")
 
   const submitAnswer = async (data: PostDataProps, handleGetsoal:()=>void) => {
     setIsLoading(true);

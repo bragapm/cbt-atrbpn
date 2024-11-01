@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Info, RefreshCcw } from "lucide-react";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 interface IMultiChoice {
   loading: boolean;
@@ -22,45 +22,47 @@ const MultipleChoice: FC<IMultiChoice> = ({
   const listalpabet = ["A", "B", "C", "D", "E"];
 
   return (
-    <div className="w-full bg-white border rounded-2xl p-3 grid gap-2 flex-1">
+    <div className="w-full bg-white border rounded-2xl p-3 flex flex-col gap-2 flex-1">
       <p className="text-primary font-medium">Pilih Jawaban Anda</p>
-      {loading ? (
-        <>
-          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
-          <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
-        </>
-      ) : listJawaban ? (
-        listJawaban.map((el, idx) => {
-          const isSelected = listSubmitAnswer?.some(
-            (answer) => answer.answer === el.id
-          );
-          return (
-            <div
-              key={el.id}
-              className={`flex gap-2 border p-2 rounded-xl hover:bg-primary/20 cursor-pointer ${
-                isSelected ? "bg-[#F5FBFB] border-[#2A6083]" : ""
-              }`}
-              onClick={() => handleSelectAnswer(el.id)}
-            >
+      <div className="grid gap-2 flex-1">
+        {loading ? (
+          <>
+            <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+          </>
+        ) : listJawaban ? (
+          listJawaban.map((el, idx) => {
+            const isSelected = listSubmitAnswer?.some(
+              (answer) => answer.answer === el.id
+            );
+            return (
               <div
-                className={`${
-                  isSelected ? "bg-[#2A6083]" : "bg-primary"
-                } w-6 h-6 text-white rounded-lg flex text-xs`}
+                key={el.id}
+                className={`flex gap-2 border p-2 rounded-xl hover:bg-primary/20 cursor-pointer ${
+                  isSelected ? "bg-[#F5FBFB] border-[#2A6083]" : ""
+                }`}
+                onClick={() => handleSelectAnswer(el.id)}
               >
-                <p className="m-auto">{listalpabet[idx]}</p>
+                <div
+                  className={`${
+                    isSelected ? "bg-[#2A6083]" : "bg-primary"
+                  } w-6 h-6 text-white rounded-lg flex text-xs`}
+                >
+                  <p className="m-auto">{listalpabet[idx]}</p>
+                </div>
+                <div className="flex-1">
+                  <p>{el.text}</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <p>{el.text}</p>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <div className="h-10"></div>
-      )}
+            );
+          })
+        ) : (
+          <div className="h-10 text-center">Soal gagal dimuat</div>
+        )}
+      </div>
 
       <div className="flex gap-4 items-center mt-4">
         <Button className="rounded-xl gap-2" onClick={handleClearAnswer}>

@@ -15,10 +15,6 @@ export const userProtectedRoutes = [
         element: <ExamCbtPage />,
       },
       {
-        path: "finish",
-        element: <FinishExam />,
-      },
-      {
         path: "tutorial",
         element: <ExamTutorial />,
       },
@@ -31,6 +27,10 @@ export const userProtectedRoutes = [
       {
         path: "pin",
         element: <PinPage />,
+      },
+      {
+        path: "finish",
+        element: <FinishExam />,
       },
     ],
   },

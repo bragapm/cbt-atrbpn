@@ -1,45 +1,46 @@
-import { DirectusInterceptor } from "@/services/directus-interceptors";
-import { AxiosError, AxiosResponse } from "axios";
-import { useMutation } from "react-query";
-import { z } from "zod";
+import { useState } from 'react';
+import axios from 'axios';
 
-export const formPinUser = z.object({
-    user_session_id: z.string(),
-    pin: z.string().min(1, "PIN Wajib Diisi")
-});
-
-interface IAuthToken {
-  access_token: string;
-  expires: number;
-  refresh_token: string;
+interface PostDataProps {
+  feedback: string;
+  user_session_id:number
 }
 
-export type IPINRequest = z.infer<typeof formPinUser>;
+const useFinish = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [data,setData] = useState(null)
+  const [loadingFinish, setIsLoading] = useState(false);
+  const auth = localStorage.getItem("user_token")
 
-export type IPINAuthUser = {
-  onSuccess?: () => void;
-  onError?: (error: string) => void;
-};
+  const finishExam = async (data: PostDataProps) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
+          `/user-session-tests/finish`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${auth}`,
+          },
+        }
+      );
+      setData(response.data.data)
+    } catch (error: any) {
+      setError(error.message);
+      console.error('Terjadi kesalahan:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-const useFinish = ({ onSuccess, onError }: IPINAuthUser) => {
-  const service = new DirectusInterceptor();
-  return useMutation({
-    mutationFn: async (data: IPINRequest) => {
-      const response = await service.sendPostRequest("/user-session-tests/start", data);
-      return response;
-    },
-    onSuccess: (response: AxiosResponse<{ data: IAuthToken }>) => {
-    //   setUserToken(response?.data?.data?.access_token)
-    //   localStorage.setItem("refresh_token_user", response?.data?.data?.refresh_token)
-      onSuccess?.();
-    },
-    onError: (error: AxiosError<any>) => {
-      const errorMessage =
-        error.response.data?.message ?? "Coba Sesaat Lagi";
-        console.log(errorMessage)
-      onError?.(errorMessage);
-    },
-  });
+  return {
+    data,
+    loadingFinish,
+    error,
+    finishExam,
+  };
 };
 
 export default useFinish;

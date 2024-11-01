@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 import { z } from "zod";
 
 
@@ -45,7 +45,7 @@ const usePin = () => {
       localStorage.setItem("dataTest",JSON.stringify(response.data.data))
       navigate("/exam");
     } catch (error: any) {
-      setError(error.message);
+      setError(error?.response?.data?.message);
       console.error('Terjadi kesalahan:', error);
     } finally {
       setIsLoading(false);

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { z } from "zod";
 
 import ErrorDialog from "@/components/error-dialog";
@@ -16,6 +16,7 @@ import {
   Form,
 } from "@/components/ui/form";
 import usePin, { formPinUser, IPINRequest } from "../hooks/usePin";
+import MemoLoader from "@/components/ui/Loader";
 
 const PinPage: FC = () => {
   const sessionId = localStorage.getItem("session_id");
@@ -36,6 +37,12 @@ const PinPage: FC = () => {
     };
     postData(obj);
   }
+
+  useEffect(() => {
+    if (error) {
+      setErrorDialog(error);
+    }
+  }, [error]);
 
   return (
     <div className={`w-full h-full flex justify-end items-center`}>
@@ -91,9 +98,12 @@ const PinPage: FC = () => {
                   variant="default"
                   className="h-14"
                   onClick={form.handleSubmit(onSubmit)}
-                  isLoading={isLoading}
                 >
-                  Mulai Ujian
+                  {isLoading ? (
+                    <MemoLoader width={35} height={35} color={"white"} />
+                  ) : (
+                    "Mulai Ujian"
+                  )}
                 </Button>
               </div>
             </Form>

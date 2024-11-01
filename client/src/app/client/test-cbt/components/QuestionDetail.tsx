@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { FC } from "react";
+import { FC } from "react";
 
 interface IQuestion {
   loading: boolean;
@@ -13,9 +13,10 @@ const QuestionDetail: FC<IQuestion> = ({
   handleNextQuestion,
   handlePrevQuestion,
 }) => {
+  // category_name
   return (
     <div className="w-full bg-white/80 border rounded-[16px] p-3 grid gap-3">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between h-fit items-center">
         <div className="flex gap-2 items-center">
           <div
             className={`text-primary bg-primary/20 rounded-md px-2 py-1 text-[10px]`}
@@ -27,12 +28,14 @@ const QuestionDetail: FC<IQuestion> = ({
         </div>
         <div className="flex gap-3 items-center">
           <button
+            disabled={loading}
             className="border rounded-md border-primary p-1 hover:bg-primary/20"
             onClick={handlePrevQuestion}
           >
             <ChevronLeft color="#2A6083" size={20} />
           </button>
           <button
+            disabled={loading}
             onClick={handleNextQuestion}
             className="border rounded-md border-primary p-1 hover:bg-primary/20"
           >
@@ -53,7 +56,7 @@ const QuestionDetail: FC<IQuestion> = ({
           dangerouslySetInnerHTML={{ __html: question }}
         ></div>
       ) : (
-        <div className="h-10"></div>
+        <div className="h-10 text-center">Soal gagal dimuat</div>
       )}
     </div>
   );

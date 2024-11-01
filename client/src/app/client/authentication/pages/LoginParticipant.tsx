@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import PeraturanUjian from "../components/PeraturanUjian";
 import { useGetSessionUser } from "../hooks/useGetSessionUser";
+import MemoLoader from "@/components/ui/Loader";
 
 const LoginParticipant: FC = () => {
   const [errorDialog, setErrorDialog] = useState<string>("");
@@ -47,8 +48,6 @@ const LoginParticipant: FC = () => {
   function onSubmit(values: IAuthUserRequest) {
     mutate(values);
   }
-
-  console.log(data);
 
   return (
     <div
@@ -109,13 +108,17 @@ const LoginParticipant: FC = () => {
                     </FormItem>
                   )}
                 />
+
                 <Button
                   variant="default"
                   className="h-14"
                   onClick={form.handleSubmit(onSubmit)}
-                  isLoading={isLoading}
                 >
-                  Log In
+                  {isLoading ? (
+                    <MemoLoader width={35} height={35} color={"white"} />
+                  ) : (
+                    "Log In"
+                  )}
                 </Button>
               </div>
             </Form>

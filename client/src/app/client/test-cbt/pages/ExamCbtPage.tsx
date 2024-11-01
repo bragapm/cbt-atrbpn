@@ -2,9 +2,9 @@ import ListQuestionNumbers from "../components/ListQuestionNumbers";
 import QuestionDetail from "../components/QuestionDetail";
 import MultipleChoice from "../components/MultipleChoice";
 import RemainingTime from "../components/RemainingTime";
+import useSubmitAnswer from "../hooks/useSubmitAnswer";
 import { useGetSoal } from "../hooks/useGetSoal";
 import { useEffect, useState } from "react";
-import useSubmitAnswer from "../hooks/useSubmitAnswer";
 
 const ExamCbtPage = () => {
   const { data, isLoading, error, getSoal } = useGetSoal();
@@ -34,6 +34,9 @@ const ExamCbtPage = () => {
 
   const handleClearAnswer = () => {
     setAnswer("");
+    submitAnswer({ problem_id: selectSoal, answer_id: "0" }, () =>
+      getSoal(selectSoal, false)
+    );
   };
 
   const handleSelectAnswer = (answer) => {
@@ -80,6 +83,7 @@ const ExamCbtPage = () => {
           setSelectSoal={handleclickSoal}
           listSoal={listSoal}
           listAnswer={data?.submittedAnswers}
+          isloading={isLoading}
         />
       </div>
     </div>

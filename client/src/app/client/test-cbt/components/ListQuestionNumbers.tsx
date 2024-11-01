@@ -5,6 +5,7 @@ interface IListQuestion {
   setSelectSoal: (value: any) => void;
   listSoal: any[];
   listAnswer: any[];
+  isloading: boolean;
 }
 
 const ListQuestionNumbers: FC<IListQuestion> = ({
@@ -12,6 +13,7 @@ const ListQuestionNumbers: FC<IListQuestion> = ({
   setSelectSoal,
   listSoal,
   listAnswer,
+  isloading,
 }) => {
   const legenda = [
     { color: "bg-[#7ADC98]", title: "Soal sudah diisi" },
@@ -27,14 +29,20 @@ const ListQuestionNumbers: FC<IListQuestion> = ({
           {listSoal?.map((value, idx) => (
             <div
               key={value}
-              onClick={() => setSelectSoal(value)}
+              onClick={() => {
+                if (!isloading) {
+                  setSelectSoal(value);
+                }
+              }}
               className={`${
                 selectSoal === value ? "bg-primary text-white" : ""
               } ${
                 listAnswer?.some((answer) => answer.problem === value)
                   ? "bg-[#7ADC98]"
                   : "bg-gray-200"
-              } w-8 h-8 rounded-lg  flex cursor-pointer hover:bg-gray-100`}
+              } ${
+                isloading ? "cursor-wait" : "cursor-pointer"
+              } w-8 h-8 rounded-lg  flex  hover:bg-primary/70`}
             >
               <p className="m-auto text-[11px]">{idx + 1}</p>
             </div>
