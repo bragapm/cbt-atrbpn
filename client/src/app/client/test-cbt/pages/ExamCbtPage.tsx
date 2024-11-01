@@ -5,17 +5,38 @@ import RemainingTime from "../components/RemainingTime";
 import useSubmitAnswer from "../hooks/useSubmitAnswer";
 import { useGetSoal } from "../hooks/useGetSoal";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ExamCbtPage = () => {
   const { data, isLoading, error, getSoal } = useGetSoal();
   const { loadingAnswer, error: errorAnswer, submitAnswer } = useSubmitAnswer();
   const dataCbt = JSON.parse(localStorage.getItem("dataTest"));
   const listSoal = dataCbt?.problems;
+  const navigate = useNavigate();
 
-  const [selectSoal, setSelectSoal] = useState(listSoal[0]);
+  console.log(dataCbt);
+
+  const [selectSoal, setSelectSoal] = useState(listSoal ? listSoal[0] : "");
   const [oneget, setOneget] = useState<boolean>(false);
   const [answer, setAnswer] = useState<string>("");
-  console.log(data);
+
+  useEffect(() => {
+    if (!oneget) {
+      if (dataCbt == null) {
+        navigate("/exam/pin");
+      }
+      getSoal(selectSoal);
+      setOneget(true);
+    }
+  }, [oneget]);
+
+  function addhour(isoString, hoursToAdd) {
+    const date = new Date(isoString);
+    date.setHours(date.getHours() + hoursToAdd);
+    return date.toISOString();
+  }
+
+  const remaintime = dataCbt ? addhour(dataCbt?.start_attempt_at, 2) : "";
 
   const handleNextQuestion = () => {
     const currentIndex = listSoal.findIndex((item) => item === selectSoal);
@@ -24,6 +45,7 @@ const ExamCbtPage = () => {
       getSoal(listSoal[currentIndex + 1]);
     }
   };
+
   const handlePrevQuestion = () => {
     const currentIndex = listSoal.findIndex((item) => item === selectSoal);
     if (currentIndex > 0) {
@@ -51,13 +73,6 @@ const ExamCbtPage = () => {
     getSoal(number);
   };
 
-  useEffect(() => {
-    if (!oneget) {
-      getSoal(selectSoal);
-      setOneget(true);
-    }
-  }, [oneget]);
-
   return (
     <div className="grid grid-cols-4 gap-2 h-[85vh]">
       <div className="col-span-3 grid gap-2 h-full">
@@ -77,7 +92,7 @@ const ExamCbtPage = () => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <RemainingTime />
+        <RemainingTime endTime={remaintime} />
         <ListQuestionNumbers
           selectSoal={selectSoal}
           setSelectSoal={handleclickSoal}
