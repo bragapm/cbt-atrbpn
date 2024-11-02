@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideoTron";
+import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideotron";
 
 export const DataHasilAkhirUjianPesertaTable = () => {
   const [page, setPage] = React.useState(1);
