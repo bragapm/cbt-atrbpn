@@ -14,6 +14,10 @@ import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePe
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
 import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
+import { CreateCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/CreateCategorySoalPage";
+import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianDetailPage";
+import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
+import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPesertaPage";
 
 export const protectedRoutes = [
   {
@@ -77,12 +81,24 @@ export const protectedRoutes = [
         element: <ManagementHasilUjianPage />,
       },
       {
+        path: "hasil-ujian/detail",
+        element: <HasilAkhirUjianDetailPage />,
+      },
+      {
+        path: "hasil-ujian/detail/:pesertaId",
+        element: <HasilAkhirUjianPesertaPage />,
+      },
+      {
+        path: "hasil-ujian/list-pertanyaan/:questionId",
+        element: <HasilAkhirJawabanPesertaPage />,
+      },
+      {
         path: "tatib",
         element: <TatibPages />,
       },
       {
-        path: "pendistribusian-soal/create",
-        element: <ManagementHasilUjianPage />,
+        path: "kategori-soal/create",
+        element: <CreateCategorySoalPage />,
       },
     ],
   },

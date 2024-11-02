@@ -7,6 +7,7 @@ import {
   PenTool,
   User,
   Users,
+  Folder,
 } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -105,6 +106,12 @@ export function Sidebar() {
             href: "/pendistribusian-soal",
             activepath: "pendistribusian-soal",
           },
+          {
+            icon: <Folder size={18} />,
+            label: "Kategori Soal",
+            href: "/kategori-soal",
+            activepath: "kategori-soal",
+          },
         ],
       },
       {
@@ -114,6 +121,7 @@ export function Sidebar() {
             icon: <Users size={18} />,
             label: "Management Peserta CBT",
             href: "/peserta-cbt",
+            activepath: "peserta-cbt",
           },
           {
             icon: <User size={18} />,
@@ -124,6 +132,7 @@ export function Sidebar() {
             icon: <FileCheck size={18} />,
             label: "Management Hasil Ujian",
             href: "/hasil-ujian",
+            activepath: "hasil-ujian",
           },
           {
             icon: <Info size={18} />,

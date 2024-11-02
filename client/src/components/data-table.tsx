@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import {
   Table,
@@ -26,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   pagination: PaginationTableProps;
   labelButtonAction?: string;
+  iconButtonAction?: ReactNode;
   buttonAction?: () => void;
   isLoading?: boolean;
 }
@@ -35,6 +36,7 @@ export function DataTable<TData, TValue>({
   data,
   buttonAction,
   labelButtonAction = "Load More Data",
+  iconButtonAction,
   isLoading,
   pagination,
 }: DataTableProps<TData, TValue>) {
@@ -84,7 +86,7 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="w-auto max-w-20 ">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -120,7 +122,9 @@ export function DataTable<TData, TValue>({
               <Button
                 variant="actions"
                 size="actions"
-                startContent={<RefreshCw className="w-5 h-5" />}
+                startContent={
+                  iconButtonAction || <RefreshCw className="w-5 h-5" />
+                }
                 onClick={buttonAction}
               >
                 {labelButtonAction}
