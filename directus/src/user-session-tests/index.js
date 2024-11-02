@@ -53,6 +53,7 @@ export default (router, { services }) => {
         schema: req.schema,
       });
 
+      console.log({ user });
       // Fetch the session test by ID and make sure it belongs to the user
       const userSession = await userSessionService.readByQuery({
         filter: {
@@ -141,19 +142,32 @@ export default (router, { services }) => {
   });
 
   router.post("/finish", authMiddleware, async (req, res) => {
-    const { user_session_id } = req.body; // Assumes user_session_id is provided in the request body
+    const { user_session_id, feedback } = req.body; // Assumes user_session_id is provided in the request body
 
+    const user = req.user;
     try {
       const userTestService = new ItemsService("user_test", {
         schema: req.schema,
       });
+
       const userSessionService = new ItemsService("user_session_test", {
         schema: req.schema,
       });
 
+      const couponsService = new ItemsService("coupon", {
+        schema: req.schema,
+      });
+
+      const coupon = await couponsService.readByQuery({
+        filter: { user_id: user },
+        limit: 1,
+      });
+
+      const couponData = coupon[0];
+
       // Fetch all answers for the user session
       const userAnswers = await userTestService.readByQuery({
-        filter: { user_session_id: user_session_id },
+        filter: { user_session_id: user_session_id, user: user },
         fields: ["score_category", "score"],
       });
 
@@ -188,6 +202,7 @@ export default (router, { services }) => {
           wrong_answers: incorrectAnswers,
           not_answers: unanswered,
         }),
+        feedback: feedback,
       });
 
       // Prepare the response
@@ -195,6 +210,8 @@ export default (router, { services }) => {
         status: "success",
         data: {
           totalScore,
+          fullname: couponData.nama_peserta,
+          code: couponData.code,
         },
       };
 

@@ -1,8 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { FC } from "react";
+import { FC } from "react";
 
-interface IQuestion {}
-const QuestDetailTutorial: FC<IQuestion> = ({}) => {
+const QuestDetailTutorial: FC = () => {
   return (
     <div className="demo_quest w-full bg-white/80 border rounded-[16px] p-3 grid gap-3">
       <div className="flex justify-between items-center">
@@ -24,7 +23,7 @@ const QuestDetailTutorial: FC<IQuestion> = ({}) => {
           </button>
         </div>
       </div>
-      <div className="p-2 rounded-lg border bg-white">
+      <div className="p-2 rounded-lg border bg-white max-h-64 overflow-auto">
         <p>
           Tuan  Dr. dr. Andris Menantih, Sp.B-0ngk., telah menikah dengan Siti
           Amalia, S.Pd. dan mempunyai dua orang anak kandung yaitu Asri

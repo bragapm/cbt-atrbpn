@@ -1116,6 +1116,7 @@ packages:
   /@azure/abort-controller@2.1.2:
     resolution: {integrity: sha512-nBrLsEWm4J2u5LpAPjxADTlq3trDgVZZXHNKabeXZtpq3d3AbN/KGO82R87rdDz5/lYB024rtEf10/q0urNgsA==}
     engines: {node: '>=18.0.0'}
+    requiresBuild: true
     dependencies:
       tslib: 2.8.0
     dev: true

@@ -21,7 +21,6 @@ export default function ExamTutorial() {
     steps: [
       {
         title: "Mulai Tutorial",
-        // locale: { skip: <strong aria-label="skip">S-K-I-P</strong> },
         placement: "center",
         target: "body",
       },
@@ -30,13 +29,7 @@ export default function ExamTutorial() {
         floaterProps: {
           disableAnimation: true,
         },
-        // spotlightPadding: 50,
         placement: "left",
-        // styles: {
-        //   options: {
-        //     width: 300,
-        //   },
-        // },
         target: ".demo_quest",
         title: "Page soal",
       },
@@ -85,11 +78,6 @@ export default function ExamTutorial() {
     a11yChecker();
   }, []);
 
-  const handleClickStart = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setTourState((prevState) => ({ ...prevState, run: true }));
-  };
-
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
@@ -99,8 +87,6 @@ export default function ExamTutorial() {
       navigate("/exam/pin");
     }
   };
-
-  function CountdownTimer({ isRunning }) {}
 
   function Tooltip({
     backProps,
@@ -200,14 +186,12 @@ export default function ExamTutorial() {
   }
 
   return (
-    <div>
+    <>
       <Joyride
         callback={handleJoyrideCallback}
         continuous
         run={tourState.run}
         scrollToFirstStep
-        // showProgress
-        // showSkipButton
         disableOverlayClose
         steps={tourState.steps}
         styles={{
@@ -217,17 +201,7 @@ export default function ExamTutorial() {
         }}
         tooltipComponent={Tooltip}
       />
-      {/* <section className="demo__hero">
-        <div>
-          <button
-            onClick={handleClickStart}
-            className="p-3 border hover:bg-gray-200 rounded-lg"
-          >
-            Start
-          </button>
-        </div>
-      </section> */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2 h-[50vh]">
         <div className="col-span-3 grid gap-2">
           <QuestDetailTutorial />
           <MultiChoiceTutorial />
@@ -237,6 +211,6 @@ export default function ExamTutorial() {
           <ListQuestTutorial />
         </div>
       </div>
-    </div>
+    </>
   );
 }

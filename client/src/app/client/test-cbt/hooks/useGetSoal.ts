@@ -1,17 +1,21 @@
 import { useCallback, useState } from "react";
 
-export const useGetSessionUser = () => {
-  const [data, setData] = useState<any | null>(null);
+export const useGetSoal = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<any | null>(null);
+  const sesiId = localStorage.getItem("session_id")
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
+  const fetchData = useCallback(async (problem_id:any,notClear=true) => {
+    if(notClear){
+      setData(null)
+      setIsLoading(true);
+    }
     setError(null);
     try {
       const response = await fetch(
         import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
-        "/user-session-tests",
+        `/user-tests/${sesiId}?problem_id=${problem_id}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("user_token")}` },
         method: "GET",
@@ -21,10 +25,7 @@ export const useGetSessionUser = () => {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
-      setData(result?.data[0]);
-      if(result?.data[0]){
-        localStorage.setItem("session_id",result?.data[0]["session-id"])
-      }
+      setData(result?.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -32,6 +33,6 @@ export const useGetSessionUser = () => {
     }
   }, []);
 
-  return { data, error, getSession: fetchData };
+  return { data,isLoading, error, getSoal: fetchData };
 };
 
