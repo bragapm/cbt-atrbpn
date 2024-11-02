@@ -3,8 +3,8 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, File, MoreVertical, Trash } from "lucide-react";
-import React, { useState } from "react";
+import { Download, MoreVertical, Trash } from "lucide-react";
+import React, { FC } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
@@ -14,13 +14,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideoTron";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-export const DataHasilAkhirUjianPesertaTable = () => {
+interface ModalHasilUjianVideotronProps {
+  opened: boolean;
+  onOpenChange: () => void;
+}
+
+export const ModalHasilUjianVideotron: FC<ModalHasilUjianVideotronProps> = ({
+  opened,
+  onOpenChange,
+}) => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
@@ -93,39 +100,34 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   ];
 
   return (
-    <>
-      <SuccessDialog
-        isOpen={isShowSuccessDialog}
-        onOpenChange={setIsShowSuccessDialog}
-        description="Peserta berhasil dihapus"
-      />
-      <DeleteDialogConfirm
-        isOpen={isOpenDeleteConfirm}
-        onOpenChange={setIsOpenDeleteConfirm}
-        onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
-        }}
-        description="Apakah anda yakin ingin menghapus peserta ini ?"
-      />
-      <DataTable
-        data={userSessionTest?.data?.data}
-        columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: userSessionTest?.data?.meta?.total_count,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
-        labelButtonAction="Lihat Hasil Ujian"
-        iconButtonAction={<File className="w-5 h-5" />}
-        buttonAction={() => setIsOpenModalDetail(true)}
-      />
-      <ModalHasilUjianVideotron
-        opened={isOpenModalDetail}
-        onOpenChange={() => setIsOpenModalDetail(!isOpenModalDetail)}
-      />
-    </>
+    <Dialog open={opened} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-screen-lg">
+        <SuccessDialog
+          isOpen={isShowSuccessDialog}
+          onOpenChange={setIsShowSuccessDialog}
+          description="Peserta berhasil dihapus"
+        />
+        <DeleteDialogConfirm
+          isOpen={isOpenDeleteConfirm}
+          onOpenChange={setIsOpenDeleteConfirm}
+          onSubmit={() => {
+            console.log("delete");
+            setIsOpenDeleteConfirm(false);
+            setIsShowSuccessDialog(true);
+          }}
+          description="Apakah anda yakin ingin menghapus peserta ini ?"
+        />
+        <DataTable
+          data={userSessionTest?.data?.data}
+          columns={columns}
+          pagination={{
+            pageSize: 10,
+            totalItems: userSessionTest?.data?.meta?.total_count,
+            onPageChange: (page) => setPage(page),
+            currentPage: page,
+          }}
+        />
+      </DialogContent>
+    </Dialog>
   );
 };

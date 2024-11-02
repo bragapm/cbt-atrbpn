@@ -2,9 +2,16 @@ import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type HasilAkhirJawabanPeserta = {
   soalPertanyaan: string;
@@ -16,6 +23,7 @@ type HasilAkhirJawabanPeserta = {
 };
 
 export const DataHasilAkhirJawabanPesertaTable = () => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
@@ -119,7 +127,18 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() => navigate("/hasil-ujian/list-pertanyaan/171")}
+              >
+                Lihat Detail Peserta
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,

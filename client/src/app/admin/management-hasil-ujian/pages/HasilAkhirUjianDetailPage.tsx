@@ -2,23 +2,23 @@ import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React, { FC } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
-type ModalDataHasilAkhirUjianProps = {
-  isOpen: boolean;
-  onOpenChange: () => void;
-};
-
-export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
-  isOpen,
-  onOpenChange,
-}) => {
+export const HasilAkhirUjianDetailPage: FC = () => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
@@ -27,8 +27,6 @@ export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
     page,
     limit: 10,
   });
-
-  console.log(userSessionTest);
 
   if (!userSessionTest) {
     return null;
@@ -73,7 +71,7 @@ export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
@@ -82,7 +80,22 @@ export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(
+                    `/hasil-ujian/detail/${row.original.info_peserta.user_id}`
+                  )
+                }
+              >
+                Lihat Detail Peserta
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,
@@ -91,34 +104,38 @@ export const ModalDataHasilAkhirUjian: FC<ModalDataHasilAkhirUjianProps> = ({
   ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-screen-lg">
-        <SuccessDialog
-          isOpen={isShowSuccessDialog}
-          onOpenChange={setIsShowSuccessDialog}
-          description="Peserta berhasil dihapus"
-        />
-        <DeleteDialogConfirm
-          isOpen={isOpenDeleteConfirm}
-          onOpenChange={setIsOpenDeleteConfirm}
-          onSubmit={() => {
-            console.log("delete");
-            setIsOpenDeleteConfirm(false);
-            setIsShowSuccessDialog(true);
-          }}
-          description="Apakah anda yakin ingin menghapus peserta ini ?"
-        />
-        <DataTable
-          data={userSessionTest?.data?.data}
-          columns={columns}
-          pagination={{
-            pageSize: 10,
-            totalItems: userSessionTest?.data?.meta?.total_count,
-            onPageChange: (page) => setPage(page),
-            currentPage: page,
-          }}
-        />
-      </DialogContent>
-    </Dialog>
+    <div className="w-full h-full flex flex-col gap-3 pt-1">
+      <Breadcrumbs
+        paths={[
+          { label: "Management Hasil Ujian", path: "/hasil-ujian" },
+          { label: "Detail Hasil Ujian" },
+        ]}
+      />
+      <SuccessDialog
+        isOpen={isShowSuccessDialog}
+        onOpenChange={setIsShowSuccessDialog}
+        description="Peserta berhasil dihapus"
+      />
+      <DeleteDialogConfirm
+        isOpen={isOpenDeleteConfirm}
+        onOpenChange={setIsOpenDeleteConfirm}
+        onSubmit={() => {
+          console.log("delete");
+          setIsOpenDeleteConfirm(false);
+          setIsShowSuccessDialog(true);
+        }}
+        description="Apakah anda yakin ingin menghapus peserta ini ?"
+      />
+      <DataTable
+        data={userSessionTest?.data?.data}
+        columns={columns}
+        pagination={{
+          pageSize: 10,
+          totalItems: userSessionTest?.data?.meta?.total_count,
+          onPageChange: (page) => setPage(page),
+          currentPage: page,
+        }}
+      />
+    </div>
   );
 };

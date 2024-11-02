@@ -3,35 +3,37 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, File, MoreVertical, Trash } from "lucide-react";
-import React, { useState } from "react";
-import useGetUserSessionTestQueries, {
-  IUserSessionTest,
-} from "../../management-peserta/hooks/useGetUserSessionTestQueries";
+import React, { FC } from "react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import useGetUserTestQueries, {
+  IUserTest,
+} from "../../management-peserta/hooks/useGetUserTestQueries";
+import { useParams } from "react-router-dom";
+import { Download, MoreVertical, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideoTron";
 
-export const DataHasilAkhirUjianPesertaTable = () => {
+export const HasilAkhirJawabanPesertaPage: FC = () => {
+  const params = useParams();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
 
-  const { data: userSessionTest } = useGetUserSessionTestQueries({
+  const { data: userTest } = useGetUserTestQueries({
     page,
     limit: 10,
+    problem: `&filter[problem][id][_eq]=${params.questionId}`,
   });
 
-  if (!userSessionTest) {
+  if (!userTest) {
     return null;
   }
 
-  const columns: ColumnDef<IUserSessionTest>[] = [
+  const columns: ColumnDef<IUserTest>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -52,16 +54,12 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "info_peserta.code",
-      header: "ID Peseta",
-    },
-    {
-      accessorKey: "info_peserta.nama_peserta",
+      accessorKey: "user_session_id.info_peserta.nama_peserta",
       header: "Nama Peserta",
     },
     {
-      accessorKey: "score",
-      header: "Skor",
+      accessorKey: "answer.is_correct",
+      header: "Hasil Jawaban",
     },
     {
       id: "actions",
@@ -93,7 +91,18 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   ];
 
   return (
-    <>
+    <div className="w-full h-full flex flex-col gap-3 pt-1">
+      <Breadcrumbs
+        paths={[
+          { label: "Management Hasil Ujian", path: "/hasil-ujian" },
+          { label: "List Pertanyaan", path: "/hasil-ujian/list-pertanyaan" },
+          {
+            label:
+              userTest?.data?.data?.[0].user_session_id?.info_peserta
+                ?.nama_peserta,
+          },
+        ]}
+      />
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
@@ -110,22 +119,15 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
-        data={userSessionTest?.data?.data}
+        data={userTest?.data?.data}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: userSessionTest?.data?.meta?.total_count,
+          totalItems: userTest?.data?.meta?.filter_count,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
-        labelButtonAction="Lihat Hasil Ujian"
-        iconButtonAction={<File className="w-5 h-5" />}
-        buttonAction={() => setIsOpenModalDetail(true)}
       />
-      <ModalHasilUjianVideotron
-        opened={isOpenModalDetail}
-        onOpenChange={() => setIsOpenModalDetail(!isOpenModalDetail)}
-      />
-    </>
+    </div>
   );
 };
