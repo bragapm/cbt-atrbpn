@@ -19,7 +19,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   const { data: userTest } = useGetUserTestQueries({
     page,
     limit: 10,
-    peserta: `&filter[user][_eq]=${params.pesertaId}`,
+    pesertaId: params.pesertaId,
   });
 
   if (!userTest) {
@@ -70,7 +70,11 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
         paths={[
           { label: "Management Hasil Ujian", path: "/hasil-ujian" },
           { label: "Detail Hasil Ujian", path: "/hasil/ujian/detail" },
-          { label: "Ahmad Ansorudin" },
+          {
+            label:
+              userTest?.data?.data?.[0].user_session_id?.info_peserta
+                ?.nama_peserta,
+          },
         ]}
       />
       <SuccessDialog

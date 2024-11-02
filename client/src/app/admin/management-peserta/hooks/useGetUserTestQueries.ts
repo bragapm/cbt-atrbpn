@@ -25,20 +25,36 @@ export type IUserTest = {
 type IUserTestArgs = {
   limit: number;
   page: number;
-  peserta?: string;
-  problem?: string;
+  pesertaId?: string;
+  problemId?: string;
 };
 
 const useGetUserTestQueries = (queries?: IUserTestArgs) => {
   const service = new DirectusInterceptor();
-  const { limit, page, peserta, problem } = queries;
+  const { limit, page, pesertaId, problemId } = queries;
+
   return useQuery({
     queryKey: ["user-test", queries],
     queryFn: () => {
       const response = service.sendGetRequest<IBaseResponse<IUserTest[]>>(
-        `/items/user_test?fields=problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*${peserta}${problem}&filter[status][_eq]=published&limit=${limit}&offset=${
-          (page - 1) * limit
-        }&meta=*`
+        `/items/user_test`,
+        {
+          fields: [
+            "problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*",
+          ],
+          filter: {
+            status: { _eq: "published" },
+            user: { _eq: pesertaId },
+            problem: {
+              id: {
+                _eq: problemId,
+              },
+            },
+          },
+          meta: "*",
+          limit,
+          offset: (page - 1) * limit,
+        }
       );
       return response;
     },

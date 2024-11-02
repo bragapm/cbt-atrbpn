@@ -26,7 +26,7 @@ export const HasilAkhirJawabanPesertaPage: FC = () => {
   const { data: userTest } = useGetUserTestQueries({
     page,
     limit: 10,
-    problem: `&filter[problem][id][_eq]=${params.questionId}`,
+    problemId: params.questionId,
   });
 
   if (!userTest) {
