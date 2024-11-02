@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UjianInputForm from "./UjianInputForm";
 import { DatePicker } from "@/components/ui/date-picker";
 import { IUjianRequest } from "@/types/collection/ujian.type";
@@ -14,10 +14,29 @@ import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTabl
 import { useState } from "react";
 import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelectForm";
 import { Button } from "@/components/ui/button";
+import { useParams } from "react-router-dom";
+import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 
 const UjianForm: React.FC = () => {
   const [selectedSession, setSelectedSession] = useState<string>("");
   const form = useFormContext<IUjianRequest>();
+
+  const { id } = useParams();
+
+  const { data: detailData, isLoading: isLoadingDetailData } =
+    useGetDetailManajemenUjian({
+      ujianId: id,
+    });
+
+  useEffect(() => {
+    if (id && detailData) {
+      form.setValue("name", detailData.data.name || "");
+      form.setValue(
+        "start_time",
+        new Date(detailData.data.start_time) || new Date()
+      );
+    }
+  }, [id, detailData]);
 
   return (
     <Form {...form}>
@@ -61,7 +80,6 @@ const UjianForm: React.FC = () => {
           </div>
           <div className="w-1/3">
             <UjianSelectForm
-              // TODO: should refactor this component
               title="Sesi Ujian"
               data={[
                 { label: "Sesi 1", value: "1" },

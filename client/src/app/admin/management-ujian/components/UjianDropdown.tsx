@@ -31,7 +31,9 @@ const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
                 </Button>
               }
             />
-            <DropdownMenuItem onClick={() => navigate("#")}>
+            <DropdownMenuItem
+              onClick={() => navigate(`/ujian/edit/${ujianData.id}`)}
+            >
               Edit Sesi Ujian
             </DropdownMenuItem>
           </>
