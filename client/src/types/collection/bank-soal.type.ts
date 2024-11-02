@@ -3,7 +3,7 @@ import { IMateri } from "./materi.type";
 import { IQuestionChoiceRequest } from "./question-choice.type";
 
 export type IBankSoal = {
-  id: number;
+  id: number | string;
   status: string;
   sort: number | null;
   user_created: string | null;

@@ -1,3 +1,5 @@
+import useGetBankSoalPreview from "@/app/admin/management-question-bank/hooks/useGetBankSoalPreview";
+import ErrorPlaceholder from "@/components/error-placeholder";
 import RichTextEditor from "@/components/rich-text-editor";
 import SelectForm from "@/components/select-form";
 import {
@@ -7,18 +9,18 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Skeleton } from "@/components/ui/skeleton";
 import UploadFile from "@/components/upload-file";
+import { FOLDER_KEY } from "@/services/constants/folder-key";
+import DirectusUpload from "@/services/directus-upload";
 import { IBankSoalRequest } from "@/types/collection/bank-soal.type";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import useGetKategoriSoal from "../hooks/useGetKategoriSoal";
 import useGetMateriSoal from "../hooks/useGetMateriSoal";
 import BankSoalOptionForm from "./BankSoalOptionForm";
-import useGetBankSoalPreview from "@/app/admin/management-question-bank/hooks/useGetBankSoalPreview";
-import { useParams } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle } from "lucide-react";
-import ErrorPlaceholder from "@/components/error-placeholder";
+import { getDirectusUrl } from "@/lib/utils";
 
 const booleanData = [
   {
@@ -40,6 +42,34 @@ const BankSoalForm: React.FC = () => {
   const { id } = useParams();
 
   const { data, isLoading, isError } = useGetBankSoalPreview(id);
+
+  const handleFileUpload = async (file: File | null) => {
+    if (!file) return;
+
+    try {
+      const directusFileResponse = await DirectusUpload({
+        file,
+        folderKey: FOLDER_KEY.question_image,
+      });
+
+      const fileUrl = getDirectusUrl(directusFileResponse.id);
+
+      // Get current editor content
+      const currentContent = form.getValues("question") || "";
+
+      // Create HTML element based on file type
+      let insertContent = "";
+      insertContent = `<p><img src="${fileUrl}" alt="${file.name}"  /></p>`;
+
+      // Combine existing content with new file content
+      const newContent = currentContent + insertContent;
+
+      // Update the form
+      form.setValue("question", newContent);
+    } catch (error) {
+      console.error("Error handling file upload:", error);
+    }
+  };
 
   const handleOnChangeOption = (value: string, index: number) => {
     const newValue = [...form.getValues("choice")];
@@ -190,7 +220,13 @@ const BankSoalForm: React.FC = () => {
             render={({ field }) => (
               <FormItem className="w-full h-full">
                 <FormControl>
-                  <UploadFile value={field.value} onChange={field.onChange} />
+                  <UploadFile
+                    value={field.value}
+                    onChange={(file) => {
+                      field.onChange(file);
+                      handleFileUpload(file as File);
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
