@@ -21,7 +21,7 @@ export type IBankSoal = {
 };
 
 export type IBankSoalRequest = {
-  id?: number;
+  id?: number | string;
   kategori_id: string | null;
   random_options: string;
   random_question: string;

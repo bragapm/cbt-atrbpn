@@ -90,7 +90,6 @@ const BankSoalCreatePage: React.FC = () => {
             <p className="text-base font-light">
               Mata Ujian Peraturan Jabatan PPAT
             </p>
-            <p className="text-sm  font-light">Soal No. 13 / 20</p>
           </div>
         </CardTitle>
 

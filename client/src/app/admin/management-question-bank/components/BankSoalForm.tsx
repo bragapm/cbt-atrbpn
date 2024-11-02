@@ -91,14 +91,22 @@ const BankSoalForm: React.FC = () => {
 
   React.useEffect(() => {
     if (id && data) {
+      const selectedMateri = dataMateri?.data?.find(
+        (item) => item.id === data.questionBank.data.materi_id?.id
+      );
+      const selectedKategori = dataKategori?.data?.find(
+        (item) => item.id === data.questionBank.data.kategori_id?.id
+      );
+
       form.setValue(
         "materi_id",
-        data?.questionBank.data.materi_id?.id as string
+        selectedMateri ? String(selectedMateri.id) : ""
       );
       form.setValue(
         "kategori_id",
-        data?.questionBank?.data?.kategori_id?.id as string
+        selectedKategori ? String(selectedKategori.id) : ""
       );
+
       form.setValue(
         "random_question",
         data?.questionBank?.data?.random_question ? "true" : "false"
@@ -121,7 +129,7 @@ const BankSoalForm: React.FC = () => {
         })
       );
     }
-  }, [id, data]);
+  }, [id, data, dataMateri, dataKategori]);
 
   if (isLoading) return <Skeleton className="w-full h-[65vh]" />;
 

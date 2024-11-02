@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";
@@ -103,7 +103,6 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
               setId(row.original.id);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />

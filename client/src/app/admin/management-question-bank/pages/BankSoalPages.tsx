@@ -36,6 +36,15 @@ const BankSoalPages = () => {
             <Button
               variant="actions"
               size="actions"
+              startContent={<Cloud />}
+              onClick={() => navigate("/bank-soal/export")}
+            >
+              Export Soal
+            </Button>
+
+            <Button
+              variant="actions"
+              size="actions"
               startContent={<Plus />}
               onClick={() => navigate("/bank-soal/create")}
             >
