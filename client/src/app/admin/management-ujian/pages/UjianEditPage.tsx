@@ -6,16 +6,29 @@ import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UjianForm from "../components/UjianForm";
+import useMutateUpdateUjian from "../hooks/useMutateUpdateUjian";
 
 const UjianEditPage: React.FC = () => {
+  const { id } = useParams();
   const form = useForm();
   const [confirmationDialog, setConfirmationDialog] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigation = useNavigate();
 
-  const onSubmit = (data: IUjianRequest) => {};
+  const { mutate: updateUjian, isLoading } = useMutateUpdateUjian({
+    onSuccess: () => {
+      setIsSuccess(true);
+      setConfirmationDialog(false);
+    },
+  });
+
+  const onSubmit = (data: IUjianRequest) => {
+    if (id) {
+      updateUjian({ ...data, id });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -28,7 +41,7 @@ const UjianEditPage: React.FC = () => {
         }}
       />
       <ConfirmationDialog
-        isLoading={false}
+        isLoading={isLoading}
         isOpen={confirmationDialog}
         onOpenChange={setConfirmationDialog}
         description="Apakah Anda yakin ingin edit data ini?"

@@ -81,7 +81,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "sesiUjian",
       header: "Sesi Ujian",
       cell: ({ row }) => {
-        const sesiUjian = row.original.id;
+        const sesiUjian = row.original.sesi_ujian;
         return sesiUjian;
       },
     },
