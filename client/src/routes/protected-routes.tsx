@@ -18,6 +18,7 @@ import { CreateCategorySoalPage } from "@/app/admin/management-kategori-soal/pag
 import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianDetailPage";
 import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
 import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPesertaPage";
+import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/EditCategorySoalPage";
 
 export const protectedRoutes = [
   {
@@ -99,6 +100,10 @@ export const protectedRoutes = [
       {
         path: "kategori-soal/create",
         element: <CreateCategorySoalPage />,
+      },
+      {
+        path: "kategori-soal/edit/:id",
+        element: <EditCategorySoalPage />,
       },
     ],
   },
