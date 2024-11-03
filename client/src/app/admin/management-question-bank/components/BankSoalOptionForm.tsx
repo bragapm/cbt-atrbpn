@@ -47,7 +47,11 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
           />
         </div>
         <div>
-          <UploadFile value={fileValue} onChange={onChangeFileValue} />
+          <UploadFile
+            title="Unggah Gambar"
+            value={fileValue}
+            onChange={onChangeFileValue}
+          />
         </div>
         <SelectForm
           data={booleanData}

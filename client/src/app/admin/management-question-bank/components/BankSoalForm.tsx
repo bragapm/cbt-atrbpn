@@ -229,6 +229,7 @@ const BankSoalForm: React.FC = () => {
               <FormItem className="w-full h-full">
                 <FormControl>
                   <UploadFile
+                    title="Unggah Gambar"
                     value={field.value}
                     onChange={(file) => {
                       field.onChange(file);

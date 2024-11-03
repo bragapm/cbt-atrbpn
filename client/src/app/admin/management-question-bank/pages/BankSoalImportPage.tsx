@@ -10,18 +10,55 @@ import {
 } from "@/components/ui/form";
 import UploadFile from "@/components/upload-file";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import useImportBankSoal from "../hooks/useImportBankSoal";
+import SuccessDialog from "@/components/success-dialog";
+import ConfirmationDialog from "@/components/confirmation-dialog";
 
 const BankSoalImportPage: React.FC = () => {
   const form = useForm({});
-
   const navigation = useNavigate();
+  const [file, setFile] = useState<File | null>(null);
+  const [confirmationDialog, setConfirmationDialog] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const { mutate: importBankSoal } = useImportBankSoal({
+    onSuccess: () => {
+      setIsSuccess(true);
+      setConfirmationDialog(false);
+    },
+    onError: (error: string) => {
+      alert(error);
+    },
+  });
+
+  const onSubmit = () => {
+    if (!file) {
+      alert("Silahkan Pilih File untuk di import!");
+      return;
+    }
+    importBankSoal(file);
+  };
 
   return (
     <Form {...form}>
       <div className="flex flex-col gap-2">
+        <SuccessDialog
+          isOpen={isSuccess}
+          onOpenChange={setIsSuccess}
+          description="Data Berhasil Diimport"
+          onSubmit={() => {
+            navigation("/bank-soal");
+          }}
+        />
+        <ConfirmationDialog
+          isOpen={confirmationDialog}
+          onOpenChange={setConfirmationDialog}
+          description="Apakah Anda yakin ingin menyimpan data ini?"
+          onSubmit={onSubmit}
+        />
         <BreadcrumbAdmin
           items={[
             { label: "Daftar Soal", href: "/bank-soal" },
@@ -43,13 +80,17 @@ const BankSoalImportPage: React.FC = () => {
             <div className="w-full h-full">
               <FormField
                 control={form.control}
-                name="kategori_id"
+                name="file"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <UploadFile
-                        value={field.value}
-                        onChange={field.onChange}
+                        title="Import File Soal"
+                        value={file}
+                        onChange={(newFile: File) => {
+                          setFile(newFile);
+                          field.onChange(newFile);
+                        }}
                         className="w-full h-full text-left flex justify-between px-4 "
                       />
                     </FormControl>
@@ -74,7 +115,12 @@ const BankSoalImportPage: React.FC = () => {
             >
               Batal
             </Button>
-            <Button variant="actions" size="actions" className="w-44">
+            <Button
+              variant="actions"
+              size="actions"
+              className="w-44"
+              onClick={() => setConfirmationDialog(true)}
+            >
               Import Soal
             </Button>
           </CardFooter>
