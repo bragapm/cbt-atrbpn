@@ -9,17 +9,17 @@ type IUseMutateQuestionCategory = {
   onError?: (error: string) => void;
 };
 
-const useCreateKategoriSoalMutation = ({
-  onSuccess,
-  onError,
-}: IUseMutateQuestionCategory) => {
+const useUpdateQuestionCategoryMutation = (
+  id: string,
+  { onSuccess, onError }: IUseMutateQuestionCategory
+) => {
   const service = new DirectusInterceptor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CreateQuestionCategoryFormValue[]) => {
-      const response = await service.sendPostRequest(
-        "/items/kategori_soal",
+    mutationFn: async (data: Partial<CreateQuestionCategoryFormValue>) => {
+      const response = await service.sendPatchRequest(
+        `/items/kategori_soal/${id}`,
         data
       );
 
@@ -41,4 +41,4 @@ const useCreateKategoriSoalMutation = ({
   });
 };
 
-export default useCreateKategoriSoalMutation;
+export default useUpdateQuestionCategoryMutation;

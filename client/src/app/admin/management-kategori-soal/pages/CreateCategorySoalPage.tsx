@@ -3,6 +3,14 @@ import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/forms/FormInput";
 import { FormProvider, useForm, useFieldArray } from "react-hook-form";
 import { Plus, Trash } from "lucide-react";
+import useCreateKategoriSoalMutation from "../hooks/useCreateKategoriSoalMutation";
+import SuccessDialog from "@/components/success-dialog";
+import ConfirmationDialog from "@/components/confirmation-dialog";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { CreateQuestionCategoryFormValue } from "../types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createQuestionCategorySchema } from "../schemas/CreateQuestionCategorySchema";
 
 const CreateCategoryFormInner = ({ control }) => {
   const { fields, append, remove } = useFieldArray({
@@ -74,7 +82,12 @@ const CreateCategoryFormInner = ({ control }) => {
 };
 
 export const CreateCategorySoalPage = () => {
+  const navigation = useNavigate();
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+
   const methods = useForm({
+    resolver: zodResolver(createQuestionCategorySchema),
     defaultValues: {
       kategori_soal: [
         {
@@ -88,14 +101,40 @@ export const CreateCategorySoalPage = () => {
     mode: "onTouched",
   });
 
-  const { control, handleSubmit } = methods;
+  const { control, handleSubmit, formState } = methods;
+  const { isValid } = formState;
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const { mutateAsync: createQuestionCategory, isLoading } =
+    useCreateKategoriSoalMutation({
+      onSuccess: () => {
+        setIsSuccess(true);
+        setConfirmationDialog(false);
+      },
+    });
+
+  const onSubmit = (data: {
+    kategori_soal: CreateQuestionCategoryFormValue[];
+  }) => {
+    createQuestionCategory(data.kategori_soal);
   };
 
   return (
     <section className="pt-1">
+      <SuccessDialog
+        isOpen={isSuccess}
+        onOpenChange={setIsSuccess}
+        description="Kategori Soal Ditambahkan"
+        onSubmit={() => {
+          navigation("/kategori-soal");
+        }}
+      />
+      <ConfirmationDialog
+        isLoading={isLoading}
+        isOpen={confirmationDialog}
+        onOpenChange={setConfirmationDialog}
+        description="Apakah Anda yakin ingin menambahkan Kategori Soal"
+        onSubmit={handleSubmit(onSubmit)}
+      />
       <Breadcrumbs
         paths={[
           { label: "Daftar Management Kategori Soal", path: "/kategori-soal" },
@@ -107,15 +146,17 @@ export const CreateCategorySoalPage = () => {
           <h1 className="text-lg">Tambah Kategori Kesulitan</h1>
         </header>
         <FormProvider {...methods}>
-          <form className="mt-4 space-y-2" onSubmit={handleSubmit(onSubmit)}>
-            <CreateCategoryFormInner control={control} />
-            <div className="flex justify-end gap-3 pt-5">
-              <Button className="h-12 w-40">Batal</Button>
-              <Button type="submit" className="h-12 w-40">
-                Simpan
-              </Button>
-            </div>
-          </form>
+          <CreateCategoryFormInner control={control} />
+          <div className="flex justify-end gap-3 pt-5">
+            <Button className="h-12 w-40">Batal</Button>
+            <Button
+              onClick={() => setConfirmationDialog(true)}
+              className="h-12 w-40"
+              disabled={!isValid}
+            >
+              Simpan
+            </Button>
+          </div>
         </FormProvider>
       </div>
     </section>
