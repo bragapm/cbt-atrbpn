@@ -3,15 +3,21 @@ import CardHeader from "./CardHeader";
 import JadwalCard from "./JadwalCard";
 import ChartCard from "./ChartCard";
 import Pagination from "./Pagination";
+import useGetJadwalSesi from "../hooks/useGetJadwalSesi";
 
 const JadwalSesiSection = () => {
   const [dataChartSoal, setChartDataSoal] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 50;
 
+  const { data } = useGetJadwalSesi({
+    page: currentPage,
+    limit: 2,
+  });
+  console.log(data?.data?.data);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Lakukan sesuatu ketika halaman berubah, misalnya fetch data baru
   };
   const legenda: any[] = [
     {
@@ -57,8 +63,10 @@ const JadwalSesiSection = () => {
           listName="Pilih Sesi"
         />
         <div className="flex justify-between gap-4 py-4">
-          <JadwalCard />
-          <JadwalCard />
+          {data &&
+            data?.data?.data?.map((el, idx) => (
+              <JadwalCard key={idx} data={el} />
+            ))}
         </div>
         <div className="w-full items-center flex">
           <Pagination
