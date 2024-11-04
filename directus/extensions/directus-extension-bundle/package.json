@@ -72,6 +72,11 @@
         "type": "endpoint",
         "name": "metric-group-soal",
         "source": "src/metric-group-soal/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "account-distributions",
+        "source": "src/account-distributions/index.js"
       }
     ],
     "host": "10.8.2"
