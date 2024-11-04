@@ -1,6 +1,10 @@
+//endpoint metric pertnyaan dengan detail kategori (jawab benar/salah/tidak jawab)
+
 export default function registerEndpoint(router, { database, logger }) {
     router.get('/', async (req, res) => {
         try {
+            const { page = 1, limit = 10 } = req.query;
+            const offset = (page - 1) * limit;
             const metricSoal = await database.raw(`
                 SELECT 
                     qb.id AS question_id,
@@ -13,11 +17,29 @@ export default function registerEndpoint(router, { database, logger }) {
                 LEFT JOIN 
                     user_test ut ON qb.id = ut.problem 
                 GROUP BY 
-                    qb.id, qb.question;
+                    qb.id, qb.question
+                LIMIT ?
+                OFFSET ?;
+            `, [parseInt(limit, 10), parseInt(offset, 10)]);
+
+            // total jumlah records 
+            const totalRecordsResult = await database.raw(`
+                SELECT COUNT(DISTINCT qb.id) AS total
+                FROM questions_bank qb
+                LEFT JOIN user_test ut ON qb.id = ut.problem;
             `);
-            const totalMetricSoal = metricSoal.rows || 0;
+            const totalRecords = totalRecordsResult.rows[0]?.total || 0;
+
+            const totalPages = Math.ceil(totalRecords / limit);
+
             res.json({
-                totalMetricSoal,
+                data: metricSoal.rows,
+                pagination: {
+                    totalRecords,
+                    totalPages,
+                    currentPage: parseInt(page, 10),
+                    limit: parseInt(limit, 10)
+                }
             });
 
         } catch (error) {
