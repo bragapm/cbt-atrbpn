@@ -4,6 +4,7 @@ import JadwalCard from "./JadwalCard";
 import ChartCard from "./ChartCard";
 import Pagination from "./Pagination";
 import useGetJadwalSesi from "../hooks/useGetJadwalSesi";
+import useStatistikBankSoal from "../hooks/useStatistikBankSoal";
 
 const JadwalSesiSection = () => {
   const [dataChartSoal, setChartDataSoal] = useState<any>(null);
@@ -14,7 +15,9 @@ const JadwalSesiSection = () => {
     page: currentPage,
     limit: 2,
   });
-  console.log(data?.data?.data);
+
+  const { data: materisoal } = useStatistikBankSoal("");
+  console.log(materisoal?.data);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -82,6 +85,7 @@ const JadwalSesiSection = () => {
           subtitle={"Data ditampilkan sesuai dengan filter"}
           listOption={[]}
           listName="Pilih Paket Soal"
+          hide
         />
         <div className="flex flex-col justify-between gap-4 p-4 rounded-lg mt-4 border bg-white">
           <p className="font-semibold ">Data Soal</p>
@@ -100,16 +104,17 @@ const JadwalSesiSection = () => {
             </div>
             <div className="p-4 border rounded-lg text-xs flex flex-col gap-2 ">
               <p>Materi Soal</p>
-              {[1, 2, 3, 4, 5].map((el) => (
-                <div key={el}>
-                  <p className="font-bold">32</p>
-                  <p className="text-[10px]">Bahasa Indo</p>
-                </div>
-              ))}
+              {materisoal?.data &&
+                materisoal?.data?.soalPerKategori?.map((el, idx) => (
+                  <div key={el.materi_id}>
+                    <p className="font-bold">{el.jumlah_soal}</p>
+                    <p className="text-[10px]">{el.materi}</p>
+                  </div>
+                ))}
             </div>
           </div>
           <p className="text-xs">
-            Data ini menampilkan sesuai dengan filter paket yang dipilih
+            Data ini menampilkan sesuai dengan filter yang dipilih
           </p>
         </div>
       </div>

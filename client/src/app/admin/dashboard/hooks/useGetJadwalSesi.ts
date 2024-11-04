@@ -19,17 +19,13 @@ type IUserSessionTestArgs = {
 const useGetJadwalSesi = (queries?: IUserSessionTestArgs) => {
   const service = new DirectusInterceptor();
   const { limit, page } = queries;
-
   return useQuery({
     queryKey: ["session-test", queries],
     queryFn: () => {
       const response = service.sendGetRequest<IBaseResponse<IJadwalSesi[]>>(
-        `/items/session_test?limit=${limit}&offset=${
-          (page - 1) * limit
-        }&meta=*`,
-        {
-          fields: "*.*",
-        }
+        `/items/session_test`,
+        { fields: ["*.*"], meta: "*", page, limit }
+
       );
       return response;
     },

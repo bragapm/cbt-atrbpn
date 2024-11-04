@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IjadwalCard {
   data: any;
 }
 const JadwalCard: FC<IjadwalCard> = ({ data }) => {
+  const navigate = useNavigate();
   const StartEndTime = (title, time, date) => {
     return (
       <div>
@@ -23,7 +25,9 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
       <div className="flex gap-2 items-center ">
         {StartEndTime(
           "Mulai",
-          new Date(data.start_time).toLocaleTimeString("id"),
+          new Date(data.start_time).getHours() +
+            " : " +
+            new Date(data.start_time).getMinutes(),
           new Date(data.start_time).toDateString()
         )}
         <div className="bg-white shadow-md rounded-full border border-gray-50 p-3 flex">
@@ -31,7 +35,9 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
         </div>
         {StartEndTime(
           "Selesai",
-          new Date(data.end_time).toLocaleTimeString("id"),
+          new Date(data.end_time).getHours() +
+            " : " +
+            new Date(data.end_time).getMinutes(),
           new Date(data.end_time).toDateString()
         )}
       </div>
@@ -52,7 +58,14 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
         </div>
       </div>
       <div className=" pt-4">
-        <Button className="bg-[#8CBAC7] text-white w-full">Lihat Detail</Button>
+        <Button
+          className="bg-[#8CBAC7] text-white w-full"
+          onClick={() => {
+            navigate("/ujian");
+          }}
+        >
+          Lihat Detail
+        </Button>
       </div>
     </div>
   );

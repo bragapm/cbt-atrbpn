@@ -2,24 +2,14 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseResponse } from "@/types/base-response";
 import { useQuery } from "react-query";
 
-type IQuestionCategory = {
-  nama_kategori: string;
-  bobot_benar: number;
-  bobot_salah: number;
-  tidak_menjawab: number;
-  id: number;
-};
-
-const useStatistikBankSoal = (id: string) => {
+const useStatistikBankSoal = (id?: string) => {
   const service = new DirectusInterceptor();
+  let query = id ? "metric-materi?materi_id="+id:"metric-group-soal"
   return useQuery({
-    queryKey: ["statistik-bank-soal", id],
+    queryKey: ["statistik-bank-soal", query],
     queryFn: () => {
-      const response = service.sendGetRequest<IBaseResponse<IQuestionCategory>>(
-        `/items/kategori_soal/${id}`,
-        {
-          fields: "*.*",
-        }
+      const response = service.sendGetRequest<any>(
+        `/${query}`
       );
       return response;
     },
