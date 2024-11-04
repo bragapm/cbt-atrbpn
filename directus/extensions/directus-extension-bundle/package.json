@@ -47,6 +47,16 @@
         "type": "endpoint",
         "name": "export-pertanyaan",
         "source": "src/export-pertanyaan/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-hasil",
+        "source": "src/export-hasil/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "metric-dashboard",
+        "source": "src/metric-dashboard/index.js"
       }
     ],
     "host": "10.8.2"
