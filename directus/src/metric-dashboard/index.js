@@ -25,28 +25,10 @@ export default function registerEndpoint(router, { database, logger }) {
             `);
             const finishedTests = finishedTestsResult.rows || 0;
 
-            // total questions
-            const soalResult = await database.raw(`
-                SELECT COUNT(*) AS jumlah_soal 
-                FROM questions_bank qb;
-            `);
-            const jumlahSoal = soalResult.rows || 0;
-
-            // questions per materi
-            const soalPerKategoriResult = await database.raw(`
-                SELECT qb.materi_id, ms.materi, COUNT(*) AS jumlah_soal
-                FROM questions_bank qb
-                JOIN materi_soal ms ON qb.materi_id = ms.id 
-                GROUP BY qb.materi_id, ms.materi;
-            `);
-            const soalPerKategori = soalPerKategoriResult.rows || [];
-
             res.json({
                 totalRegisteredUsers,
                 ongoingTests,
                 finishedTests,
-                jumlahSoal,
-                soalPerKategori
             });
 
         } catch (error) {

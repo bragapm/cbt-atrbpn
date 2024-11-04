@@ -62,6 +62,16 @@
         "type": "endpoint",
         "name": "metric-pertanyaan",
         "source": "src/metric-pertanyaan/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "metric-materi",
+        "source": "src/metric-materi/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "metric-group-soal",
+        "source": "src/metric-group-soal/index.js"
       }
     ],
     "host": "10.8.2"
