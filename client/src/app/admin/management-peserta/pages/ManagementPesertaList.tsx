@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import TableActions from "@/components/table-actions";
 import { Button } from "@/components/ui/button";
 import { Plus, Upload } from "lucide-react";
@@ -5,6 +6,7 @@ import PesertaCBTTable from "../components/PesertaTable";
 import { useNavigate } from "react-router-dom";
 import useGetUserSessionTestQueries from "../hooks/useGetUserSessionTestQueries";
 import { useState } from "react";
+import { useExportUserSessionTest } from "../hooks/useExportUserSessionTest";
 
 const PAGE_LIMIT = 10;
 
@@ -17,6 +19,10 @@ export const ManagementPesertaList = () => {
     limit: PAGE_LIMIT,
     page,
   });
+
+  const handleDownloadPeserta = () => {
+    useExportUserSessionTest();
+  };
 
   if (!pesertaCbt) {
     return null;
@@ -33,6 +39,7 @@ export const ManagementPesertaList = () => {
               variant="actions"
               size="actions"
               startContent={<Upload size="14" />}
+              onClick={handleDownloadPeserta}
             >
               Export Data Peserta
             </Button>

@@ -4,28 +4,23 @@ import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { CreateUserSessionTest } from "../types";
 
-type IUseMutateUserSession = {
+type IUseUpdateUserSessionMutate = {
   onSuccess?: () => void;
   onError?: (error: string) => void;
 };
 
-const useCreateUserSessionMutation = ({
-  onSuccess,
-  onError,
-}: IUseMutateUserSession) => {
+const useUpdateUserSessionMutation = (
+  id: string,
+  { onSuccess, onError }: IUseUpdateUserSessionMutate
+) => {
   const service = new DirectusInterceptor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CreateUserSessionTest) => {
-      const response = await service.sendPostRequest(
-        "/items/user_session_test",
-        {
-          ...data,
-          created_at: new Date(),
-          updated_at: new Date(),
-          status: "published",
-        }
+    mutationFn: async (data: Partial<CreateUserSessionTest>) => {
+      const response = await service.sendPatchRequest(
+        `/items/user_session_test/${id}`,
+        data
       );
 
       return response;
@@ -46,4 +41,4 @@ const useCreateUserSessionMutation = ({
   });
 };
 
-export default useCreateUserSessionMutation;
+export default useUpdateUserSessionMutation;

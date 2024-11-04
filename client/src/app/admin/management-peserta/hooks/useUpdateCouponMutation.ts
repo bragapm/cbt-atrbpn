@@ -2,31 +2,26 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseErrorResponse } from "@/types/errors";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { CreateUserSessionTest } from "../types";
+import { UpdateCoupon } from "../types";
 
-type IUseMutateUserSession = {
+type IUseUpdateCouponMutate = {
   onSuccess?: () => void;
   onError?: (error: string) => void;
 };
 
-const useCreateUserSessionMutation = ({
-  onSuccess,
-  onError,
-}: IUseMutateUserSession) => {
+const useUpdateCouponMutation = (
+  id: number,
+  { onSuccess, onError }: IUseUpdateCouponMutate
+) => {
   const service = new DirectusInterceptor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CreateUserSessionTest) => {
-      const response = await service.sendPostRequest(
-        "/items/user_session_test",
-        {
-          ...data,
-          created_at: new Date(),
-          updated_at: new Date(),
-          status: "published",
-        }
-      );
+    mutationFn: async (data: Partial<UpdateCoupon>) => {
+      const response = await service.sendPatchRequest(`/items/coupon/${id}`, {
+        ...data,
+        updateAt: new Date(),
+      });
 
       return response;
     },
@@ -46,4 +41,4 @@ const useCreateUserSessionMutation = ({
   });
 };
 
-export default useCreateUserSessionMutation;
+export default useUpdateCouponMutation;
