@@ -57,6 +57,11 @@
         "type": "endpoint",
         "name": "metric-dashboard",
         "source": "src/metric-dashboard/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "metric-pertanyaan",
+        "source": "src/metric-pertanyaan/index.js"
       }
     ],
     "host": "10.8.2"
