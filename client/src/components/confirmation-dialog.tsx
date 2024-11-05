@@ -10,6 +10,7 @@ type DeleteDialogConfirmProps = {
   description?: string;
   isLoading?: boolean;
   onSubmit?: () => void;
+  icon?: React.ReactNode;
 };
 
 const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
@@ -18,12 +19,13 @@ const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
   description,
   isLoading,
   onSubmit,
+  icon,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col gap-6 justify-center items-center">
         <Card className="bg-white p-8 w-fit">
-          <Check className="text-primary w-12 h-12" />
+          {icon ? icon : <Check className="text-primary w-12 h-12" />}
         </Card>
         <h1 className="text-xl font-medium">Konfirmasi</h1>
         <p className="text-sm text-gray-500">{description}</p>
