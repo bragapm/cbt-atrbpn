@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UjianInputForm from "./UjianInputForm";
-import UjianSelectForm from "./UjianSelectForm";
 import { DatePicker } from "@/components/ui/date-picker";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import {
@@ -10,12 +9,47 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import useGetUserUjian from "../hooks/useGetUserUjian";
 import { useFormContext } from "react-hook-form";
+import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
+import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelectForm";
+import { Button } from "@/components/ui/button";
+import { useParams } from "react-router-dom";
+import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
+import ErrorPlaceholder from "@/components/error-placeholder";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const UjianForm: React.FC = () => {
-  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian();
   const form = useFormContext<IUjianRequest>();
+  const { id } = useParams();
+
+  const {
+    data: detailData,
+    isLoading: isLoadingDetailData,
+    isError,
+  } = useGetDetailManajemenUjian(id);
+
+  const sessionOptions = [
+    { label: "Sesi 1", value: "1" },
+    { label: "Sesi 2", value: "2" },
+    { label: "Sesi 3", value: "3" },
+    { label: "Sesi 4", value: "4" },
+    { label: "Sesi 5", value: "5" },
+  ];
+
+  useEffect(() => {
+    if (id && detailData) {
+      form.setValue("name", detailData.data.name || "");
+      form.setValue("start_time", new Date(detailData.data.start_time));
+      form.setValue(
+        "sesi_ujian",
+        detailData.data.sesi_ujian ? String(detailData.data.sesi_ujian) : ""
+      );
+    }
+  }, [id, detailData]);
+
+  if (isLoadingDetailData) return <Skeleton className="w-full h-[65vh]" />;
+
+  if (isError) return <ErrorPlaceholder />;
 
   return (
     <Form {...form}>
@@ -58,12 +92,22 @@ const UjianForm: React.FC = () => {
             />
           </div>
           <div className="w-1/3">
-            <UjianSelectForm
-              // TODO: should refactor this component
-              title="Sesi Ujian"
-              data={[{ label: "Sesi 1", value: "Sesi 1" }]}
-              onChange={() => {}}
-              value=""
+            <FormField
+              control={form.control}
+              name="sesi_ujian"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <UjianSelectForm
+                      title="Sesi Ujian"
+                      value={field.value}
+                      onChange={field.onChange}
+                      data={sessionOptions}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
@@ -72,20 +116,21 @@ const UjianForm: React.FC = () => {
           <FormField
             control={form.control}
             name="user"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormControl>
-                  <UjianSelectForm
-                    title="Peserta Ujian"
-                    value={field.value}
-                    onChange={field.onChange}
-                    isLoading={isLoadingUser}
-                    data={dataUser?.data?.map((item) => {
-                      return {
-                        value: String(item.id),
-                        label: item.first_name + " " + item.last_name,
-                      };
-                    })}
+                  <UjianTablePeserta
+                    triggerButton={
+                      <Button
+                        variant="outline"
+                        className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
+                      >
+                        <p className="text-gray-500 font-light text-xs">
+                          Peserta Ujian
+                        </p>
+                        <p>Buka Data Peserta Ujian</p>
+                      </Button>
+                    }
                   />
                 </FormControl>
                 <FormMessage />

@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   iconButtonAction?: ReactNode;
   buttonAction?: () => void;
   isLoading?: boolean;
+  actionButton?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
   iconButtonAction,
   isLoading,
   pagination,
+  actionButton,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const table = useReactTable({
