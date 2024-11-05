@@ -92,6 +92,16 @@
         "type": "endpoint",
         "name": "metric-score",
         "source": "src/metric-score/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-session",
+        "source": "src/export-session/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "generate-pin",
+        "source": "src/generate-pin/index.js"
       }
     ],
     "host": "10.8.2"
