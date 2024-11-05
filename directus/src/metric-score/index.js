@@ -16,7 +16,7 @@ export default function registerEndpoint(router, { database, logger }) {
             if (date) {
                 avgScoreByDateQuery += ` WHERE DATE(start_attempt_at) = ? `;
             }
-            avgScoreByDateQuery += `GROUP BY DATE(start_attempt_at) ORDER BY date;`;
+            avgScoreByDateQuery += `GROUP BY DATE(start_attempt_at)`;
 
             const avgScoreByDateResult = await database.raw(avgScoreByDateQuery, date ? [date] : []);
             const avgScoreByDate = avgScoreByDateResult.rows.map(row => ({
@@ -42,9 +42,9 @@ export default function registerEndpoint(router, { database, logger }) {
             // optional date filter
             let avgScoreBySessionQuery = `
                 SELECT 
+                    st.id AS session,
+                    st.name AS session_name,
                     DATE(ust.start_attempt_at) AS date,
-                    st.id as session,
-                    st.name,
                     AVG(ust.score) AS average_score
                 FROM 
                     user_session_test ust 
@@ -55,12 +55,12 @@ export default function registerEndpoint(router, { database, logger }) {
                 avgScoreBySessionQuery += ` WHERE DATE(ust.start_attempt_at) = ? `;
             }
             avgScoreBySessionQuery += `
-                GROUP BY DATE(ust.start_attempt_at), st.name, st.id
-
-            `;
+                GROUP BY DATE(ust.start_attempt_at), st.name, st.id`;
 
             const avgScoreBySessionResult = await database.raw(avgScoreBySessionQuery, date ? [date] : []);
+            console.log(avgScoreBySessionResult);
             const avgScoreBySession = avgScoreBySessionResult.rows.map(row => ({
+                session_name: row.session_name,
                 date: row.date,
                 session: row.session,
                 average_score: parseFloat(row.average_score)
