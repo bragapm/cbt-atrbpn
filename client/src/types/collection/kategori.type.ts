@@ -1,5 +1,5 @@
 export type IKategori = {
-  id: number;
+  id: number | string;
   user_created: string;
   date_created: string; // or Date if you prefer handling as Date objects
   user_updated: string;

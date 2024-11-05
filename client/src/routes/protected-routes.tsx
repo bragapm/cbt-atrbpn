@@ -43,7 +43,7 @@ export const protectedRoutes = [
         element: <BankSoalCreatePage />,
       },
       {
-        path: "bank-soal/edit",
+        path: "bank-soal/edit/:id",
         element: <BankSoalEditPage />,
       },
       {
