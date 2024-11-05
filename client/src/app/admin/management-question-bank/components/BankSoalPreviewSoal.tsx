@@ -71,7 +71,7 @@ const BankSoalPreviewSoal: React.FC<IBankSoalPreviewSoal> = ({ data }) => {
             <ChevronLeft className="h-4 w-4" onClick={prevItem} />
           </Button>
           <Button variant="outline" size="icon">
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" onClick={nextItem} />
           </Button>
         </div>
       </CardHeader>

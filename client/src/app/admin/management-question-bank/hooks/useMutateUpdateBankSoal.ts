@@ -68,6 +68,7 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
         return {
           ...item,
+          order: index + 1,
           question_id: questionValue.id,
           option_image: uploadedOptionImageId, // This will be null if not uploaded
           option_id: existingChoices?.[index]?.id, // Using the id from the response

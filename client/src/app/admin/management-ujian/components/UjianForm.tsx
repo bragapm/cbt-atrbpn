@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 import ErrorPlaceholder from "@/components/error-placeholder";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 const UjianForm: React.FC = () => {
   const form = useFormContext<IUjianRequest>();
@@ -55,7 +56,7 @@ const UjianForm: React.FC = () => {
     <Form {...form}>
       <div className="w-full flex flex-col gap-3">
         <div className="w-full flex gap-3">
-          <div className="w-1/3">
+          <div className="w-full">
             <FormField
               control={form.control}
               name="name"
@@ -73,17 +74,20 @@ const UjianForm: React.FC = () => {
               )}
             />
           </div>
-          <div className="w-1/3">
+        </div>
+
+        <div className="w-full flex gap-3">
+          <div className="w-full">
             <FormField
               control={form.control}
               name="start_time"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <DatePicker
-                      title="Tanggal Ujian"
-                      value={field.value}
-                      onChange={field.onChange}
+                    <DateTimePicker
+                      title="Mulai Ujian"
+                      date={field.value}
+                      setDate={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -91,18 +95,17 @@ const UjianForm: React.FC = () => {
               )}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-full">
             <FormField
               control={form.control}
-              name="sesi_ujian"
+              name="start_time"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <UjianSelectForm
-                      title="Sesi Ujian"
-                      value={field.value}
-                      onChange={field.onChange}
-                      data={sessionOptions}
+                    <DateTimePicker
+                      title="Selesai Ujian"
+                      date={field.value}
+                      setDate={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

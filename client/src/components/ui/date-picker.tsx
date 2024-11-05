@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 
 type IDatePicker = {
   title: string;
@@ -25,7 +26,7 @@ export function DatePicker({ title, value, onChange }: IDatePicker) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-full h-full text-left font-normal",
+            "w-full justify-between text-left font-normal h-[55px]",
             !value && "text-muted-foreground"
           )}
         >
@@ -33,6 +34,7 @@ export function DatePicker({ title, value, onChange }: IDatePicker) {
             <span className="text-xs text-gray-500">{title}</span>
             {value ? format(value, "PPP") : <span>Pick a date</span>}
           </div>
+          <CalendarIcon className="mr-2 h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

@@ -42,7 +42,7 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
       const questionId = response.data.data.id;
 
       // Step 3: Upload images for each choice option and prepare data for options
-      const choiceValue = choice?.map(async (item) => {
+      const choiceValue = choice?.map(async (item, index) => {
         const uploadedOption = item.option_image
           ? await DirectusUpload({
               file: item.option_image as File,
@@ -52,6 +52,7 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
         return {
           ...item,
+          order: index + 1,
           question_id: questionId,
           option_image: uploadedOption ? uploadedOption.id : null,
         };
