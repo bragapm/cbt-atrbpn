@@ -16,6 +16,7 @@ export type IUserSessionTest = {
   };
   session: {
     name: string;
+    id: number;
   };
   id: number;
   score: number;

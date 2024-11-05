@@ -12,15 +12,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-type HasilAkhirJawabanPeserta = {
-  soalPertanyaan: string;
-  materiSoal: string;
-  kategoriSoal: string;
-  jawabanBenar: number;
-  jawabanSalah: number;
-  tidakMenjawab: number;
-};
+import useGetQuestionMetricsQuery, {
+  QuestionMetric,
+} from "../hooks/useGetQuestionMetricsQuery";
 
 export const DataHasilAkhirJawabanPesertaTable = () => {
   const navigate = useNavigate();
@@ -28,50 +22,16 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
-  const hasilJawabanDummy: HasilAkhirJawabanPeserta[] = [
-    {
-      soalPertanyaan: "Lorem ipsum",
-      materiSoal: "TPU",
-      kategoriSoal: "Sulit",
-      jawabanBenar: 10,
-      jawabanSalah: 20,
-      tidakMenjawab: 20,
-    },
-    {
-      soalPertanyaan: "Lorem ipsum",
-      materiSoal: "TPU",
-      kategoriSoal: "Sulit",
-      jawabanBenar: 10,
-      jawabanSalah: 20,
-      tidakMenjawab: 20,
-    },
-    {
-      soalPertanyaan: "Lorem ipsum",
-      materiSoal: "TPU",
-      kategoriSoal: "Sulit",
-      jawabanBenar: 10,
-      jawabanSalah: 20,
-      tidakMenjawab: 20,
-    },
-    {
-      soalPertanyaan: "Lorem ipsum",
-      materiSoal: "TPU",
-      kategoriSoal: "Sulit",
-      jawabanBenar: 10,
-      jawabanSalah: 20,
-      tidakMenjawab: 20,
-    },
-    {
-      soalPertanyaan: "Lorem ipsum",
-      materiSoal: "TPU",
-      kategoriSoal: "Sulit",
-      jawabanBenar: 10,
-      jawabanSalah: 20,
-      tidakMenjawab: 20,
-    },
-  ];
+  const { data: questionMetric } = useGetQuestionMetricsQuery({
+    limit: 10,
+    page,
+  });
 
-  const columns: ColumnDef<HasilAkhirJawabanPeserta>[] = [
+  if (!questionMetric) {
+    return null;
+  }
+
+  const columns: ColumnDef<QuestionMetric>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -92,27 +52,37 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "soalPertanyaan",
+      accessorKey: "question_text",
       header: "Soal Pertanyaan",
+      cell: ({ row }) => {
+        const question = row.original.question_text;
+        return (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: question,
+            }}
+          />
+        );
+      },
     },
+    // {
+    //   accessorKey: "materiSoal",
+    //   header: "Materi Soal",
+    // },
+    // {
+    //   accessorKey: "kategoriSoal",
+    //   header: "Kategori Soal",
+    // },
     {
-      accessorKey: "materiSoal",
-      header: "Materi Soal",
-    },
-    {
-      accessorKey: "kategoriSoal",
-      header: "Kategori Soal",
-    },
-    {
-      accessorKey: "jawabanBenar",
+      accessorKey: "correct_count",
       header: "Jawaban Benar",
     },
     {
-      accessorKey: "jawabanSalah",
+      accessorKey: "incorrect_count",
       header: "Jawaban Salah",
     },
     {
-      accessorKey: "tidakMenjawab",
+      accessorKey: "no_answer_count",
       header: "Tidak Menjawab",
     },
     {
@@ -164,11 +134,11 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
-        data={hasilJawabanDummy}
+        data={questionMetric.data.data}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: 60,
+          totalItems: Number(questionMetric.data.pagination.totalRecords),
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

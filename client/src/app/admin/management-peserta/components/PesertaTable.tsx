@@ -56,7 +56,7 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
     },
     {
       accessorKey: "info_peserta.code",
-      header: "ID Peseta",
+      header: "ID Peserta",
     },
     {
       accessorKey: "info_peserta.nama_peserta",

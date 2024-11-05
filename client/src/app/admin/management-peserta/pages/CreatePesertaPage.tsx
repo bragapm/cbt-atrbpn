@@ -1,11 +1,49 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/forms/FormInput";
-import { FormProvider, useForm } from "react-hook-form";
+import {
+  FormProvider,
+  useForm,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
 import { CreatePesertaCBTFormValue } from "../types";
 import { FormSelect } from "@/components/forms/FormSelect";
+import useGetUserQuery from "../hooks/useGetUserQuery";
+import useCreateUserSessionMutation from "../hooks/useCreateUserSessionMutation";
+import useGetSessionTestQueries from "../hooks/useGetSessionTestQueries";
+import { useMemo, useState } from "react";
+import SuccessDialog from "@/components/success-dialog";
+import ConfirmationDialog from "@/components/confirmation-dialog";
+import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createManagementPesertaSchema } from "../schemas/CreateManagementPesertaSchema";
+import useUpdateCouponMutation from "../hooks/useUpdateCouponMutation";
 
-const CreatePesertaFormInner = () => {
+const CreatePesertaFormInner = ({
+  openDialogConfirmation,
+}: {
+  openDialogConfirmation: () => void;
+}) => {
+  const { formState } = useFormContext();
+
+  const { isValid } = formState;
+
+  const { data: sessionTest } = useGetSessionTestQueries();
+
+  const sessionTestOption = useMemo(() => {
+    if (sessionTest?.data?.data) {
+      const options = sessionTest.data.data.map((item) => {
+        return {
+          label: item.name,
+          value: String(item.id),
+        };
+      });
+      return options;
+    }
+    return [];
+  }, [sessionTest]);
+
   return (
     <>
       <div className="flex gap-3">
@@ -28,17 +66,18 @@ const CreatePesertaFormInner = () => {
         />
         <FormSelect
           label="Sesi Ujian"
-          options={[
-            { label: "Sesi 1", value: "1" },
-            { label: "Sesi 2", value: "2" },
-          ]}
+          options={sessionTestOption}
           name="sesiUjian"
         />
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
-        <Button type="submit" className="w-40">
+        <Button
+          onClick={openDialogConfirmation}
+          disabled={!isValid}
+          className="w-40"
+        >
           Tambah Peserta
         </Button>
       </div>
@@ -47,7 +86,13 @@ const CreatePesertaFormInner = () => {
 };
 
 export const CreatePesertaPage = () => {
-  const methods = useForm({
+  const navigation = useNavigate();
+
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+
+  const methods = useForm<CreatePesertaCBTFormValue>({
+    resolver: zodResolver(createManagementPesertaSchema),
     defaultValues: {
       idPeserta: "",
       namaPeserta: "",
@@ -57,12 +102,63 @@ export const CreatePesertaPage = () => {
     mode: "onTouched",
   });
 
+  const idPeserta = useWatch({
+    control: methods.control,
+    name: "idPeserta",
+  });
+
+  const { handleSubmit } = methods;
+
+  const { data: users } = useGetUserQuery({ code: idPeserta });
+
+  const { mutateAsync: createUserSession, isLoading } =
+    useCreateUserSessionMutation({
+      onSuccess: () => {
+        setIsSuccess(true);
+        setConfirmationDialog(false);
+      },
+    });
+
+  const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
+    users?.data?.data[0].id,
+    {
+      onSuccess: () => {},
+    }
+  );
+
   const onSubmit = (data: CreatePesertaCBTFormValue) => {
-    console.log("Form Data:", data);
+    if (users.data.data[0]) {
+      const user = users.data.data[0];
+      createUserSession({
+        user: user.user_id.id,
+        session: data.sesiUjian,
+        info_peserta: String(user.id),
+      });
+
+      updateCoupon({
+        nama_peserta: data.namaPeserta,
+        nomor_kontak: data.nomorKontak,
+      });
+    }
   };
 
   return (
     <section>
+      <SuccessDialog
+        isOpen={isSuccess}
+        onOpenChange={setIsSuccess}
+        description="Peserta CBT Ditambahkan"
+        onSubmit={() => {
+          navigation("/peserta-cbt");
+        }}
+      />
+      <ConfirmationDialog
+        isLoading={isLoading}
+        isOpen={confirmationDialog}
+        onOpenChange={setConfirmationDialog}
+        description="Apakah Anda yakin ingin menambahkan Peserta CBT"
+        onSubmit={handleSubmit(onSubmit)}
+      />
       <Breadcrumbs
         paths={[
           { label: "Daftar Peserta", path: "/peserta-cbt" },
@@ -75,12 +171,11 @@ export const CreatePesertaPage = () => {
           <h2 className="text-sm">Data Peserta Ujian CBT ATR/BPN</h2>
         </header>
         <FormProvider {...methods}>
-          <form
-            className="mt-4 space-y-2"
-            onSubmit={methods.handleSubmit(onSubmit)}
-          >
-            <CreatePesertaFormInner />
-          </form>
+          <div className="mt-4 space-y-2">
+            <CreatePesertaFormInner
+              openDialogConfirmation={() => setConfirmationDialog(true)}
+            />
+          </div>
         </FormProvider>
       </div>
     </section>
