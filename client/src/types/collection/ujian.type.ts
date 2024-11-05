@@ -8,7 +8,7 @@ export type IUjian = {
   updated_at: string;
   deleted_at: string | null;
   PIN: number | null;
-  sesi_ujian: number | null;
+  user: IUserSessionTest;
 };
 
 export type IUjianRequest = {
@@ -17,5 +17,18 @@ export type IUjianRequest = {
   start_time: Date;
   end_time: Date;
   user: string[];
-  sesi_ujian: string;
+};
+
+export type IUserSessionTest = {
+  id: number;
+  session: number;
+  user: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type IUserSessionTestRequest = {
+  id?: number | string;
+  session: number | string;
+  user: string;
 };

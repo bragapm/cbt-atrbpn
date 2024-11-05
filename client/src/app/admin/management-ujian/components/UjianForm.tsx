@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import UjianInputForm from "./UjianInputForm";
-import { DatePicker } from "@/components/ui/date-picker";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import {
   Form,
@@ -11,8 +10,6 @@ import {
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
-import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelectForm";
-import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 import ErrorPlaceholder from "@/components/error-placeholder";
@@ -31,13 +28,12 @@ const UjianForm: React.FC = () => {
 
   useEffect(() => {
     if (id && detailData) {
-      form.setValue("name", detailData.data.name || "");
-      form.setValue("start_time", new Date(detailData.data.start_time));
-      form.setValue("end_time", new Date(detailData.data.end_time));
-      form.setValue(
-        "sesi_ujian",
-        detailData.data.sesi_ujian ? String(detailData.data.sesi_ujian) : ""
-      );
+      form.setValue("name", detailData.name || "");
+      form.setValue("start_time", new Date(detailData.start_time));
+      form.setValue("end_time", new Date(detailData.end_time));
+      if (detailData.user) {
+        form.setValue("user", detailData.user.user);
+      }
     }
   }, [id, detailData]);
 

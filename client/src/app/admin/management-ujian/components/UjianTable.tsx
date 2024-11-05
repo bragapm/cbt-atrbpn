@@ -78,11 +78,33 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     },
     {
-      accessorKey: "sesiUjian",
-      header: "Sesi Ujian",
+      accessorKey: "mulaiUjian",
+      header: "Mulai Ujian",
       cell: ({ row }) => {
-        const sesiUjian = row.original.sesi_ujian;
-        return sesiUjian;
+        const mulaiUjian = row.original.start_time;
+        const date = new Date(mulaiUjian);
+        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}/${date.getFullYear()}`;
+
+        return formattedDate;
+      },
+    },
+    {
+      accessorKey: "selesaiUjian",
+      header: "Selesai Ujian",
+      cell: ({ row }) => {
+        const selesaiUjian = row.original.end_time;
+        const date = new Date(selesaiUjian);
+        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}/${date.getFullYear()}`;
+
+        return formattedDate;
       },
     },
     {
