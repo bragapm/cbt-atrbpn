@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
+
 import useGetPieJadwalUjian from "../hooks/useGetPieJadwalUjian";
 import useGetJadwalUjian from "../hooks/useGetJadwalUjian";
-import { useState, useEffect } from "react";
+import MemoLoader from "@/components/ui/Loader";
 import CardHeader from "./CardHeader";
 import ChartCard from "./ChartCard";
 
@@ -46,18 +48,13 @@ const StatistikJadwal = () => {
     {
       icon: "/images/ic-calendar.svg",
       name: "Sesi Ujian Hari ini",
-      value: data?.data?.todayTests,
+      value: data?.data?.todayTests || 0,
     },
     {
       icon: "/images/ic-computer.svg",
       name: "Sesi Ujian Minggu Ini",
-      value: data?.data?.thisWeekTests,
+      value: data?.data?.thisWeekTests || 0,
     },
-    // {
-    //   icon: "/images/ic-globe.svg",
-    //   name: "Sesi Ujian Bulan Ini",
-    //   value: 20,
-    // },
   ];
 
   return (
@@ -70,10 +67,10 @@ const StatistikJadwal = () => {
       />
       <div className="grid grid-cols-2 gap-4">
         <div className=" gap-4 grid">
-          {cardlist.map((el) => (
+          {cardlist.map((el, idx) => (
             <div
               className="border px-4 py-3 rounded-lg flex gap-4 items-center bg-white"
-              key={el.value}
+              key={idx}
             >
               <div className="rounded-full shadow-md w-12 h-12 border border-gray-100 flex items-center text-center">
                 <img src={el.icon} className="w-5 h-5 m-auto"></img>
@@ -85,8 +82,8 @@ const StatistikJadwal = () => {
             </div>
           ))}
         </div>
-        <div className="col-span-1 bg-white rounded-lg border p-2">
-          {dataChartDataAverage && (
+        <div className="col-span-1 bg-white rounded-lg border p-2 flex">
+          {dataChartDataAverage ? (
             <ChartCard
               datas={dataChartDataAverage}
               legend={legenda}
@@ -96,6 +93,10 @@ const StatistikJadwal = () => {
                 value: " ",
               }}
             />
+          ) : (
+            <div className="m-auto">
+              <MemoLoader width={30} height={30} color={"#2A6083"} />
+            </div>
           )}
         </div>
       </div>

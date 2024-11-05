@@ -4,12 +4,12 @@ import { useQuery } from "react-query";
 
 const useStatistikBankSoal = (id?: string) => {
   const service = new DirectusInterceptor();
-  let query = id ? "metric-materi?materi_id="+id:"metric-group-soal"
+  let query = id ? "?materi_id="+id:""
   return useQuery({
     queryKey: ["statistik-bank-soal", query],
     queryFn: () => {
       const response = service.sendGetRequest<any>(
-        `/${query}`
+        `/metric-materi${query}`
       );
       return response;
     },

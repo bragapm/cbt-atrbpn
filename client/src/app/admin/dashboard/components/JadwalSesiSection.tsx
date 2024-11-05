@@ -17,7 +17,6 @@ const JadwalSesiSection = () => {
   });
 
   const { data: materisoal } = useStatistikBankSoal("");
-  console.log(materisoal?.data);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -36,25 +35,51 @@ const JadwalSesiSection = () => {
       color: "bg-[#8CBAC7]",
     },
   ];
-  useEffect(() => {
-    let label: string[] = ["Sulit", "Sangat Mudah", "Mudah"];
-    let newData: any[] = [50, 30, 20];
-    let bgColors: string[] = ["#2A6083", "#699EB2", "#8CBAC7"];
 
-    const data = {
-      labels: label,
-      datasets: [
-        {
-          label: "",
-          data: newData,
-          backgroundColor: bgColors,
-          borderWidth: 0,
-          color: "#fff",
-        },
-      ],
-    };
-    setChartDataSoal(data);
-  }, []);
+  function hitungJumlahSoalPerKategori(data) {
+    const jumlahSoalPerKategori = {};
+    data.forEach((materi) => {
+      if (!jumlahSoalPerKategori[materi.nama_kategori]) {
+        jumlahSoalPerKategori[materi.nama_kategori] = 0;
+      }
+      jumlahSoalPerKategori[materi.nama_kategori] += Number(materi.jumlah_soal);
+    });
+    let kat = [];
+    let jum = [];
+    let total: any = 0;
+    Object.entries(jumlahSoalPerKategori).map(([kategori, jumlah]) => {
+      kat.push(kategori);
+      jum.push(jumlah);
+      total = total + jumlah;
+    });
+
+    return { kategori: kat, jumlah: jum, total: total };
+  }
+
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    if (materisoal?.data) {
+      const hasil = hitungJumlahSoalPerKategori(materisoal?.data?.data);
+      let label: string[] = hasil.kategori;
+      let newData: any[] = hasil.jumlah;
+      let bgColors: string[] = ["#2A6083", "#699EB2", "#8CBAC7"];
+      console.log(hasil.total);
+      setTotal(hasil.total);
+      const data = {
+        labels: label,
+        datasets: [
+          {
+            label: "",
+            data: newData,
+            backgroundColor: bgColors,
+            borderWidth: 0,
+            color: "#fff",
+          },
+        ],
+      };
+      setChartDataSoal(data);
+    }
+  }, [materisoal]);
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -97,7 +122,7 @@ const JadwalSesiSection = () => {
                   legend={legenda}
                   centerContent={{
                     label: "Jumlah Soal",
-                    value: 100,
+                    value: total,
                   }}
                 />
               )}
@@ -105,8 +130,8 @@ const JadwalSesiSection = () => {
             <div className="p-4 border rounded-lg text-xs flex flex-col gap-2 ">
               <p>Materi Soal</p>
               {materisoal?.data &&
-                materisoal?.data?.soalPerKategori?.map((el, idx) => (
-                  <div key={el.materi_id}>
+                materisoal?.data?.data?.map((el, idx) => (
+                  <div key={idx}>
                     <p className="font-bold">{el.jumlah_soal}</p>
                     <p className="text-[10px]">{el.materi}</p>
                   </div>

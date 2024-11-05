@@ -12,7 +12,6 @@ const QuestDetailTutorial: FC = () => {
             <p className={`font-medium`}>Sulit</p>
           </div>
           <p className="text-primary font-medium">Soal No.1</p>
-          <p className="text-sm">| Soal Kategori Tugas Pokok PPAT</p>
         </div>
         <div className="flex gap-3 items-center">
           <button className="border rounded-md border-primary p-1 hover:bg-primary/20">
