@@ -15,6 +15,7 @@ export type IUjianRequest = {
   id?: number | string;
   name: string;
   start_time: Date;
-  user: string;
+  end_time: Date;
+  user: string[];
   sesi_ujian: string;
 };

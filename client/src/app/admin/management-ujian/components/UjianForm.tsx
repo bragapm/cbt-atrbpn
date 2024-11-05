@@ -29,18 +29,11 @@ const UjianForm: React.FC = () => {
     isError,
   } = useGetDetailManajemenUjian(id);
 
-  const sessionOptions = [
-    { label: "Sesi 1", value: "1" },
-    { label: "Sesi 2", value: "2" },
-    { label: "Sesi 3", value: "3" },
-    { label: "Sesi 4", value: "4" },
-    { label: "Sesi 5", value: "5" },
-  ];
-
   useEffect(() => {
     if (id && detailData) {
       form.setValue("name", detailData.data.name || "");
       form.setValue("start_time", new Date(detailData.data.start_time));
+      form.setValue("end_time", new Date(detailData.data.end_time));
       form.setValue(
         "sesi_ujian",
         detailData.data.sesi_ujian ? String(detailData.data.sesi_ujian) : ""
@@ -98,7 +91,7 @@ const UjianForm: React.FC = () => {
           <div className="w-full">
             <FormField
               control={form.control}
-              name="start_time"
+              name="end_time"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -119,21 +112,12 @@ const UjianForm: React.FC = () => {
           <FormField
             control={form.control}
             name="user"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <UjianTablePeserta
-                    triggerButton={
-                      <Button
-                        variant="outline"
-                        className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
-                      >
-                        <p className="text-gray-500 font-light text-xs">
-                          Peserta Ujian
-                        </p>
-                        <p>Buka Data Peserta Ujian</p>
-                      </Button>
-                    }
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />
