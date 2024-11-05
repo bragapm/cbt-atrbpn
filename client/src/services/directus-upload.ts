@@ -1,3 +1,4 @@
+import { IBaseResponse } from "@/types/base-response";
 import { DirectusInterceptor } from "./directus-interceptors";
 
 const service = new DirectusInterceptor();
@@ -40,13 +41,16 @@ const DirectusUpload = async ({ file, folderKey }: IDirectusUpload) => {
 
   formData.append("file", file);
 
-  const response = await service.sendPostRequest("/files", formData, "", {
+  const response = await service.sendPostRequest<
+    any,
+    IBaseResponse<IDirectusUploadResponse>
+  >("/files", formData, "", {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 
-  return response.data as IDirectusUploadResponse;
+  return response.data.data;
 };
 
 export default DirectusUpload;

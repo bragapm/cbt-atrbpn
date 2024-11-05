@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
 import { useState } from "react";
 
-const limit: number = 10;
+const limit: number = 20;
 
 const BankSoalPages = () => {
   const navigate = useNavigate();
@@ -31,6 +31,15 @@ const BankSoalPages = () => {
               onClick={() => navigate("/bank-soal/import")}
             >
               Import Soal
+            </Button>
+
+            <Button
+              variant="actions"
+              size="actions"
+              startContent={<Cloud />}
+              onClick={() => navigate("/bank-soal/export")}
+            >
+              Export Soal
             </Button>
 
             <Button
