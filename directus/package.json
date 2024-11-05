@@ -88,6 +88,11 @@
         "type": "endpoint",
         "name": "account-distributions",
         "source": "src/account-distributions/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "upcoming-tests",
+        "source": "src/upcoming-tests/index.js"
       }
     ],
     "host": "10.8.2"
