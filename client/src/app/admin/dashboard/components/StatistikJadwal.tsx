@@ -1,9 +1,14 @@
+import useGetPieJadwalUjian from "../hooks/useGetPieJadwalUjian";
+import useGetJadwalUjian from "../hooks/useGetJadwalUjian";
 import { useState, useEffect } from "react";
 import CardHeader from "./CardHeader";
 import ChartCard from "./ChartCard";
 
 const StatistikJadwal = () => {
+  const { data: pieData } = useGetPieJadwalUjian();
+  const { data } = useGetJadwalUjian();
   const [dataChartDataAverage, setChartDataAverage] = useState<any>(null);
+
   const legenda: any[] = [
     {
       label: "Sedang Berlangsung",
@@ -14,44 +19,49 @@ const StatistikJadwal = () => {
       color: "bg-[#699EB2]",
     },
   ];
-  useEffect(() => {
-    let label: string[] = ["Sedang Berlangsung", "Belum Dimulai"];
-    let newData: any[] = [50, 30];
-    let bgColors: string[] = ["#2A6083", "#699EB2"];
 
-    const data = {
-      labels: label,
-      datasets: [
-        {
-          label: "",
-          data: newData,
-          backgroundColor: bgColors,
-          borderWidth: 0,
-          color: "#fff",
-        },
-      ],
-    };
-    setChartDataAverage(data);
-  }, []);
+  useEffect(() => {
+    if (pieData) {
+      const obj = pieData?.data;
+      let newData: any[] = [obj?.completedTests, obj?.nonCompletedTests];
+      let label: string[] = ["Sedang Berlangsung", "Belum Dimulai"];
+      let bgColors: string[] = ["#2A6083", "#699EB2"];
+      const data = {
+        labels: label,
+        datasets: [
+          {
+            label: "",
+            data: newData,
+            backgroundColor: bgColors,
+            borderWidth: 0,
+            color: "#fff",
+          },
+        ],
+      };
+      setChartDataAverage(data);
+    }
+  }, [pieData]);
+
   const cardlist = [
     {
       icon: "/images/ic-calendar.svg",
       name: "Sesi Ujian Hari ini",
-      value: 1000,
+      value: data?.data?.todayTests,
     },
     {
       icon: "/images/ic-computer.svg",
       name: "Sesi Ujian Minggu Ini",
-      value: 30,
+      value: data?.data?.thisWeekTests,
     },
-    {
-      icon: "/images/ic-globe.svg",
-      name: "Sesi Ujian Bulan Ini",
-      value: 20,
-    },
+    // {
+    //   icon: "/images/ic-globe.svg",
+    //   name: "Sesi Ujian Bulan Ini",
+    //   value: 20,
+    // },
   ];
+
   return (
-    <div className=" space-y-4 ">
+    <div className="space-y-4">
       <CardHeader
         title={"Statistik Jadwal Ujian"}
         subtitle={"Data ditampilkan sesuai dengan filter"}
@@ -82,8 +92,8 @@ const StatistikJadwal = () => {
               legend={legenda}
               height={220}
               centerContent={{
-                label: "Selisih",
-                value: "50%",
+                label: " ",
+                value: " ",
               }}
             />
           )}

@@ -2,24 +2,18 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseResponse } from "@/types/base-response";
 import { useQuery } from "react-query";
 
-type IQuestionCategory = {
-  nama_kategori: string;
-  bobot_benar: number;
-  bobot_salah: number;
-  tidak_menjawab: number;
-  id: number;
+type IUpcoming = {
+  todayTests: string;
+  thisWeekTests: string;
 };
 
-const useGetJadwalUjian = (id: string) => {
+const useGetJadwalUjian = () => {
   const service = new DirectusInterceptor();
   return useQuery({
-    queryKey: ["jadwal-ujian-summary", id],
+    queryKey: ["jadwal-ujian-summary","jadwal"],
     queryFn: () => {
-      const response = service.sendGetRequest<IBaseResponse<IQuestionCategory>>(
-        `/items/kategori_soal/${id}`,
-        {
-          fields: "*.*",
-        }
+      const response = service.sendGetRequest<IUpcoming>(
+        `/upcoming-tests/upcoming`
       );
       return response;
     },
