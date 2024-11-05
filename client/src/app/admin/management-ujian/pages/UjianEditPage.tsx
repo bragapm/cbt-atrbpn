@@ -1,22 +1,23 @@
 import BreadcrumbAdmin from "@/components/breadcrumb-admin";
 import ConfirmationDialog from "@/components/confirmation-dialog";
+import SuccessDialog from "@/components/success-dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import UjianForm from "../components/UjianForm";
-import useMutateUjian from "../hooks/useMutateUjian";
-import { useNavigate } from "react-router-dom";
-import SuccessDialog from "@/components/success-dialog";
+import useMutateUpdateUjian from "../hooks/useMutateUpdateUjian";
 
-const UjianCreatePages: React.FC = () => {
+const UjianEditPage: React.FC = () => {
+  const { id } = useParams();
   const form = useForm();
   const [confirmationDialog, setConfirmationDialog] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigation = useNavigate();
 
-  const { mutate, isLoading } = useMutateUjian({
+  const { mutate: updateUjian, isLoading } = useMutateUpdateUjian({
     onSuccess: () => {
       setIsSuccess(true);
       setConfirmationDialog(false);
@@ -24,7 +25,9 @@ const UjianCreatePages: React.FC = () => {
   });
 
   const onSubmit = (data: IUjianRequest) => {
-    mutate(data);
+    if (id) {
+      updateUjian({ ...data, id });
+    }
   };
 
   return (
@@ -41,19 +44,19 @@ const UjianCreatePages: React.FC = () => {
         isLoading={isLoading}
         isOpen={confirmationDialog}
         onOpenChange={setConfirmationDialog}
-        description="Apakah Anda yakin ingin menyimpan data ini?"
+        description="Apakah Anda yakin ingin edit data ini?"
         onSubmit={form.handleSubmit(onSubmit)}
       />
       <BreadcrumbAdmin
         items={[
           { label: "Daftar Ujian", href: "/ujian" },
-          { label: "Tambah Sesi Ujian" },
+          { label: "Edit Ujian" },
         ]}
       />
       <Card className="px-4 pt-4 pb-1 flex flex-col gap-4 overflow-y-auto relative h-[49vh]">
         <CardTitle className="flex justify-between">
           <div className="flex flex-col gap-1">
-            <h1 className="text-xl font-light">Tambah Sesi Ujian</h1>
+            <h1 className="text-xl font-light">Edit Ujian</h1>
             <p className="text-base font-light">
               Mata Ujian Peraturan Jabatan PPAT
             </p>
@@ -80,7 +83,7 @@ const UjianCreatePages: React.FC = () => {
             className="w-44"
             onClick={() => setConfirmationDialog(true)}
           >
-            Tambah Sesi Ujian
+            Edit Sesi Ujian
           </Button>
         </CardFooter>
       </Card>
@@ -88,4 +91,4 @@ const UjianCreatePages: React.FC = () => {
   );
 };
 
-export default UjianCreatePages;
+export default UjianEditPage;

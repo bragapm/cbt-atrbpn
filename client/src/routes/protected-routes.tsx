@@ -19,6 +19,7 @@ import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pa
 import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
 import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPesertaPage";
 import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/EditCategorySoalPage";
+import UjianEditPage from "@/app/admin/management-ujian/pages/UjianEditPage";
 
 export const protectedRoutes = [
   {
@@ -56,6 +57,10 @@ export const protectedRoutes = [
       {
         path: "ujian/create",
         element: <UjianCreatePages />,
+      },
+      {
+        path: "ujian/edit/:id",
+        element: <UjianEditPage />,
       },
       {
         path: "peserta-cbt",
