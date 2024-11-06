@@ -62,8 +62,8 @@ export function DataTable<TData, TValue>({
         </div>
       ) : (
         <>
-          <Table className="w-full h-full">
-            <TableHeader className="sticky top-0 bg-white z-10 shadow-sm">
+          <Table>
+            <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="h-[300px] relative overflow-y-auto">
+            <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
