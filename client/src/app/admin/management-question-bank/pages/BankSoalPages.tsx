@@ -1,7 +1,7 @@
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
 import { Button } from "@/components/ui/button";
-import { Cloud, Download, Plus } from "lucide-react";
+import { Cloud, Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BankSoalTable from "../components/BankSoalTable";
@@ -39,19 +39,19 @@ const BankSoalPages = () => {
             <Button
               variant="actions"
               size="actions"
-              startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/import")}
+              startContent={<Upload />}
+              onClick={() => setIsOpenExportDialog(true)}
             >
-              Import Soal
+              Export Soal
             </Button>
 
             <Button
               variant="actions"
               size="actions"
               startContent={<Cloud />}
-              onClick={() => setIsOpenExportDialog(true)}
+              onClick={() => navigate("/bank-soal/import")}
             >
-              Export Soal
+              Import Soal
             </Button>
 
             <Button

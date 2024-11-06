@@ -80,7 +80,6 @@ const CategorySoalTable: React.FC<IKategoriTable> = ({ data }) => {
               setIsOpenDeleteConfirm(true);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),

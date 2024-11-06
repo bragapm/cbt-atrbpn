@@ -57,8 +57,8 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
         const kategori = row?.original.kategori_id?.nama_kategori;
 
         return (
-          <div className="w-full">
-            <BadgeCategory name={kategori} />
+          <div className="w-[80px]">
+            {kategori ? <BadgeCategory name={kategori} /> : "-"}
           </div>
         );
       },
@@ -68,7 +68,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       header: "Distribusi Soal",
       cell: ({ row }) => {
         const jumlahSoal = row?.original?.jumlah_soal;
-        return <div className="w-full flex flex-col gap-3">{jumlahSoal}</div>;
+        return (
+          <div className="w-full flex flex-col gap-3">{jumlahSoal ?? "-"}</div>
+        );
       },
     },
     {
@@ -76,7 +78,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       header: "Bobot Nilai Benar",
       cell: ({ row }) => {
         const jumlahBenar = row?.original?.kategori_id?.bobot_benar;
-        return <div className="w-full flex flex-col gap-3">{jumlahBenar}</div>;
+        return (
+          <div className="w-full flex flex-col gap-3">{jumlahBenar ?? "-"}</div>
+        );
       },
     },
     {
@@ -84,7 +88,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       header: "Bobot Nilai Salah",
       cell: ({ row }) => {
         const jumlahSalah = row?.original?.kategori_id?.bobot_salah;
-        return <div className="w-full flex flex-col gap-3">{jumlahSalah}</div>;
+        return (
+          <div className="w-full flex flex-col gap-3">{jumlahSalah ?? "-"}</div>
+        );
       },
     },
     {
@@ -93,7 +99,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       cell: ({ row }) => {
         const tidakMenjawab = row?.original?.kategori_id?.tidak_menjawab;
         return (
-          <div className="w-full flex flex-col gap-3">{tidakMenjawab}</div>
+          <div className="w-full flex flex-col gap-3">
+            {tidakMenjawab ?? "-"}
+          </div>
         );
       },
     },
@@ -108,7 +116,6 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
               setIsOpenDeleteConfirm(true);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),

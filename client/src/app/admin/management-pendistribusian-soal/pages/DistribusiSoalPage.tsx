@@ -1,6 +1,6 @@
 import TableActions from "@/components/table-actions";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus } from "lucide-react";
+import { Cloud, Plus, Upload } from "lucide-react";
 import DistribusiSoalTable from "../components/DistribusiSoalTable";
 import useGetManagementDistribusiSoal from "../hooks/useGetManagementDistribusiSoal";
 import { useState } from "react";
@@ -22,7 +22,7 @@ const DistribusiSoalPage = () => {
         description="Data ditampilkan sesuai dengan filter"
         actions={
           <div className="flex gap-2">
-            <Button variant="actions" size="actions" startContent={<Cloud />}>
+            <Button variant="actions" size="actions" startContent={<Upload />}>
               Export Pendistribusian Soal
             </Button>
 

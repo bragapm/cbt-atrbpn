@@ -39,7 +39,7 @@ const UjianPages = () => {
             <Button
               variant="actions"
               size="actions"
-              startContent={<Upload size="14" />}
+              startContent={<Upload />}
               onClick={() => setIsOpenExportDialog(true)}
             >
               Export Sesi Ujian
