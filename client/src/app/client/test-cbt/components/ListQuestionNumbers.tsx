@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 
 interface IListQuestion {
   selectSoal: any;
-  setSelectSoal: (value: any) => void;
+  setSelectSoal: (value: any, idx: number) => void;
   listSoal: any[];
   listAnswer: any[];
   isloading: boolean;
@@ -31,7 +31,7 @@ const ListQuestionNumbers: FC<IListQuestion> = ({
               key={value}
               onClick={() => {
                 if (!isloading) {
-                  setSelectSoal(value);
+                  setSelectSoal(value, idx + 1);
                 }
               }}
               className={`${

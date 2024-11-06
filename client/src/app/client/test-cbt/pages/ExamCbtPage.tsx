@@ -14,9 +14,8 @@ const ExamCbtPage = () => {
   const listSoal = dataCbt?.problems;
   const navigate = useNavigate();
 
-  console.log(dataCbt);
-
   const [selectSoal, setSelectSoal] = useState(listSoal ? listSoal[0] : "");
+  const [noSoal, setNoSoal] = useState(1);
   const [oneget, setOneget] = useState<boolean>(false);
   const [answer, setAnswer] = useState<string>("");
 
@@ -68,9 +67,10 @@ const ExamCbtPage = () => {
     );
   };
 
-  const handleclickSoal = (number) => {
+  const handleclickSoal = (number, noSoal) => {
     setSelectSoal(number);
     getSoal(number);
+    setNoSoal(noSoal);
   };
 
   return (
@@ -79,6 +79,7 @@ const ExamCbtPage = () => {
         <QuestionDetail
           loading={isLoading}
           question={data?.question}
+          noSoal={noSoal}
           handleNextQuestion={handleNextQuestion}
           handlePrevQuestion={handlePrevQuestion}
         />
