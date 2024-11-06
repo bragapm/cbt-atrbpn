@@ -5,21 +5,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
-import { IDistribusiSoal } from "../hooks/useGetManagementDistribusiSoal";
+import { IKategori } from "@/types/collection/kategori.type";
 import { PaginationTableProps } from "@/components/table-pagination";
-import BadgeCategory from "@/components/badge-category";
 
-type IDistribusiTable = {
-  data: IDistribusiSoal[];
+type IKategoriTable = {
+  data: IKategori[];
   pagination: PaginationTableProps;
 };
 
-const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
+const CategorySoalTable: React.FC<IKategoriTable> = ({ data }) => {
+  console.log({ data });
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
-  const columns: ColumnDef<IDistribusiSoal>[] = [
+  const columns: ColumnDef<IKategori>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -40,42 +40,14 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "materiSoal",
-      header: "Materi Soal",
-      cell: ({ row }) => {
-        return (
-          <div className="flex flex-col gap-2">
-            {row?.original?.materi_id?.materi ?? "-"}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "category",
+      accessorKey: "nama_kategori",
       header: "Kategori Soal",
-      cell: ({ row }) => {
-        const kategori = row?.original.kategori_id?.nama_kategori;
-
-        return (
-          <div className="w-full">
-            <BadgeCategory name={kategori} />
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "distribusiSoal",
-      header: "Distribusi Soal",
-      cell: ({ row }) => {
-        const jumlahSoal = row?.original?.jumlah_soal;
-        return <div className="w-full flex flex-col gap-3">{jumlahSoal}</div>;
-      },
     },
     {
       accessorKey: "bobotBenar",
       header: "Bobot Nilai Benar",
       cell: ({ row }) => {
-        const jumlahBenar = row?.original?.kategori_id?.bobot_benar;
+        const jumlahBenar = row?.original?.bobot_benar;
         return <div className="w-full flex flex-col gap-3">{jumlahBenar}</div>;
       },
     },
@@ -83,7 +55,7 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "bobotSalah",
       header: "Bobot Nilai Salah",
       cell: ({ row }) => {
-        const jumlahSalah = row?.original?.kategori_id?.bobot_salah;
+        const jumlahSalah = row?.original?.bobot_salah;
         return <div className="w-full flex flex-col gap-3">{jumlahSalah}</div>;
       },
     },
@@ -91,7 +63,7 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "tidakMenjawab",
       header: "Tidak Menjawab",
       cell: ({ row }) => {
-        const tidakMenjawab = row?.original?.kategori_id?.tidak_menjawab;
+        const tidakMenjawab = row?.original?.tidak_menjawab;
         return (
           <div className="w-full flex flex-col gap-3">{tidakMenjawab}</div>
         );
@@ -148,4 +120,4 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
   );
 };
 
-export default DistribusiSoalTable;
+export default CategorySoalTable;
