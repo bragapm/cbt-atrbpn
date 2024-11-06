@@ -38,7 +38,7 @@ export default ({ filter }, { database, services, logger }) => {
   
       await userSessionService.updateOne(payload.user_session_id, { score: updatedScore });
   
-      logger.info(`Score updated successfully for session ID ${payload.user_session_id}`);
+      logger.info(`Score updated successfully for user_session_test ID ${payload.user_session_id}`);
       return payload;
     });
   
@@ -76,10 +76,10 @@ export default ({ filter }, { database, services, logger }) => {
   
       const currentScore = sessionData?.[0]?.score || 0;
       const updatedScore = currentScore + userTestScore;
-      
+
       await userSessionService.updateOne(payload.user_session_id, { score: updatedScore });
   
-      logger.info(`Score updated successfully for session ID ${payload.user_session_id}`);
+      logger.info(`Score updated successfully for user_session_test ID ${payload.user_session_id}`);
       return payload;
     });
   };
