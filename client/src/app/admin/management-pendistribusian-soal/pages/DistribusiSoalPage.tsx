@@ -1,6 +1,6 @@
 import TableActions from "@/components/table-actions";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus, Upload } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import DistribusiSoalTable from "../components/DistribusiSoalTable";
 import useGetManagementDistribusiSoal from "../hooks/useGetManagementDistribusiSoal";
 import { useState } from "react";
@@ -10,9 +10,9 @@ const limit: number = 20;
 const DistribusiSoalPage = () => {
   const [page, setPage] = useState(1);
 
-  const { data } = useGetManagementDistribusiSoal({
-    page,
-    limit,
+  const { data, isLoading, refetch } = useGetManagementDistribusiSoal({
+    page: page,
+    limit: limit,
   });
 
   return (
@@ -34,12 +34,14 @@ const DistribusiSoalPage = () => {
       />
       <DistribusiSoalTable
         data={data?.data?.data}
+        isLoading={isLoading}
         pagination={{
           pageSize: limit,
           totalItems: data?.data?.meta.total_count,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        refetch={refetch}
       />
     </div>
   );

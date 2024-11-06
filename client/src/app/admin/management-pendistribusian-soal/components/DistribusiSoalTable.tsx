@@ -3,21 +3,40 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { IDistribusiSoal } from "../hooks/useGetManagementDistribusiSoal";
 import { PaginationTableProps } from "@/components/table-pagination";
 import BadgeCategory from "@/components/badge-category";
+import { useNavigate } from "react-router-dom";
+import useDeleteMutationDistribusiSoal from "../hooks/useDeleteMutationDistribusiSoal";
 
 type IDistribusiTable = {
   data: IDistribusiSoal[];
+  isLoading: boolean;
   pagination: PaginationTableProps;
+  refetch: () => void;
 };
 
-const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const DistribusiSoalTable: React.FC<IDistribusiTable> = ({
+  data,
+  isLoading,
+  pagination,
+  refetch,
+}) => {
+  const [id, setId] = React.useState<string | number>("");
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const navigate = useNavigate();
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeleteMutationDistribusiSoal({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IDistribusiSoal>[] = [
     {
@@ -108,12 +127,13 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -129,27 +149,26 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Soal berhasil dihapus"
+        description="Pendistribusian Soal berhasil dihapus"
+        onSubmit={() => {
+          navigate("/pendistribusian-soal");
+          refetch();
+        }}
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
-        description="Apakah anda yakin ingin menghapus soal ini ?"
+        description="Apakah anda yakin ingin menghapus Pendistribusian Soal ini ?"
       />
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );

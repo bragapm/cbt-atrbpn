@@ -14,9 +14,9 @@ const CategorySoalPage = () => {
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
 
-  const { data } = useGetCategorySoal({
-    page,
-    limit,
+  const { data, isLoading, refetch } = useGetCategorySoal({
+    page: page,
+    limit: limit,
   });
 
   return (
@@ -57,12 +57,14 @@ const CategorySoalPage = () => {
       />
       <CategorySoalTable
         data={data?.data.data}
+        isLoading={isLoading}
         pagination={{
           pageSize: limit,
           totalItems: data?.data?.meta.total_count,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        refetch={refetch}
       />
     </div>
   );
