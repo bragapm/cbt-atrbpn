@@ -32,7 +32,7 @@ const useMutateUpdateUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
         >(`/items/user_session_test?filter[session][_eq]=${data.id}`);
 
         const modifiedData = {
-          user: data.user[0],
+          user: data.user,
           session: data.id,
         };
 

@@ -11,11 +11,7 @@ import { useNavigate } from "react-router-dom";
 import SuccessDialog from "@/components/success-dialog";
 
 const UjianCreatePages: React.FC = () => {
-  const form = useForm({
-    defaultValues: {
-      user: [],
-    },
-  });
+  const form = useForm();
   const [confirmationDialog, setConfirmationDialog] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigation = useNavigate();

@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   iconButtonAction?: ReactNode;
   buttonAction?: () => void;
   isLoading?: boolean;
-  actionButton?: React.ReactNode;
+  customSelectedFooter?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({
   iconButtonAction,
   isLoading,
   pagination,
-  actionButton,
+  customSelectedFooter,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -110,8 +110,10 @@ export function DataTable<TData, TValue>({
           </Table>
           <div className="flex justify-between w-full items-center">
             <p className="text-xs w-full">
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} Rows Selected
+              {customSelectedFooter
+                ? customSelectedFooter
+                : table.getFilteredSelectedRowModel().rows.length}{" "}
+              of {table.getFilteredRowModel().rows.length} Rows Selected
             </p>
             <PaginationTable
               pageSize={pagination.pageSize}

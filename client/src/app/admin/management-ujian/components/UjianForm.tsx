@@ -16,7 +16,7 @@ import ErrorPlaceholder from "@/components/error-placeholder";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 
-const UjianForm: React.FC = () => {
+const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
   const form = useFormContext<IUjianRequest>();
   const { id } = useParams();
 
@@ -37,7 +37,7 @@ const UjianForm: React.FC = () => {
     }
   }, [id, detailData]);
 
-  if (isLoadingDetailData) return <Skeleton className="w-full h-[65vh]" />;
+  if (isLoadingDetailData) return <Skeleton className="w-full h-[35vh]" />;
 
   if (isError) return <ErrorPlaceholder />;
 

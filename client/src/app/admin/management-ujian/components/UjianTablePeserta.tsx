@@ -9,17 +9,16 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
-  value?: string[];
-  onChange?: (value: string[]) => void;
+  value?: string;
+  onChange?: (value: string) => void;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
@@ -33,6 +32,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const [studentVal, setStudentVal] = useState<string[]>([]);
+
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
@@ -44,17 +44,18 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     setPage(1);
   };
 
-  const handleCheckValue = (val: string, bool: boolean) => {
-    if (bool) {
-      setStudentVal((prev) => [...prev, val]);
-    } else {
-      setStudentVal((prev) => prev.filter((item) => item !== val));
+  const getCurrentUser = () => {
+    if (value) {
+      return dataUser?.data?.find((item) => item.id === value);
     }
+    return "";
   };
 
-  const handleCheckAll = (bool: boolean) => {
+  const currentUser = getCurrentUser();
+
+  const handleCheckValue = (val: string, bool: boolean) => {
     if (bool) {
-      setStudentVal(dataUser?.data?.map((item) => item.id));
+      setStudentVal([val]);
     } else {
       setStudentVal([]);
     }
@@ -64,12 +65,22 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     return studentVal.includes(val);
   };
 
-  const getCheckAll = () => {
-    return studentVal.length === dataUser?.data?.length;
-  };
+  // TODO: UNCOMMENT THIS IF USERS RETRIVE ARRAY
+
+  // const handleCheckAll = (bool: boolean) => {
+  //   if (bool) {
+  //     setStudentVal(dataUser?.data?.map((item) => item.id));
+  //   } else {
+  //     setStudentVal([]);
+  //   }
+  // };
+
+  // const getCheckAll = () => {
+  //   return studentVal.length === dataUser?.data?.length;
+  // };
 
   const handleSubmit = () => {
-    onChange(studentVal);
+    onChange(studentVal[0]);
     setIsOpen(false);
   };
 
@@ -77,20 +88,21 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     {
       id: "select",
       header: ({ table }) => (
-        <Checkbox
-          checked={getCheckAll()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-            handleCheckAll(!!value);
-          }}
-          aria-label="Select all"
-        />
+        // TODO: UNCOMENT THIS IF USER RETRIVE ARRAY
+        // <Checkbox
+        //   checked={getCheckAll()}
+        //   onCheckedChange={(value) => {
+        //     table.toggleAllPageRowsSelected(!!value);
+        //     handleCheckAll(!!value);
+        //   }}
+        //   aria-label="Select all"
+        // />
+        <></>
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={getCheckValue(row.original.id)}
           onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
             handleCheckValue(row.original.id, !!value);
           }}
           aria-label="Select row"
@@ -131,12 +143,17 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
         <Button
           variant="outline"
           className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            if (value) {
+              setStudentVal([value]);
+            }
+            setIsOpen(true);
+          }}
         >
           <p className="text-gray-500 font-light text-xs">Peserta Ujian</p>
           <p>
-            {value?.length > 0
-              ? `${value.length} Peserta`
+            {currentUser
+              ? `${currentUser?.first_name} - ${currentUser?.last_name}`
               : "Data Peserta Ujian"}
           </p>
         </Button>
@@ -159,27 +176,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
 
           <div className="p-2 w-full h-full">
             <DataTable
-              actionButton={
-                <>
-                  {isDetail ? (
-                    <UjianPIN
-                      triggerButton={
-                        <Button
-                          variant="actions"
-                          size="actions"
-                          startContent={<Lock />}
-                        >
-                          Generate Pin Ujian
-                        </Button>
-                      }
-                    />
-                  ) : (
-                    <Button variant="actions" size="actions">
-                      Pilih Peserta
-                    </Button>
-                  )}
-                </>
-              }
+              customSelectedFooter={studentVal?.length}
               buttonAction={handleSubmit}
               iconButtonAction={isDetail ? <Lock /> : <></>}
               labelButtonAction={

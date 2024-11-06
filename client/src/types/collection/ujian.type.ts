@@ -16,7 +16,7 @@ export type IUjianRequest = {
   name: string;
   start_time: Date;
   end_time: Date;
-  user: string[];
+  user: string;
 };
 
 export type IUserSessionTest = {
