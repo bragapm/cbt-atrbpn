@@ -108,6 +108,11 @@
         "type": "endpoint",
         "name": "generate-pin",
         "source": "src/generate-pin/index.js"
+      },
+      {
+        "type": "hook",
+        "name": "handle-user-answer",
+        "source": "src/handle-user-answer/index.js"
       }
     ],
     "host": "10.8.2"
