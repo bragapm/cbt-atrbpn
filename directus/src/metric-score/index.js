@@ -66,8 +66,11 @@ export default function registerEndpoint(router, { database, logger }) {
                 average_score: parseFloat(row.average_score)
             }));
 
+            const overallAverageScore = avgScoreBySession.reduce((sum, row) => sum + row.average_score, 0) / avgScoreBySession.length;
+
             res.json({
-                averageScoreBySession: avgScoreBySession
+                averageScoreBySession: avgScoreBySession,
+                overallAverageScore: avgScoreBySession.length > 0 ? overallAverageScore : 0 
             });
 
         } catch (error) {
@@ -75,4 +78,32 @@ export default function registerEndpoint(router, { database, logger }) {
             res.status(500).json({ error: "An error occurred while fetching average scores by session." });
         }
     });
+
+    router.get('/all', async (req, res) => {
+        const { date } = req.query;
+        try {
+
+            let avgScoreQuery = `
+                SELECT 
+                AVG(score) AS average_score
+                FROM 
+                user_session_test
+                `;
+            const avgScoreResult = await database.raw(avgScoreQuery, date ? [date] : []);
+            const avgScore = avgScoreResult.rows.map(row => ({
+                average_score: parseFloat(row.average_score)
+            }));
+
+            res.json({
+                averageScore: avgScore
+            });
+
+        } catch (error) {
+            logger.error("Error fetching average scores by date:", error);
+            res.status(500).json({ error: "An error occurred while fetching average scores by date." });
+        }
+    });
 }
+
+
+
