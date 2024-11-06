@@ -1,3 +1,9 @@
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import { FC, useState, useEffect } from "react";
 
 interface PaginationProps {
@@ -13,10 +19,7 @@ const Pagination: FC<PaginationProps> = ({
 }) => {
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
 
-  // Fungsi untuk menghitung halaman mana yang akan ditampilkan
   const calculateVisiblePages = () => {
-    // Implementasi logika untuk menghitung halaman yang akan ditampilkan
-    // Contoh: Tampilkan 5 halaman di sekitar halaman aktif
     const maxPagesToShow = 5;
     const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
     const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
@@ -25,26 +28,25 @@ const Pagination: FC<PaginationProps> = ({
     );
   };
 
-  // Efek samping untuk menghitung ulang halaman yang terlihat saat currentPage berubah
   useEffect(() => {
     calculateVisiblePages();
   }, [currentPage, totalPages]);
 
   return (
-    <div className="flex gap-2 w-full mx-auto justify-evenly">
+    <div className="flex gap-2 w-full justify-evenly">
       <button
         className="px-3 py-1 bg-white rounded-lg"
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
       >
-        &laquo;
+        <ChevronsLeft size={16} />
       </button>
       <button
         className="px-3 py-1 bg-white  rounded-lg"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        &lt;
+        <ChevronLeft size={16} />
       </button>
       {visiblePages.map((page) => (
         <button
@@ -70,14 +72,14 @@ const Pagination: FC<PaginationProps> = ({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        &gt;
+        <ChevronRight size={16} />
       </button>
       <button
         className="px-3 py-1 bg-white  rounded-lg"
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
       >
-        &raquo;
+        <ChevronsRight size={16} />
       </button>
     </div>
   );

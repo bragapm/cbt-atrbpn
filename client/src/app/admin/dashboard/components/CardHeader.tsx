@@ -12,16 +12,22 @@ interface ICardHead {
   title: string;
   subtitle: string;
   listOption: any[];
+  selectData: any;
+  setData: (val: any) => void;
   listName?: string;
   hide?: boolean;
+  isDate?: boolean;
 }
 
 const CardHeader: FC<ICardHead> = ({
   title,
   subtitle,
   listOption,
+  selectData,
+  setData,
   listName = "pilih data",
   hide,
+  isDate,
 }) => {
   return (
     <div className="flex justify-between">
@@ -46,6 +52,15 @@ const CardHeader: FC<ICardHead> = ({
             {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
         </DropdownMenu>
+      )}
+      {isDate && (
+        <input
+          className=" p-2 px-4 border rounded-2xl"
+          type="date"
+          id="date"
+          value={selectData}
+          onChange={(e) => setData(e.target.value)}
+        />
       )}
     </div>
   );

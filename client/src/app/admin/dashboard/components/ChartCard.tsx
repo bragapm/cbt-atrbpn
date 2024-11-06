@@ -3,18 +3,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// const data = {
-//   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-//   datasets: [
-//     {
-//       label: "# of Votes",
-//       data: [12, 19, 3, 5],
-//       backgroundColor: ["#FFCE1E", "#5F3424", "#B33A2A", "#FF9543"],
-//       borderWidth: 0,
-//     },
-//   ],
-// };
-
 const options = {
   responsive: false,
   tooltips: {
@@ -47,13 +35,12 @@ const options = {
     },
     datalabels: {
       display: false,
-      color: "#000000", // Set the label color here
+      color: "#000000",
       font: {
         size: 10,
       },
     },
   },
-  // maintainAspectRatio: false
 };
 interface DougnutState {
   datas: any;
@@ -69,7 +56,7 @@ const ChartCard: FC<DougnutState> = ({
   centerContent,
 }) => {
   return (
-    <div className="flex flex-col gap-6 items-center w-full h-full p-2">
+    <div className="flex flex-col gap-6 items-center w-full p-2 m-auto">
       <div className="relative">
         <Doughnut
           data={datas}

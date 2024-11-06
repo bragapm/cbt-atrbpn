@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 
 const useGetHasilUjian = (date?: string) => {
   const service = new DirectusInterceptor(); 
-  let query = date? "by-session?date="+date:"by-date"
+  let query = date === "all" ? "all" : date ? "by-session?date="+date : "by-date"
 
   return useQuery({
     queryKey: ["hasi-ujian-average", date],

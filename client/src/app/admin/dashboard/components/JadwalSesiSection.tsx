@@ -5,36 +5,42 @@ import ChartCard from "./ChartCard";
 import Pagination from "./Pagination";
 import useGetJadwalSesi from "../hooks/useGetJadwalSesi";
 import useStatistikBankSoal from "../hooks/useStatistikBankSoal";
+import MemoLoader from "@/components/ui/Loader";
+import Skeletons from "./Skeletons";
+
+const legenda: any[] = [
+  {
+    label: "Sulit",
+    color: "bg-[#2A6083]",
+  },
+  {
+    label: "Sangat Mudah",
+    color: "bg-[#699EB2]",
+  },
+  {
+    label: "Mudah",
+    color: "bg-[#8CBAC7]",
+  },
+];
 
 const JadwalSesiSection = () => {
   const [dataChartSoal, setChartDataSoal] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filter, setFilter] = useState(new Date().toISOString().slice(0, 10));
   const totalPages = 50;
+
+  console.log(filter);
 
   const { data } = useGetJadwalSesi({
     page: currentPage,
     limit: 2,
   });
-
   const { data: materisoal } = useStatistikBankSoal("");
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const legenda: any[] = [
-    {
-      label: "Sulit",
-      color: "bg-[#2A6083]",
-    },
-    {
-      label: "Sangat Mudah",
-      color: "bg-[#699EB2]",
-    },
-    {
-      label: "Mudah",
-      color: "bg-[#8CBAC7]",
-    },
-  ];
 
   function hitungJumlahSoalPerKategori(data) {
     const jumlahSoalPerKategori = {};
@@ -56,14 +62,12 @@ const JadwalSesiSection = () => {
     return { kategori: kat, jumlah: jum, total: total };
   }
 
-  const [total, setTotal] = useState(0);
   useEffect(() => {
     if (materisoal?.data) {
       const hasil = hitungJumlahSoalPerKategori(materisoal?.data?.data);
       let label: string[] = hasil.kategori;
       let newData: any[] = hasil.jumlah;
       let bgColors: string[] = ["#2A6083", "#699EB2", "#8CBAC7"];
-      console.log(hasil.total);
       setTotal(hasil.total);
       const data = {
         labels: label,
@@ -83,20 +87,29 @@ const JadwalSesiSection = () => {
 
   return (
     <div className="grid grid-cols-2 gap-6">
-      <div>
+      <div className="flex flex-col justify-between">
         <CardHeader
           title={"Jadwal Sesi"}
           subtitle={"Data ditampilkan sesuai dengan filter"}
           listOption={[]}
-          listName="Pilih Sesi"
+          selectData={filter}
+          setData={setFilter}
+          listName="Pilih Tanggal"
+          isDate
+          hide
         />
-        <div className="flex justify-between gap-4 py-4">
-          {data &&
+        <div className="flex justify-between gap-4 py-4  h-full">
+          {data ? (
             data?.data?.data?.map((el, idx) => (
               <JadwalCard key={idx} data={el} />
-            ))}
+            ))
+          ) : (
+            <div className="m-auto">
+              <MemoLoader width={40} height={40} color={"#2A6083"} />
+            </div>
+          )}
         </div>
-        <div className="w-full items-center flex">
+        <div className="w-full items-center mt-auto flex">
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
@@ -108,15 +121,17 @@ const JadwalSesiSection = () => {
         <CardHeader
           title={"Statistik Bank Soal"}
           subtitle={"Data ditampilkan sesuai dengan filter"}
+          selectData={""}
+          setData={() => {}}
           listOption={[]}
           listName="Pilih Paket Soal"
           hide
         />
         <div className="flex flex-col justify-between gap-4 p-4 rounded-lg mt-4 border bg-white">
           <p className="font-semibold ">Data Soal</p>
-          <div className="grid grid-cols-3 gap-4 w-full justify-between">
-            <div className="col-span-2 h-full border rounded-lg">
-              {dataChartSoal && (
+          <div className="grid grid-cols-5 gap-4  justify-between">
+            <div className="col-span-3 h-full border rounded-lg flex">
+              {dataChartSoal ? (
                 <ChartCard
                   datas={dataChartSoal}
                   legend={legenda}
@@ -125,17 +140,24 @@ const JadwalSesiSection = () => {
                     value: total,
                   }}
                 />
+              ) : (
+                <div className="m-auto">
+                  <MemoLoader width={30} height={30} color={"#2A6083"} />
+                </div>
               )}
             </div>
-            <div className="p-4 border rounded-lg text-xs flex flex-col gap-2 ">
+            <div className="p-4 col-span-2 border rounded-lg text-xs flex flex-col gap-2 ">
               <p>Materi Soal</p>
-              {materisoal?.data &&
+              {materisoal?.data ? (
                 materisoal?.data?.data?.map((el, idx) => (
                   <div key={idx}>
                     <p className="font-bold">{el.jumlah_soal}</p>
                     <p className="text-[10px]">{el.materi}</p>
                   </div>
-                ))}
+                ))
+              ) : (
+                <Skeletons count={6} />
+              )}
             </div>
           </div>
           <p className="text-xs">

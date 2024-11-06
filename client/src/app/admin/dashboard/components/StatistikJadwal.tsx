@@ -10,6 +10,7 @@ const StatistikJadwal = () => {
   const { data: pieData } = useGetPieJadwalUjian();
   const { data } = useGetJadwalUjian();
   const [dataChartDataAverage, setChartDataAverage] = useState<any>(null);
+  const [filter, setFilter] = useState(new Date().toISOString().slice(0, 10));
 
   const legenda: any[] = [
     {
@@ -63,6 +64,8 @@ const StatistikJadwal = () => {
         title={"Statistik Jadwal Ujian"}
         subtitle={"Data ditampilkan sesuai dengan filter"}
         listOption={[]}
+        selectData={filter}
+        setData={setFilter}
         hide
       />
       <div className="grid grid-cols-2 gap-4">
@@ -75,8 +78,12 @@ const StatistikJadwal = () => {
               <div className="rounded-full shadow-md w-12 h-12 border border-gray-100 flex items-center text-center">
                 <img src={el.icon} className="w-5 h-5 m-auto"></img>
               </div>
-              <div className="">
-                <p className="font-bold text-xl">{el.value}</p>
+              <div>
+                {el.value ? (
+                  <p className="font-bold text-xl">{el.value}</p>
+                ) : (
+                  <div className="h-4 w-full mt-2 bg-gray-200 rounded-md animate-pulse" />
+                )}
                 <p className="text-xs">{el.name}</p>
               </div>
             </div>
