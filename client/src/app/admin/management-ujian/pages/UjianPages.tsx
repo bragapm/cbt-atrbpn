@@ -1,12 +1,11 @@
+import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
-import UjianTable from "../components/UjianTable";
 import { Button } from "@/components/ui/button";
 import { Download, Plus, Upload } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import useGetManagementUjian from "../hooks/useGetManagementUjian";
 import { useState } from "react";
-import ConfirmationDialog from "@/components/confirmation-dialog";
-import useGetExportUjian from "@/app/admin/management-ujian/hooks/useGetExportUjian";
+import { useNavigate } from "react-router-dom";
+import UjianTable from "../components/UjianTable";
+import useGetManagementUjian from "../hooks/useGetManagementUjian";
 
 const limit: number = 10;
 
@@ -14,8 +13,6 @@ const UjianPages = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
-  const { mutate: fetchExportUjian, isLoading: isFetchingExportUjian } =
-    useGetExportUjian();
 
   const { data, isLoading } = useGetManagementUjian({
     page: page,
@@ -29,8 +26,10 @@ const UjianPages = () => {
         onOpenChange={setIsOpenExportDialog}
         description="Apakah anda yakin ingin mengekspor data?"
         icon={<Download size="30" className="text-primary" />}
-        isLoading={isFetchingExportUjian}
-        onSubmit={() => fetchExportUjian()}
+        onSubmit={() => {
+          window.location.href =
+            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-session";
+        }}
       />
       <TableActions
         title="Sesi Ujian"

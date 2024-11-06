@@ -1,12 +1,11 @@
+import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
-import BankSoalTable from "../components/BankSoalTable";
 import { Button } from "@/components/ui/button";
 import { Cloud, Download, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
 import { useState } from "react";
-import ConfirmationDialog from "@/components/confirmation-dialog";
-import useGetExportBankSoal from "@/app/admin/management-question-bank/hooks/useGetExportBankSoal";
+import { useNavigate } from "react-router-dom";
+import BankSoalTable from "../components/BankSoalTable";
+import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
 
 const limit: number = 20;
 
@@ -14,8 +13,6 @@ const BankSoalPages = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
-  const { mutate: fetchExportBankSoal, isLoading: isLoadingExportBankSoal } =
-    useGetExportBankSoal();
 
   const { data, isLoading } = useGetManagementBankSoal({
     page: page,
@@ -29,8 +26,10 @@ const BankSoalPages = () => {
         onOpenChange={setIsOpenExportDialog}
         description="Apakah anda yakin ingin mengekspor data?"
         icon={<Download size="30" className="text-primary" />}
-        isLoading={isLoadingExportBankSoal}
-        onSubmit={() => fetchExportBankSoal()}
+        onSubmit={() => {
+          window.location.href =
+            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-pertanyaan";
+        }}
       />
       <TableActions
         title="Daftar Soal"

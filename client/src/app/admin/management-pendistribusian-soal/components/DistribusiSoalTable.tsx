@@ -6,9 +6,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Download, MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { IDistribusiSoal } from "../hooks/useGetManagementDistribusiSoal";
+import { PaginationTableProps } from "@/components/table-pagination";
+import BadgeCategory from "@/components/badge-category";
 
 type IDistribusiTable = {
   data: IDistribusiSoal[];
+  pagination: PaginationTableProps;
 };
 
 const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
@@ -40,27 +43,22 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "materiSoal",
       header: "Materi Soal",
       cell: ({ row }) => {
-        const materiSoal = row.original.materi_id.map((item) => item.materi);
         return (
           <div className="flex flex-col gap-2">
-            {materiSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
+            {row?.original?.materi_id?.materi ?? "-"}
           </div>
         );
       },
     },
     {
-      accessorKey: "kategoriSoal",
+      accessorKey: "category",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategoriSoal = row.original.kategori_id.map((item) => item.id);
+        const kategori = row?.original.kategori_id?.nama_kategori;
 
         return (
-          <div className="w-full flex flex-col gap-3">
-            {kategoriSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
+          <div className="w-full">
+            <BadgeCategory name={kategori} />
           </div>
         );
       },
@@ -69,62 +67,28 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "distribusiSoal",
       header: "Distribusi Soal",
       cell: ({ row }) => {
-        const distribusiSoal = row.original.kategori_id.map((item) => item.id);
-        return (
-          <div className="w-full flex flex-col gap-3">
-            {distribusiSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
-        );
+        return <div className="w-full flex flex-col gap-3"></div>;
       },
     },
     {
       accessorKey: "bobotBenar",
       header: "Bobot Nilai Benar",
       cell: ({ row }) => {
-        const bobotBenar = row.original.kategori_id.map(
-          (item) => item.bobot_benar
-        );
-        return (
-          <div className="w-full flex flex-col gap-3">
-            {bobotBenar.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
-        );
+        return <div className="w-full flex flex-col gap-3"></div>;
       },
     },
     {
       accessorKey: "bobotSalah",
       header: "Bobot Nilai Salah",
       cell: ({ row }) => {
-        const bobotSalah = row.original.kategori_id.map(
-          (item) => item.bobot_salah
-        );
-        return (
-          <div className="w-full flex flex-col gap-3">
-            {bobotSalah.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
-        );
+        return <div className="w-full flex flex-col gap-3"></div>;
       },
     },
     {
       accessorKey: "tidakMenjawab",
       header: "Tidak Menjawab",
       cell: ({ row }) => {
-        const tidakMenjawab = row.original.kategori_id.map(
-          (item) => item.tidak_menjawab
-        );
-        return (
-          <div className="w-full flex flex-col gap-3">
-            {tidakMenjawab.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
-        );
+        return <div className="w-full flex flex-col gap-3"></div>;
       },
     },
     {
