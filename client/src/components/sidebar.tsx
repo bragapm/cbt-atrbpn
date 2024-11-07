@@ -5,7 +5,6 @@ import {
   Monitor,
   Info,
   PenTool,
-  User,
   Users,
   Folder,
 } from "lucide-react";
@@ -124,14 +123,9 @@ export function Sidebar() {
             activepath: "peserta-cbt",
           },
           {
-            icon: <User size={18} />,
-            label: "Akun Admin",
-            href: "/akun-admin",
-          },
-          {
             icon: <FileCheck size={18} />,
             label: "Management Hasil Ujian",
-            href: "/hasil-ujian",
+            href: "/hasil-ujian/hasil-akhir-ujian",
             activepath: "hasil-ujian",
           },
           {

@@ -3,17 +3,11 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
 import React, { FC } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface ModalHasilUjianVideotronProps {
@@ -69,33 +63,6 @@ export const ModalHasilUjianVideotron: FC<ModalHasilUjianVideotronProps> = ({
     {
       accessorKey: "score",
       header: "Skor",
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: () => (
-        <div className="flex space-x-2">
-          <Trash
-            className="cursor-pointer text-gray-400 w-4 h-4"
-            onClick={() => {
-              setIsOpenDeleteConfirm(true);
-            }}
-          />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => {}}>
-                Lihat Detail Peserta
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ),
-      enableSorting: false,
-      enableHiding: false,
     },
   ];
 

@@ -3,7 +3,7 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, File, MoreVertical, Trash } from "lucide-react";
+import { File, MoreVertical, Trash } from "lucide-react";
 import React, { useState } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
@@ -16,8 +16,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideotron";
 import useDeletePesertaMutation from "../../management-peserta/hooks/useDeletePesertaMutation";
+import { useNavigate } from "react-router-dom";
 
 export const DataHasilAkhirUjianPesertaTable = () => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
@@ -87,13 +89,18 @@ export const DataHasilAkhirUjianPesertaTable = () => {
               setId(row.original.id);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(
+                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.info_peserta.user_id}`
+                  )
+                }
+              >
                 Lihat Detail Peserta
               </DropdownMenuItem>
             </DropdownMenuContent>

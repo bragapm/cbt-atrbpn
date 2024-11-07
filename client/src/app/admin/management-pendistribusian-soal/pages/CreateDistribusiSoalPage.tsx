@@ -10,25 +10,32 @@ import {
 import { Plus, Trash } from "lucide-react";
 import SuccessDialog from "@/components/success-dialog";
 import ConfirmationDialog from "@/components/confirmation-dialog";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMemo, useState, useEffect } from "react";
 import { FormSelect } from "@/components/forms/FormSelect";
 import useGetQuestionCategories from "../../management-kategori-soal/hooks/useGetQuestionCategoriesQuesry";
-import useGetMateriSoalQuery from "../hooks/useGetMateriSoalQuery";
 import useCreatePendistribusianSoalMutation from "../hooks/useCreatePendristribusianSoalMutation";
 import { PendistribusianSoalFormValue } from "../types";
+import useGetMateriSoal from "../../management-question-bank/hooks/useGetMateriSoal";
 
-const CreateDistribusiSoalFormInner = ({
-  control,
-  setValue,
-  materiSoalName,
-}) => {
+const CreateDistribusiSoalFormInner = ({ control, setValue }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "distribusi_soal",
   });
 
   const { data: kategoriSoal } = useGetQuestionCategories();
+  const { data: materiSoal } = useGetMateriSoal();
+
+  const materiSoalOption = useMemo(() => {
+    if (materiSoal?.data) {
+      return materiSoal.data.map((item) => ({
+        label: item.materi,
+        value: String(item.id),
+      }));
+    }
+    return [];
+  }, [materiSoal]);
 
   const questionCategoriesOption = useMemo(() => {
     if (kategoriSoal?.data?.data) {
@@ -70,9 +77,12 @@ const CreateDistribusiSoalFormInner = ({
 
   return (
     <>
-      <div className="w-full border border-gray-400 py-2 px-3 rounded-xl mb-3">
-        <p className="text-xs text-gray-500">Materi Soal</p>
-        <p className="text-sm py-1">{materiSoalName}</p>
+      <div className="mb-4">
+        <FormSelect
+          label="Materi Soal"
+          options={materiSoalOption}
+          name={`materi_soal_id`}
+        />
       </div>
       {fields.map((field, index) => (
         <div key={field.id} className="border p-3 rounded-xl space-y-3 mb-4">
@@ -146,15 +156,13 @@ const CreateDistribusiSoalFormInner = ({
 };
 
 export const CreateDistribusiSoalPage = () => {
-  const params = useParams();
   const navigation = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 
-  const { data: materiSoal } = useGetMateriSoalQuery(params.materiSoalId);
-
   const methods = useForm({
     defaultValues: {
+      materi_soal_id: "",
       distribusi_soal: [
         {
           kategori_soal: "",
@@ -181,10 +189,11 @@ export const CreateDistribusiSoalPage = () => {
 
   const onSubmit = (data: {
     distribusi_soal: PendistribusianSoalFormValue[];
+    materi_soal_id: string;
   }) => {
     const dataToCreate = data.distribusi_soal.map((item) => {
       return {
-        materi_id: String(materiSoal?.data?.data?.id),
+        materi_id: data.materi_soal_id,
         kategori_id: item.kategori_soal,
         jumlah_soal: item.jumlah_soal,
       };
@@ -227,7 +236,6 @@ export const CreateDistribusiSoalPage = () => {
           <CreateDistribusiSoalFormInner
             control={control}
             setValue={setValue}
-            materiSoalName={materiSoal?.data?.data?.materi || ""}
           />
           <div className="flex justify-end gap-3 pt-5">
             <Button className="h-12 w-40">Batal</Button>

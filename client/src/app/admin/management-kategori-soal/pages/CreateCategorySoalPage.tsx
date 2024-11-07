@@ -142,7 +142,7 @@ export const CreateCategorySoalPage = () => {
         ]}
       />
       <div className="border rounded-md bg-white p-4 mt-6">
-        <header>
+        <header className="mb-4">
           <h1 className="text-lg">Tambah Kategori Kesulitan</h1>
         </header>
         <FormProvider {...methods}>
