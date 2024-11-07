@@ -1,4 +1,3 @@
-import { downloadFile } from "@/lib/utils";
 import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { useRef } from "react";
 import { useMutation } from "react-query";
