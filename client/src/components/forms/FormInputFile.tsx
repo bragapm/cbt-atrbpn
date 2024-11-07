@@ -31,21 +31,20 @@ export const FormInputFile: FC<FormInputFileProps> = ({
             <div>
               <input
                 type="file"
-                {...field}
-                className="opacity-0 w-full absolute h-full"
                 onChange={(e) => {
                   const files = e.target.files;
                   if (files && files.length > 0) {
-                    field.onChange(files[0]);
+                    field.onChange(files[0]); // Pass the selected file to react-hook-form
                   } else {
-                    field.onChange(null);
+                    field.onChange(null); // Handle empty input
                   }
                 }}
+                className="opacity-0 w-full absolute h-full"
               />
 
               {errors[name] && (
                 <p className="text-red-500 text-xs">
-                  {errors[name]?.message.toString()}
+                  {errors[name]?.message?.toString()}
                 </p>
               )}
             </div>
