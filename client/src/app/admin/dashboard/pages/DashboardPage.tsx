@@ -3,20 +3,27 @@ import JadwalSesiSection from "../components/JadwalSesiSection";
 import StatistikHasil from "../components/StatistikHasil";
 import StatistikJadwal from "../components/StatistikJadwal";
 import React from "react";
+import useGetTotal from "../hooks/useGetTotal";
 
 const Dashboardpage: React.FC = () => {
+  const { data } = useGetTotal();
+
   const cardlist = [
     {
       icon: "/images/ic-user-gray.svg",
       name: "Total Peserta Terdaftar",
-      value: 1000,
+      value: data?.data?.totalRegisteredUsers[0]?.total_registered_users,
     },
     {
       icon: "/images/ic-computer.svg",
       name: "Ujian Sedang Berlangsung",
-      value: 30,
+      value: data?.data?.finishedTests[0]?.finished_tests,
     },
-    { icon: "/images/ic-check.svg", name: "Ujian Selesai", value: 20 },
+    {
+      icon: "/images/ic-check.svg",
+      name: "Ujian Selesai",
+      value: data?.data?.ongoingTests[0]?.ongoing_tests,
+    },
   ];
   return (
     <div className="p-4 w-full flex flex-col gap-6">
@@ -38,10 +45,10 @@ const Dashboardpage: React.FC = () => {
         <img src={"/images/ic-dash-card.png"} className=" pl-6 w-full"></img>
       </div>
       <div className=" gap-4 grid grid-cols-3">
-        {cardlist.map((el) => (
+        {cardlist.map((el, idx) => (
           <div
             className="border px-4 py-3 rounded-lg flex gap-4 items-center bg-white"
-            key={el.value}
+            key={idx}
           >
             <div className="rounded-full shadow-md w-12 h-12 border border-gray-100 flex items-center text-center">
               <img src={el.icon} className="w-5 h-5 m-auto"></img>

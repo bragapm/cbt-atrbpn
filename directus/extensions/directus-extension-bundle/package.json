@@ -77,6 +77,36 @@
         "type": "endpoint",
         "name": "account-distributions",
         "source": "src/account-distributions/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "upcoming-tests",
+        "source": "src/upcoming-tests/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "test-count",
+        "source": "src/test-count/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "metric-score",
+        "source": "src/metric-score/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-session",
+        "source": "src/export-session/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "generate-pin",
+        "source": "src/generate-pin/index.js"
+      },
+      {
+        "type": "hook",
+        "name": "handle-user-answer",
+        "source": "src/handle-user-answer/index.js"
       }
     ],
     "host": "10.8.2"

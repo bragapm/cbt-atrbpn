@@ -1,5 +1,5 @@
 export type IMateri = {
-  id: number;
+  id: number | string;
   user_created: string;
   date_created: string; // or Date if you want to handle this as a Date object
   user_updated: string | null;

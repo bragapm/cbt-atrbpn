@@ -4,16 +4,17 @@ import { FC } from "react";
 interface IQuestion {
   loading: boolean;
   question: any;
+  noSoal: number;
   handleNextQuestion: () => void;
   handlePrevQuestion: () => void;
 }
 const QuestionDetail: FC<IQuestion> = ({
   loading,
   question,
+  noSoal,
   handleNextQuestion,
   handlePrevQuestion,
 }) => {
-  // category_name
   return (
     <div className="w-full bg-white/80 border rounded-[16px] p-3 grid gap-3">
       <div className="flex justify-between h-fit items-center">
@@ -23,8 +24,7 @@ const QuestionDetail: FC<IQuestion> = ({
           >
             <p className={`font-medium`}>Sulit</p>
           </div>
-          <p className="text-primary font-medium">Soal No.1</p>
-          <p className="text-sm">| Soal Kategori Tugas Pokok PPAT</p>
+          <p className="text-primary font-medium">Soal No. {noSoal}</p>
         </div>
         <div className="flex gap-3 items-center">
           <button

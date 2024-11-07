@@ -21,6 +21,7 @@ import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian
 import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/EditCategorySoalPage";
 import { CreateDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/CreateDistribusiSoalPage";
 import { EditDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/UpdateDistribusiSoalPage";
+import UjianEditPage from "@/app/admin/management-ujian/pages/UjianEditPage";
 
 export const protectedRoutes = [
   {
@@ -44,7 +45,7 @@ export const protectedRoutes = [
         element: <BankSoalCreatePage />,
       },
       {
-        path: "bank-soal/edit",
+        path: "bank-soal/edit/:id",
         element: <BankSoalEditPage />,
       },
       {
@@ -58,6 +59,10 @@ export const protectedRoutes = [
       {
         path: "ujian/create",
         element: <UjianCreatePages />,
+      },
+      {
+        path: "ujian/edit/:id",
+        element: <UjianEditPage />,
       },
       {
         path: "peserta-cbt",

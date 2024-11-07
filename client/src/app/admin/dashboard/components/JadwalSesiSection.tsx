@@ -3,15 +3,23 @@ import CardHeader from "./CardHeader";
 import JadwalCard from "./JadwalCard";
 import ChartCard from "./ChartCard";
 import Pagination from "./Pagination";
+import useGetJadwalSesi from "../hooks/useGetJadwalSesi";
+import useStatistikBankSoal from "../hooks/useStatistikBankSoal";
 
 const JadwalSesiSection = () => {
   const [dataChartSoal, setChartDataSoal] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 50;
 
+  const { data } = useGetJadwalSesi({
+    page: currentPage,
+    limit: 2,
+  });
+
+  const { data: materisoal } = useStatistikBankSoal("");
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Lakukan sesuatu ketika halaman berubah, misalnya fetch data baru
   };
   const legenda: any[] = [
     {
@@ -27,25 +35,51 @@ const JadwalSesiSection = () => {
       color: "bg-[#8CBAC7]",
     },
   ];
-  useEffect(() => {
-    let label: string[] = ["Sulit", "Sangat Mudah", "Mudah"];
-    let newData: any[] = [50, 30, 20];
-    let bgColors: string[] = ["#2A6083", "#699EB2", "#8CBAC7"];
 
-    const data = {
-      labels: label,
-      datasets: [
-        {
-          label: "",
-          data: newData,
-          backgroundColor: bgColors,
-          borderWidth: 0,
-          color: "#fff",
-        },
-      ],
-    };
-    setChartDataSoal(data);
-  }, []);
+  function hitungJumlahSoalPerKategori(data) {
+    const jumlahSoalPerKategori = {};
+    data.forEach((materi) => {
+      if (!jumlahSoalPerKategori[materi.nama_kategori]) {
+        jumlahSoalPerKategori[materi.nama_kategori] = 0;
+      }
+      jumlahSoalPerKategori[materi.nama_kategori] += Number(materi.jumlah_soal);
+    });
+    let kat = [];
+    let jum = [];
+    let total: any = 0;
+    Object.entries(jumlahSoalPerKategori).map(([kategori, jumlah]) => {
+      kat.push(kategori);
+      jum.push(jumlah);
+      total = total + jumlah;
+    });
+
+    return { kategori: kat, jumlah: jum, total: total };
+  }
+
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    if (materisoal?.data) {
+      const hasil = hitungJumlahSoalPerKategori(materisoal?.data?.data);
+      let label: string[] = hasil.kategori;
+      let newData: any[] = hasil.jumlah;
+      let bgColors: string[] = ["#2A6083", "#699EB2", "#8CBAC7"];
+      console.log(hasil.total);
+      setTotal(hasil.total);
+      const data = {
+        labels: label,
+        datasets: [
+          {
+            label: "",
+            data: newData,
+            backgroundColor: bgColors,
+            borderWidth: 0,
+            color: "#fff",
+          },
+        ],
+      };
+      setChartDataSoal(data);
+    }
+  }, [materisoal]);
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -57,8 +91,10 @@ const JadwalSesiSection = () => {
           listName="Pilih Sesi"
         />
         <div className="flex justify-between gap-4 py-4">
-          <JadwalCard />
-          <JadwalCard />
+          {data &&
+            data?.data?.data?.map((el, idx) => (
+              <JadwalCard key={idx} data={el} />
+            ))}
         </div>
         <div className="w-full items-center flex">
           <Pagination
@@ -74,6 +110,7 @@ const JadwalSesiSection = () => {
           subtitle={"Data ditampilkan sesuai dengan filter"}
           listOption={[]}
           listName="Pilih Paket Soal"
+          hide
         />
         <div className="flex flex-col justify-between gap-4 p-4 rounded-lg mt-4 border bg-white">
           <p className="font-semibold ">Data Soal</p>
@@ -85,23 +122,24 @@ const JadwalSesiSection = () => {
                   legend={legenda}
                   centerContent={{
                     label: "Jumlah Soal",
-                    value: 100,
+                    value: total,
                   }}
                 />
               )}
             </div>
             <div className="p-4 border rounded-lg text-xs flex flex-col gap-2 ">
               <p>Materi Soal</p>
-              {[1, 2, 3, 4, 5].map((el) => (
-                <div key={el}>
-                  <p className="font-bold">32</p>
-                  <p className="text-[10px]">Bahasa Indo</p>
-                </div>
-              ))}
+              {materisoal?.data &&
+                materisoal?.data?.data?.map((el, idx) => (
+                  <div key={idx}>
+                    <p className="font-bold">{el.jumlah_soal}</p>
+                    <p className="text-[10px]">{el.materi}</p>
+                  </div>
+                ))}
             </div>
           </div>
           <p className="text-xs">
-            Data ini menampilkan sesuai dengan filter paket yang dipilih
+            Data ini menampilkan sesuai dengan filter yang dipilih
           </p>
         </div>
       </div>
