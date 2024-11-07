@@ -42,6 +42,13 @@ const BankSoalCreatePage: React.FC = () => {
           order: 4,
           option_image: null,
         },
+        {
+          question_id: "",
+          option_text: "",
+          is_correct: false,
+          order: 5,
+          option_image: null,
+        },
       ],
     },
   });
