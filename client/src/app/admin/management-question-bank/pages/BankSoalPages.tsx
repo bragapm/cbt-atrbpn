@@ -14,7 +14,7 @@ const BankSoalPages = () => {
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
 
-  const { data, isLoading } = useGetManagementBankSoal({
+  const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,
   });
@@ -74,6 +74,7 @@ const BankSoalPages = () => {
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        refetch={refetch}
       />
     </div>
   );
