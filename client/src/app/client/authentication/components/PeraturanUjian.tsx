@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
+import { useGetUserTatib } from "../hooks/useGetUserTatib";
 
 interface IPeraturanUjian {
   check: any;
@@ -12,6 +13,8 @@ const PeraturanUjian: FC<IPeraturanUjian> = ({
   setChecked,
   navigate,
 }) => {
+  const { data, error, getTatib } = useGetUserTatib();
+
   return (
     <div className="w-full h-full flex gap-4 flex-col ">
       <div className="flex gap-2 items-center justify-between ">
