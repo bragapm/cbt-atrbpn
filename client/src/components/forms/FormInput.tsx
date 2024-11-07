@@ -28,7 +28,11 @@ export const FormInput: FC<FormInputProps> = ({
   const error = getError(name)?.message || "";
 
   return (
-    <div className="w-full border border-gray-400 py-1 px-3 rounded-xl">
+    <div
+      className={`w-full border border-gray-400 py-1 px-3 rounded-xl ${
+        props.disabled ? "bg-gray-200" : "bg-white"
+      }`}
+    >
       {label && <label className="text-xs text-gray-500">{label}</label>}
 
       <Controller

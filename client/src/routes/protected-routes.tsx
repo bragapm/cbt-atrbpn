@@ -19,6 +19,8 @@ import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pa
 import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
 import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPesertaPage";
 import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/EditCategorySoalPage";
+import { CreateDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/CreateDistribusiSoalPage";
+import { EditDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/UpdateDistribusiSoalPage";
 
 export const protectedRoutes = [
   {
@@ -104,6 +106,14 @@ export const protectedRoutes = [
       {
         path: "kategori-soal/edit/:id",
         element: <EditCategorySoalPage />,
+      },
+      {
+        path: "pendistribusian-soal/create/:materiSoalId",
+        element: <CreateDistribusiSoalPage />,
+      },
+      {
+        path: "pendistribusian-soal/edit/:distribusiSoalId",
+        element: <EditDistribusiSoalPage />,
       },
     ],
   },

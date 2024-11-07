@@ -16,12 +16,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import useDeletePesertaMutation from "../../management-peserta/hooks/useDeletePesertaMutation";
 
 export const HasilAkhirUjianDetailPage: FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+
+  const [id, setId] = React.useState<string | number>("");
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeletePesertaMutation({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
@@ -77,6 +89,7 @@ export const HasilAkhirUjianDetailPage: FC = () => {
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -117,12 +130,11 @@ export const HasilAkhirUjianDetailPage: FC = () => {
         description="Peserta berhasil dihapus"
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />

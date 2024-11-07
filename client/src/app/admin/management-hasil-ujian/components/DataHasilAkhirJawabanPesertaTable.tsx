@@ -65,14 +65,6 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
         );
       },
     },
-    // {
-    //   accessorKey: "materiSoal",
-    //   header: "Materi Soal",
-    // },
-    // {
-    //   accessorKey: "kategoriSoal",
-    //   header: "Kategori Soal",
-    // },
     {
       accessorKey: "correct_count",
       header: "Jawaban Benar",
