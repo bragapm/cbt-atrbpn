@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Trash, ChevronDown } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";

@@ -120,7 +120,7 @@ export const CreatePesertaPage = () => {
     });
 
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
-    users?.data?.data[0].id,
+    users?.data?.data[0]?.id,
     {
       onSuccess: () => {},
     }

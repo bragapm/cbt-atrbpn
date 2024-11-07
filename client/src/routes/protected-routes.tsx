@@ -14,7 +14,6 @@ import AdminLayout from "@/layouts/AdminLayout";
 import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
 import { ImportPesertaPage } from "@/app/admin/management-peserta/pages/ImportPesertaPage";
-import { ManagementHasilUjianPage } from "@/app/admin/management-hasil-ujian/pages/ManagementHasilUjianPage";
 import { CreateCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/CreateCategorySoalPage";
 import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianDetailPage";
 import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
@@ -23,6 +22,8 @@ import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages
 import { CreateDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/CreateDistribusiSoalPage";
 import { EditDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/UpdateDistribusiSoalPage";
 import UjianEditPage from "@/app/admin/management-ujian/pages/UjianEditPage";
+import { HasilAkhirUjianPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPage";
+import { HasilAkhirJawabanPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPage";
 
 export const protectedRoutes = [
   {
@@ -86,15 +87,19 @@ export const protectedRoutes = [
         element: <DistribusiSoalPage />,
       },
       {
-        path: "hasil-ujian",
-        element: <ManagementHasilUjianPage />,
+        path: "hasil-ujian/hasil-akhir-ujian",
+        element: <HasilAkhirUjianPage />,
       },
       {
-        path: "hasil-ujian/detail",
+        path: "hasil-ujian/list-pertanyaan",
+        element: <HasilAkhirJawabanPage />,
+      },
+      {
+        path: "hasil-ujian/hasil-akhir-ujian/detail",
         element: <HasilAkhirUjianDetailPage />,
       },
       {
-        path: "hasil-ujian/detail/:pesertaId",
+        path: "hasil-ujian/hasil-akhir-ujian/detail/:pesertaId",
         element: <HasilAkhirUjianPesertaPage />,
       },
       {
@@ -118,7 +123,7 @@ export const protectedRoutes = [
         element: <EditCategorySoalPage />,
       },
       {
-        path: "pendistribusian-soal/create/:materiSoalId",
+        path: "pendistribusian-soal/create",
         element: <CreateDistribusiSoalPage />,
       },
       {

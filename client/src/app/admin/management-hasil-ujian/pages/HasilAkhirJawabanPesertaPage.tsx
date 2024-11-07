@@ -9,13 +9,7 @@ import useGetUserTestQueries, {
   IUserTest,
 } from "../../management-peserta/hooks/useGetUserTestQueries";
 import { useParams } from "react-router-dom";
-import { Download, MoreVertical, Trash } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Trash } from "lucide-react";
 
 export const HasilAkhirJawabanPesertaPage: FC = () => {
   const params = useParams();
@@ -72,17 +66,6 @@ export const HasilAkhirJawabanPesertaPage: FC = () => {
               setIsOpenDeleteConfirm(true);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem onClick={() => {}}>
-                Lihat Detail Peserta
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       ),
       enableSorting: false,
@@ -94,7 +77,7 @@ export const HasilAkhirJawabanPesertaPage: FC = () => {
     <div className="w-full h-full flex flex-col gap-3 pt-1">
       <Breadcrumbs
         paths={[
-          { label: "Management Hasil Ujian", path: "/hasil-ujian" },
+          { label: "Management Hasil Ujian" },
           { label: "List Pertanyaan", path: "/hasil-ujian/list-pertanyaan" },
           {
             label:

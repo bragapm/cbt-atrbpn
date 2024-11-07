@@ -10,6 +10,12 @@ import { PaginationTableProps } from "@/components/table-pagination";
 import BadgeCategory from "@/components/badge-category";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationDistribusiSoal from "../hooks/useDeleteMutationDistribusiSoal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type IDistribusiTable = {
   data: IDistribusiSoal[];
@@ -136,7 +142,20 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({
               setId(row.original.id);
             }}
           />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(`/pendistribusian-soal/edit/${row.original.id}`)
+                }
+              >
+                Edit
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,

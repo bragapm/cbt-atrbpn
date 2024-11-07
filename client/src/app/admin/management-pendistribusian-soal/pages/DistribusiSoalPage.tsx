@@ -4,10 +4,12 @@ import { Plus, Upload } from "lucide-react";
 import DistribusiSoalTable from "../components/DistribusiSoalTable";
 import useGetManagementDistribusiSoal from "../hooks/useGetManagementDistribusiSoal";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const limit: number = 20;
 
 const DistribusiSoalPage = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
   const { data, isLoading, refetch } = useGetManagementDistribusiSoal({
@@ -26,7 +28,12 @@ const DistribusiSoalPage = () => {
               Export Pendistribusian Soal
             </Button>
 
-            <Button variant="actions" size="actions" startContent={<Plus />}>
+            <Button
+              onClick={() => navigate("/pendistribusian-soal/create")}
+              variant="actions"
+              size="actions"
+              startContent={<Plus />}
+            >
               Tambah Pendistribusian Soal
             </Button>
           </div>
