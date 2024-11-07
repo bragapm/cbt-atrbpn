@@ -15,12 +15,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideotron";
+import useDeletePesertaMutation from "../../management-peserta/hooks/useDeletePesertaMutation";
 
 export const DataHasilAkhirUjianPesertaTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
+
+  const [id, setId] = React.useState<string | number>("");
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeletePesertaMutation({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
@@ -66,12 +78,13 @@ export const DataHasilAkhirUjianPesertaTable = () => {
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -100,12 +113,11 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         description="Peserta berhasil dihapus"
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />

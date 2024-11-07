@@ -13,6 +13,7 @@ import {
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { IUserSessionTest } from "../hooks/useGetUserSessionTestQueries";
+import useDeletePesertaMutation from "../hooks/useDeletePesertaMutation";
 
 type PesertaCBTTableProps = {
   userSessionTest?: IUserSessionTest[];
@@ -33,6 +34,16 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
 
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const [id, setId] = React.useState<string | number>("");
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeletePesertaMutation({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
@@ -79,6 +90,7 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
           <Download className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -109,12 +121,11 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
         description="Peserta berhasil dihapus"
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />

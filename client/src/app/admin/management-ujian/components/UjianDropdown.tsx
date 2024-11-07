@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { IUjian } from "@/types/collection/ujian.type";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
-import { Button } from "@/components/ui/button";
 
 type IUjianPopupProps = {
   ujianData: IUjian;
@@ -23,14 +22,7 @@ const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
       <DropdownMenuContent className="bg-white p-2">
         {now > endTime ? (
           <>
-            <UjianTablePeserta
-              isDetail
-              triggerButton={
-                <Button className="px-2 py-1 font-normal" variant="ghost">
-                  Lihat Detail Ujian
-                </Button>
-              }
-            />
+            <UjianTablePeserta isDetail />
             <DropdownMenuItem
               onClick={() => navigate(`/ujian/edit/${ujianData.id}`)}
             >

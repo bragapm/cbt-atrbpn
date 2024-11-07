@@ -3,18 +3,40 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
 import { IDistribusiSoal } from "../hooks/useGetManagementDistribusiSoal";
+import { PaginationTableProps } from "@/components/table-pagination";
+import BadgeCategory from "@/components/badge-category";
+import { useNavigate } from "react-router-dom";
+import useDeleteMutationDistribusiSoal from "../hooks/useDeleteMutationDistribusiSoal";
 
 type IDistribusiTable = {
   data: IDistribusiSoal[];
+  isLoading: boolean;
+  pagination: PaginationTableProps;
+  refetch: () => void;
 };
 
-const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
-  const [page, setPage] = React.useState(1);
+const DistribusiSoalTable: React.FC<IDistribusiTable> = ({
+  data,
+  isLoading,
+  pagination,
+  refetch,
+}) => {
+  const [id, setId] = React.useState<string | number>("");
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const navigate = useNavigate();
+
+  const { mutate: deleteMutation, isLoading: isLoadingDelete } =
+    useDeleteMutationDistribusiSoal({
+      onSuccess: () => {
+        setIsOpenDeleteConfirm(false);
+        setIsShowSuccessDialog(true);
+        setId("");
+      },
+    });
 
   const columns: ColumnDef<IDistribusiSoal>[] = [
     {
@@ -40,27 +62,22 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "materiSoal",
       header: "Materi Soal",
       cell: ({ row }) => {
-        const materiSoal = row.original.materi_id.map((item) => item.materi);
         return (
           <div className="flex flex-col gap-2">
-            {materiSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
+            {row?.original?.materi_id?.materi ?? "-"}
           </div>
         );
       },
     },
     {
-      accessorKey: "kategoriSoal",
+      accessorKey: "category",
       header: "Kategori Soal",
       cell: ({ row }) => {
-        const kategoriSoal = row.original.kategori_id.map((item) => item.id);
+        const kategori = row?.original.kategori_id?.nama_kategori;
 
         return (
-          <div className="w-full flex flex-col gap-3">
-            {kategoriSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
+          <div className="w-[80px]">
+            {kategori ? <BadgeCategory name={kategori} /> : "-"}
           </div>
         );
       },
@@ -69,13 +86,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "distribusiSoal",
       header: "Distribusi Soal",
       cell: ({ row }) => {
-        const distribusiSoal = row.original.kategori_id.map((item) => item.id);
+        const jumlahSoal = row?.original?.jumlah_soal;
         return (
-          <div className="w-full flex flex-col gap-3">
-            {distribusiSoal.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
+          <div className="w-full flex flex-col gap-3">{jumlahSoal ?? "-"}</div>
         );
       },
     },
@@ -83,15 +96,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "bobotBenar",
       header: "Bobot Nilai Benar",
       cell: ({ row }) => {
-        const bobotBenar = row.original.kategori_id.map(
-          (item) => item.bobot_benar
-        );
+        const jumlahBenar = row?.original?.kategori_id?.bobot_benar;
         return (
-          <div className="w-full flex flex-col gap-3">
-            {bobotBenar.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
+          <div className="w-full flex flex-col gap-3">{jumlahBenar ?? "-"}</div>
         );
       },
     },
@@ -99,15 +106,9 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "bobotSalah",
       header: "Bobot Nilai Salah",
       cell: ({ row }) => {
-        const bobotSalah = row.original.kategori_id.map(
-          (item) => item.bobot_salah
-        );
+        const jumlahSalah = row?.original?.kategori_id?.bobot_salah;
         return (
-          <div className="w-full flex flex-col gap-3">
-            {bobotSalah.map((item) => {
-              return <p>{item}</p>;
-            })}
-          </div>
+          <div className="w-full flex flex-col gap-3">{jumlahSalah ?? "-"}</div>
         );
       },
     },
@@ -115,14 +116,10 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       accessorKey: "tidakMenjawab",
       header: "Tidak Menjawab",
       cell: ({ row }) => {
-        const tidakMenjawab = row.original.kategori_id.map(
-          (item) => item.tidak_menjawab
-        );
+        const tidakMenjawab = row?.original?.kategori_id?.tidak_menjawab;
         return (
           <div className="w-full flex flex-col gap-3">
-            {tidakMenjawab.map((item) => {
-              return <p>{item}</p>;
-            })}
+            {tidakMenjawab ?? "-"}
           </div>
         );
       },
@@ -130,15 +127,15 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
+              setId(row.original.id);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),
@@ -152,27 +149,26 @@ const DistribusiSoalTable: React.FC<IDistribusiTable> = ({ data }) => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Soal berhasil dihapus"
+        description="Pendistribusian Soal berhasil dihapus"
+        onSubmit={() => {
+          navigate("/pendistribusian-soal");
+          refetch();
+        }}
       />
       <DeleteDialogConfirm
+        isLoading={isLoadingDelete}
         isOpen={isOpenDeleteConfirm}
         onOpenChange={setIsOpenDeleteConfirm}
         onSubmit={() => {
-          console.log("delete");
-          setIsOpenDeleteConfirm(false);
-          setIsShowSuccessDialog(true);
+          deleteMutation({ id: id });
         }}
-        description="Apakah anda yakin ingin menghapus soal ini ?"
+        description="Apakah anda yakin ingin menghapus Pendistribusian Soal ini ?"
       />
       <DataTable
         data={data || []}
         columns={columns}
-        pagination={{
-          pageSize: 10,
-          totalItems: 60,
-          onPageChange: (page) => setPage(page),
-          currentPage: page,
-        }}
+        isLoading={isLoading}
+        pagination={pagination}
       />
     </>
   );

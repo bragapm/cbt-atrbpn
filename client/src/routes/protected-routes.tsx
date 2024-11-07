@@ -9,6 +9,7 @@ import BankSoalPreview from "@/app/admin/management-question-bank/pages/BankSoal
 import TatibPages from "@/app/admin/management-tatib/pages/TatibPages";
 import UjianCreatePages from "@/app/admin/management-ujian/pages/UjianCreatePages";
 import UjianPages from "@/app/admin/management-ujian/pages/UjianPages";
+import CategorySoalPage from "@/app/admin/management-kategori-soal/pages/CategorySoalPage";
 import AdminLayout from "@/layouts/AdminLayout";
 import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
@@ -19,6 +20,8 @@ import { HasilAkhirUjianDetailPage } from "@/app/admin/management-hasil-ujian/pa
 import { HasilAkhirUjianPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPesertaPage";
 import { HasilAkhirJawabanPesertaPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPesertaPage";
 import { EditCategorySoalPage } from "@/app/admin/management-kategori-soal/pages/EditCategorySoalPage";
+import { CreateDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/CreateDistribusiSoalPage";
+import { EditDistribusiSoalPage } from "@/app/admin/management-pendistribusian-soal/pages/UpdateDistribusiSoalPage";
 import UjianEditPage from "@/app/admin/management-ujian/pages/UjianEditPage";
 
 export const protectedRoutes = [
@@ -103,12 +106,24 @@ export const protectedRoutes = [
         element: <TatibPages />,
       },
       {
+        path: "kategori-soal",
+        element: <CategorySoalPage />,
+      },
+      {
         path: "kategori-soal/create",
         element: <CreateCategorySoalPage />,
       },
       {
         path: "kategori-soal/edit/:id",
         element: <EditCategorySoalPage />,
+      },
+      {
+        path: "pendistribusian-soal/create/:materiSoalId",
+        element: <CreateDistribusiSoalPage />,
+      },
+      {
+        path: "pendistribusian-soal/edit/:distribusiSoalId",
+        element: <EditDistribusiSoalPage />,
       },
     ],
   },

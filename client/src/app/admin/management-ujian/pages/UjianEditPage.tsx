@@ -64,7 +64,7 @@ const UjianEditPage: React.FC = () => {
         </CardTitle>
         <CardContent className="w-full px-2 flex flex-col gap-2">
           <FormProvider {...form}>
-            <UjianForm />
+            <UjianForm isEdit={true} />
           </FormProvider>
         </CardContent>
 

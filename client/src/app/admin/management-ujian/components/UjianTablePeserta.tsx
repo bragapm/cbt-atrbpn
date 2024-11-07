@@ -9,25 +9,30 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type IUjianTablePeserta = {
-  triggerButton: React.ReactNode;
   isDetail?: boolean;
+  value?: string;
+  onChange?: (value: string) => void;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
-  triggerButton,
   isDetail = false,
+  value,
+  onChange,
 }) => {
   const limit: number = 10;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [studentVal, setStudentVal] = useState<string[]>([]);
+
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
@@ -39,20 +44,67 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     setPage(1);
   };
 
+  const getCurrentUser = () => {
+    if (value) {
+      return dataUser?.data?.find((item) => item.id === value);
+    }
+    return "";
+  };
+
+  const currentUser = getCurrentUser();
+
+  const handleCheckValue = (val: string, bool: boolean) => {
+    if (bool) {
+      setStudentVal([val]);
+    } else {
+      setStudentVal([]);
+    }
+  };
+
+  const getCheckValue = (val: string) => {
+    return studentVal.includes(val);
+  };
+
+  // TODO: UNCOMMENT THIS IF USERS RETRIVE ARRAY
+
+  // const handleCheckAll = (bool: boolean) => {
+  //   if (bool) {
+  //     setStudentVal(dataUser?.data?.map((item) => item.id));
+  //   } else {
+  //     setStudentVal([]);
+  //   }
+  // };
+
+  // const getCheckAll = () => {
+  //   return studentVal.length === dataUser?.data?.length;
+  // };
+
+  const handleSubmit = () => {
+    onChange(studentVal[0]);
+    setIsOpen(false);
+  };
+
   const columns: ColumnDef<IUser>[] = [
     {
       id: "select",
       header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
+        // TODO: UNCOMENT THIS IF USER RETRIVE ARRAY
+        // <Checkbox
+        //   checked={getCheckAll()}
+        //   onCheckedChange={(value) => {
+        //     table.toggleAllPageRowsSelected(!!value);
+        //     handleCheckAll(!!value);
+        //   }}
+        //   aria-label="Select all"
+        // />
+        <></>
       ),
       cell: ({ row }) => (
         <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          checked={getCheckValue(row.original.id)}
+          onCheckedChange={(value) => {
+            handleCheckValue(row.original.id, !!value);
+          }}
           aria-label="Select row"
         />
       ),
@@ -75,77 +127,75 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
         return nama;
       },
     },
-    {
-      accessorKey: "session",
-      header: "Sesi Ujian",
-      // cell: ({ row }) => {
-      //   const session = row.original.session;
-      //   return session;
-      // },
-    },
-    {
-      accessorKey: "phone",
-      header: "No. Hp",
-      // cell: ({ row }) => {
-      //   const phone = row.original.phone;
-      //   return phone;
-      // },
-    },
   ];
 
   return (
-    <Dialog>
-      <DialogTrigger className="w-full">{triggerButton}</DialogTrigger>
-      <DialogContent className="pt-10 max-w-4xl">
-        <div className="w-full flex flex-row justify-between items-center">
-          <div className="flex flex-col  gap-1">
-            <DialogTitle>Data Peserta CBT</DialogTitle>
-            <DialogDescription>
-              Data ditampilkan sesuai dengan filter
-            </DialogDescription>
-          </div>
-
-          <div className="w-1/2">
-            <SearchBox onSearch={handleSearchChange} />
-          </div>
-        </div>
-
-        <div className="p-2 w-full h-full">
-          <DataTable
-            actionButton={
-              <>
-                {isDetail ? (
-                  <UjianPIN
-                    triggerButton={
-                      <Button
-                        variant="actions"
-                        size="actions"
-                        startContent={<Lock />}
-                      >
-                        Generate Pin Ujian
-                      </Button>
-                    }
-                  />
-                ) : (
-                  <Button variant="actions" size="actions">
-                    Pilih Peserta
-                  </Button>
-                )}
-              </>
+    <>
+      {isDetail ? (
+        <Button
+          className="px-2 py-1 font-normal"
+          variant="ghost"
+          onClick={() => setIsOpen(true)}
+        >
+          Lihat Detail Ujian
+        </Button>
+      ) : (
+        <Button
+          variant="outline"
+          className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
+          onClick={() => {
+            if (value) {
+              setStudentVal([value]);
             }
-            data={dataUser?.data || []}
-            columns={columns}
-            isLoading={isLoadingUser}
-            pagination={{
-              pageSize: limit,
-              totalItems: dataUser?.meta.total_count,
-              onPageChange: (page) => setPage(page),
-              currentPage: page,
-            }}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+            setIsOpen(true);
+          }}
+        >
+          <p className="text-gray-500 font-light text-xs">Peserta Ujian</p>
+          <p>
+            {currentUser
+              ? `${currentUser?.first_name} - ${currentUser?.last_name}`
+              : "Data Peserta Ujian"}
+          </p>
+        </Button>
+      )}
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="pt-10 max-w-4xl">
+          <div className="w-full flex flex-row justify-between items-center">
+            <div className="flex flex-col  gap-1">
+              <DialogTitle>Data Peserta CBT</DialogTitle>
+              <DialogDescription>
+                Data ditampilkan sesuai dengan filter
+              </DialogDescription>
+            </div>
+
+            <div className="w-1/2">
+              <SearchBox onSearch={handleSearchChange} />
+            </div>
+          </div>
+
+          <div className="p-2 w-full h-full">
+            <DataTable
+              customSelectedFooter={studentVal?.length}
+              buttonAction={handleSubmit}
+              iconButtonAction={isDetail ? <Lock /> : <></>}
+              labelButtonAction={
+                isDetail ? "Generate Pin Ujian" : "Pilih Peserta"
+              }
+              data={dataUser?.data || []}
+              columns={columns}
+              isLoading={isLoadingUser}
+              pagination={{
+                pageSize: limit,
+                totalItems: dataUser?.meta.total_count,
+                onPageChange: (page) => setPage(page),
+                currentPage: page,
+              }}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

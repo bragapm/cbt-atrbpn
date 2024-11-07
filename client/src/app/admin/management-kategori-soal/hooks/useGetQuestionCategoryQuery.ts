@@ -2,7 +2,7 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseResponse } from "@/types/base-response";
 import { useQuery } from "react-query";
 
-type IQuestionCategory = {
+export type IQuestionCategory = {
   nama_kategori: string;
   bobot_benar: number;
   bobot_salah: number;

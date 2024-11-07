@@ -3,8 +3,13 @@ import { Button } from "@/components/ui/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { ImportPesertaCBTFormValue } from "../types";
 import { FormInputFile } from "@/components/forms/FormInputFile";
+import useImportPesertaMutation from "../hooks/useImportPesertaMutation";
+import SuccessDialog from "@/components/success-dialog";
+import ConfirmationDialog from "@/components/confirmation-dialog";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const ImportPesertaFormInner = () => {
+const ImportPesertaFormInner = ({ openConfirmModal }) => {
   return (
     <>
       <FormInputFile
@@ -13,7 +18,7 @@ const ImportPesertaFormInner = () => {
       />
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
-        <Button type="submit" className="w-40">
+        <Button onClick={openConfirmModal} className="w-40">
           Tambah Peserta
         </Button>
       </div>
@@ -22,19 +27,51 @@ const ImportPesertaFormInner = () => {
 };
 
 export const ImportPesertaPage = () => {
+  const navigation = useNavigate();
+
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+
   const methods = useForm({
     defaultValues: {
-      filePeserta: null,
+      filePeserta: undefined,
     },
     mode: "onTouched",
   });
 
+  const { mutateAsync: importPeserta, isLoading } = useImportPesertaMutation({
+    onSuccess: () => {
+      setIsSuccess(true);
+      setConfirmationDialog(false);
+    },
+    onError: () => {
+      setConfirmationDialog(false);
+    },
+  });
+
   const onSubmit = (data: ImportPesertaCBTFormValue) => {
-    console.log("Form Data:", data);
+    importPeserta({
+      filePeserta: data.filePeserta,
+    });
   };
 
   return (
     <section>
+      <SuccessDialog
+        isOpen={isSuccess}
+        onOpenChange={setIsSuccess}
+        description="Peserta CBT Ditambahkan"
+        onSubmit={() => {
+          navigation("/peserta-cbt");
+        }}
+      />
+      <ConfirmationDialog
+        isLoading={isLoading}
+        isOpen={confirmationDialog}
+        onOpenChange={setConfirmationDialog}
+        description="Apakah Anda yakin ingin mengimport Peserta CBT"
+        onSubmit={methods.handleSubmit(onSubmit)}
+      />
       <Breadcrumbs
         paths={[
           { label: "Daftar Peserta", path: "/peserta-cbt" },
@@ -47,12 +84,11 @@ export const ImportPesertaPage = () => {
           <h2 className="text-sm">Data Peserta Ujian CBT ATR/BPN</h2>
         </header>
         <FormProvider {...methods}>
-          <form
-            className="mt-4 space-y-2"
-            onSubmit={methods.handleSubmit(onSubmit)}
-          >
-            <ImportPesertaFormInner />
-          </form>
+          <div className="mt-4 space-y-2">
+            <ImportPesertaFormInner
+              openConfirmModal={() => setConfirmationDialog(true)}
+            />
+          </div>
         </FormProvider>
       </div>
     </section>

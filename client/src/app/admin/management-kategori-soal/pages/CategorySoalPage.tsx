@@ -4,17 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UjianTable from "../components/UjianTable";
-import useGetManagementUjian from "../hooks/useGetManagementUjian";
+import CategorySoalTable from "../components/CategorySoalTable";
+import useGetCategorySoal from "../hooks/useGetCategorySoal";
 
 const limit: number = 10;
 
-const UjianPages = () => {
+const CategorySoalPage = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
 
-  const { data, isLoading } = useGetManagementUjian({
+  const { data, isLoading, refetch } = useGetCategorySoal({
     page: page,
     limit: limit,
   });
@@ -32,7 +32,7 @@ const UjianPages = () => {
         }}
       />
       <TableActions
-        title="Sesi Ujian"
+        title="Management Kategori Soal"
         description="Data ditampilkan sesuai dengan filter"
         actions={
           <div className="flex gap-2">
@@ -42,31 +42,32 @@ const UjianPages = () => {
               startContent={<Upload />}
               onClick={() => setIsOpenExportDialog(true)}
             >
-              Export Sesi Ujian
+              Export Kategori Soal
             </Button>
             <Button
               variant="actions"
               size="actions"
               startContent={<Plus />}
-              onClick={() => navigate("/ujian/create")}
+              onClick={() => navigate("/kategori-soal/create")}
             >
-              Tambah Sesi Ujian
+              Tambah Kategori Soal
             </Button>
           </div>
         }
       />
-      <UjianTable
-        data={data?.data}
+      <CategorySoalTable
+        data={data?.data.data}
         isLoading={isLoading}
         pagination={{
           pageSize: limit,
-          totalItems: data?.meta.total_count,
+          totalItems: data?.data?.meta.total_count,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        refetch={refetch}
       />
     </div>
   );
 };
 
-export default UjianPages;
+export default CategorySoalPage;

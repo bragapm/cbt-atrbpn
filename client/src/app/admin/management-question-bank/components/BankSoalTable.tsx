@@ -10,9 +10,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash, ChevronDown } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";
@@ -70,8 +76,40 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       accessorKey: "question",
       header: "Soal",
       cell: ({ row }) => {
+        const questionHtml = row.original.question;
+        const previewText = questionHtml?.replace(/<[^>]+>/g, "").slice(0, 50);
+        const [isOpen, setIsOpen] = React.useState(false);
+
         return (
-          <div dangerouslySetInnerHTML={{ __html: row.original.question }} />
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            onValueChange={(value) =>
+              setIsOpen(value === row.original.id.toString())
+            }
+          >
+            <AccordionItem
+              value={row.original.id.toString()}
+              className="border-none"
+            >
+              <AccordionTrigger className="hover:no-underline py-0">
+                {!isOpen && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-normal">
+                      {previewText}...
+                    </span>
+                  </div>
+                )}
+              </AccordionTrigger>
+              <AccordionContent className="pt-2">
+                <div
+                  dangerouslySetInnerHTML={{ __html: questionHtml }}
+                  className="text-sm text-gray-600"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         );
       },
     },
@@ -80,7 +118,6 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       header: "Kategori Soal",
       cell: ({ row }) => {
         const kategori = row?.original.kategori_id?.nama_kategori;
-
         return <BadgeCategory name={kategori} />;
       },
     },
