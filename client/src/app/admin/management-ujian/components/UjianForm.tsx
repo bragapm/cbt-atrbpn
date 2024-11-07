@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import UjianInputForm from "./UjianInputForm";
-import { DatePicker } from "@/components/ui/date-picker";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import {
   Form,
@@ -11,15 +10,13 @@ import {
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
 import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTablePeserta";
-import UjianSelectForm from "@/app/admin/management-ujian/components/UjianSelectForm";
-import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 import ErrorPlaceholder from "@/components/error-placeholder";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 
-const UjianForm: React.FC = () => {
+const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
   const form = useFormContext<IUjianRequest>();
   const { id } = useParams();
 
@@ -29,26 +26,18 @@ const UjianForm: React.FC = () => {
     isError,
   } = useGetDetailManajemenUjian(id);
 
-  const sessionOptions = [
-    { label: "Sesi 1", value: "1" },
-    { label: "Sesi 2", value: "2" },
-    { label: "Sesi 3", value: "3" },
-    { label: "Sesi 4", value: "4" },
-    { label: "Sesi 5", value: "5" },
-  ];
-
   useEffect(() => {
     if (id && detailData) {
-      form.setValue("name", detailData.data.name || "");
-      form.setValue("start_time", new Date(detailData.data.start_time));
-      form.setValue(
-        "sesi_ujian",
-        detailData.data.sesi_ujian ? String(detailData.data.sesi_ujian) : ""
-      );
+      form.setValue("name", detailData.name || "");
+      form.setValue("start_time", new Date(detailData.start_time));
+      form.setValue("end_time", new Date(detailData.end_time));
+      if (detailData.user) {
+        form.setValue("user", detailData.user.user);
+      }
     }
   }, [id, detailData]);
 
-  if (isLoadingDetailData) return <Skeleton className="w-full h-[65vh]" />;
+  if (isLoadingDetailData) return <Skeleton className="w-full h-[35vh]" />;
 
   if (isError) return <ErrorPlaceholder />;
 
@@ -98,7 +87,7 @@ const UjianForm: React.FC = () => {
           <div className="w-full">
             <FormField
               control={form.control}
-              name="start_time"
+              name="end_time"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -119,21 +108,12 @@ const UjianForm: React.FC = () => {
           <FormField
             control={form.control}
             name="user"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <UjianTablePeserta
-                    triggerButton={
-                      <Button
-                        variant="outline"
-                        className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
-                      >
-                        <p className="text-gray-500 font-light text-xs">
-                          Peserta Ujian
-                        </p>
-                        <p>Buka Data Peserta Ujian</p>
-                      </Button>
-                    }
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

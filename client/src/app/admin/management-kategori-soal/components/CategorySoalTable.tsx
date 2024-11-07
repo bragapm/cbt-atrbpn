@@ -2,31 +2,34 @@ import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical, Trash } from "lucide-react";
 import React from "react";
-import UjianDropdown from "./UjianDropdown";
-import { IUjian } from "@/types/collection/ujian.type";
-import { useNavigate } from "react-router-dom";
+import { IKategori } from "@/types/collection/kategori.type";
 import { PaginationTableProps } from "@/components/table-pagination";
-import useDeleteMutationUjian from "../hooks/useDeleteMutationUjian";
+import { useNavigate } from "react-router-dom";
+import useDeleteMutationKategoriSoal from "../hooks/useDeleteMutationKategoriSoal";
 
-type IUjianTable = {
-  data: IUjian[];
+type IKategoriTable = {
+  data: IKategori[];
   isLoading: boolean;
   pagination: PaginationTableProps;
+  refetch: () => void;
 };
 
-const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
-  const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
+const CategorySoalTable: React.FC<IKategoriTable> = ({
+  data,
+  isLoading,
+  pagination,
+  refetch,
+}) => {
   const [id, setId] = React.useState<string | number>("");
+  const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
-    useDeleteMutationUjian({
+    useDeleteMutationKategoriSoal({
       onSuccess: () => {
         setIsOpenDeleteConfirm(false);
         setIsShowSuccessDialog(true);
@@ -34,7 +37,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     });
 
-  const columns: ColumnDef<IUjian>[] = [
+  const columns: ColumnDef<IKategori>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -55,56 +58,33 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "namaUjian",
-      header: "Nama Ujian",
+      accessorKey: "nama_kategori",
+      header: "Kategori Soal",
+    },
+    {
+      accessorKey: "bobotBenar",
+      header: "Bobot Nilai Benar",
       cell: ({ row }) => {
-        const namaUjian = row.original.name;
-        return namaUjian;
+        const jumlahBenar = row?.original?.bobot_benar;
+        return <div className="w-full flex flex-col gap-3">{jumlahBenar}</div>;
       },
     },
     {
-      accessorKey: "tanggalUjian",
-      header: "Tanggal Ujian",
+      accessorKey: "bobotSalah",
+      header: "Bobot Nilai Salah",
       cell: ({ row }) => {
-        const tanggalUjian = row.original.start_time;
-        const date = new Date(tanggalUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
-
-        return formattedDate;
+        const jumlahSalah = row?.original?.bobot_salah;
+        return <div className="w-full flex flex-col gap-3">{jumlahSalah}</div>;
       },
     },
     {
-      accessorKey: "mulaiUjian",
-      header: "Mulai Ujian",
+      accessorKey: "tidakMenjawab",
+      header: "Tidak Menjawab",
       cell: ({ row }) => {
-        const mulaiUjian = row.original.start_time;
-        const date = new Date(mulaiUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
-
-        return formattedDate;
-      },
-    },
-    {
-      accessorKey: "selesaiUjian",
-      header: "Selesai Ujian",
-      cell: ({ row }) => {
-        const selesaiUjian = row.original.end_time;
-        const date = new Date(selesaiUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
-
-        return formattedDate;
+        const tidakMenjawab = row?.original?.tidak_menjawab;
+        return (
+          <div className="w-full flex flex-col gap-3">{tidakMenjawab}</div>
+        );
       },
     },
     {
@@ -119,12 +99,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
               setId(row.original.id);
             }}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-            </DropdownMenuTrigger>
-            <UjianDropdown ujianData={row.original} />
-          </DropdownMenu>
+          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
         </div>
       ),
       enableSorting: false,
@@ -137,8 +112,11 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
-        description="Ujian berhasil dihapus"
-        onSubmit={() => navigate("/ujian")}
+        description="Kategori Soal berhasil dihapus"
+        onSubmit={() => {
+          navigate("/kategori-soal");
+          refetch();
+        }}
       />
       <DeleteDialogConfirm
         isLoading={isLoadingDelete}
@@ -147,7 +125,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
         onSubmit={() => {
           deleteMutation({ id: id });
         }}
-        description="Apakah anda yakin ingin menghapus sesi ini ?"
+        description="Apakah anda yakin ingin menghapus kategori soal ini ?"
       />
       <DataTable
         data={data || []}
@@ -159,4 +137,4 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
   );
 };
 
-export default UjianTable;
+export default CategorySoalTable;

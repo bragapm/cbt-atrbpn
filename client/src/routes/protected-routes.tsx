@@ -9,6 +9,7 @@ import BankSoalPreview from "@/app/admin/management-question-bank/pages/BankSoal
 import TatibPages from "@/app/admin/management-tatib/pages/TatibPages";
 import UjianCreatePages from "@/app/admin/management-ujian/pages/UjianCreatePages";
 import UjianPages from "@/app/admin/management-ujian/pages/UjianPages";
+import CategorySoalPage from "@/app/admin/management-kategori-soal/pages/CategorySoalPage";
 import AdminLayout from "@/layouts/AdminLayout";
 import { CreatePesertaPage } from "@/app/admin/management-peserta/pages/CreatePesertaPage";
 import { EditPesertaPage } from "@/app/admin/management-peserta/pages/EditPesertaPage";
@@ -103,6 +104,10 @@ export const protectedRoutes = [
       {
         path: "tatib",
         element: <TatibPages />,
+      },
+      {
+        path: "kategori-soal",
+        element: <CategorySoalPage />,
       },
       {
         path: "kategori-soal/create",

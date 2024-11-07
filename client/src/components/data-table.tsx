@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   iconButtonAction?: ReactNode;
   buttonAction?: () => void;
   isLoading?: boolean;
-  actionButton?: React.ReactNode;
+  customSelectedFooter?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,9 +40,10 @@ export function DataTable<TData, TValue>({
   iconButtonAction,
   isLoading,
   pagination,
-  actionButton,
+  customSelectedFooter,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
+
   const table = useReactTable({
     data,
     columns,
@@ -61,8 +62,8 @@ export function DataTable<TData, TValue>({
         </div>
       ) : (
         <>
-          <Table className="w-full h-full">
-            <TableHeader className="sticky top-0 bg-white z-10 shadow-sm">
+          <Table>
+            <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
@@ -78,7 +79,7 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="h-[300px] relative overflow-y-auto">
+            <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -109,8 +110,10 @@ export function DataTable<TData, TValue>({
           </Table>
           <div className="flex justify-between w-full items-center">
             <p className="text-xs w-full">
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} Rows Selected
+              {customSelectedFooter
+                ? customSelectedFooter
+                : table.getFilteredSelectedRowModel().rows.length}{" "}
+              of {table.getFilteredRowModel().rows.length} Rows Selected
             </p>
             <PaginationTable
               pageSize={pagination.pageSize}

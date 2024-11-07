@@ -1,16 +1,18 @@
+import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
-import BankSoalTable from "../components/BankSoalTable";
 import { Button } from "@/components/ui/button";
-import { Cloud, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
+import { Cloud, Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BankSoalTable from "../components/BankSoalTable";
+import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
 
 const limit: number = 20;
 
 const BankSoalPages = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
 
   const { data, isLoading } = useGetManagementBankSoal({
     page: page,
@@ -19,6 +21,16 @@ const BankSoalPages = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
+      <ConfirmationDialog
+        isOpen={isOpenExportDialog}
+        onOpenChange={setIsOpenExportDialog}
+        description="Apakah anda yakin ingin mengekspor data?"
+        icon={<Download size="30" className="text-primary" />}
+        onSubmit={() => {
+          window.location.href =
+            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-pertanyaan";
+        }}
+      />
       <TableActions
         title="Daftar Soal"
         description="Data ditampilkan sesuai dengan filter"
@@ -27,19 +39,19 @@ const BankSoalPages = () => {
             <Button
               variant="actions"
               size="actions"
-              startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/import")}
+              startContent={<Upload />}
+              onClick={() => setIsOpenExportDialog(true)}
             >
-              Import Soal
+              Export Soal
             </Button>
 
             <Button
               variant="actions"
               size="actions"
               startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/export")}
+              onClick={() => navigate("/bank-soal/import")}
             >
-              Export Soal
+              Import Soal
             </Button>
 
             <Button
