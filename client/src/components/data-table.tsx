@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="w-auto max-w-20 ">
+                      <TableCell key={cell.id} className="w-auto max-w-52 ">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -121,17 +121,22 @@ export function DataTable<TData, TValue>({
               onPageChange={pagination.onPageChange}
               totalItems={pagination.totalItems}
             />
+
             <div className="w-full flex justify-end">
-              <Button
-                variant="actions"
-                size="actions"
-                startContent={
-                  iconButtonAction || <RefreshCw className="w-5 h-5" />
-                }
-                onClick={buttonAction}
-              >
-                {labelButtonAction}
-              </Button>
+              {buttonAction ? (
+                <Button
+                  variant="actions"
+                  size="actions"
+                  startContent={
+                    iconButtonAction || <RefreshCw className="w-5 h-5" />
+                  }
+                  onClick={buttonAction}
+                >
+                  {labelButtonAction}
+                </Button>
+              ) : (
+                <div className="w-5" />
+              )}
             </div>
           </div>
         </>

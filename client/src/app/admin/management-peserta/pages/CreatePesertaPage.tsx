@@ -120,25 +120,29 @@ export const CreatePesertaPage = () => {
     });
 
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
-    users?.data?.data[0].id,
+    users?.data?.data[0]?.id,
     {
       onSuccess: () => {},
     }
   );
 
   const onSubmit = (data: CreatePesertaCBTFormValue) => {
-    if (users.data.data[0]) {
-      const user = users.data.data[0];
-      createUserSession({
-        user: user.user_id.id,
-        session: data.sesiUjian,
-        info_peserta: String(user.id),
-      });
+    try {
+      if (users.data.data?.[0]) {
+        const user = users.data.data[0];
+        createUserSession({
+          user: user?.user_id?.id,
+          session: data.sesiUjian,
+          info_peserta: String(user?.id),
+        });
 
-      updateCoupon({
-        nama_peserta: data.namaPeserta,
-        nomor_kontak: data.nomorKontak,
-      });
+        updateCoupon({
+          nama_peserta: data.namaPeserta,
+          nomor_kontak: data.nomorKontak,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -68,8 +68,15 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
     <div className="w-full h-full flex flex-col gap-3 pt-1">
       <Breadcrumbs
         paths={[
-          { label: "Management Hasil Ujian", path: "/hasil-ujian" },
-          { label: "Detail Hasil Ujian", path: "/hasil/ujian/detail" },
+          { label: "Management Hasil Ujian" },
+          {
+            label: "Hasil Akhir Ujian",
+            path: "/hasil-ujian/hasil-akhir-ujian",
+          },
+          {
+            label: "Detail Hasil Ujian",
+            path: "/hasil-ujian/hasil-akhir-ujian/detail",
+          },
           {
             label:
               userTest?.data?.data?.[0].user_session_id?.info_peserta

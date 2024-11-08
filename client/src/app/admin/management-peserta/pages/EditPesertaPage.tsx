@@ -136,7 +136,7 @@ export const EditPesertaPage = () => {
     });
 
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
-    users?.data?.data[0].id,
+    users?.data?.data?.[0]?.id,
     {
       onSuccess: () => {},
     }
@@ -146,9 +146,9 @@ export const EditPesertaPage = () => {
     if (users.data.data[0]) {
       const user = users.data.data[0];
       createUserSession({
-        user: user.user_id.id,
+        user: user.user_id?.id,
         session: data.sesi_ujian,
-        info_peserta: String(user.id),
+        info_peserta: String(user?.id),
       });
 
       updateCoupon({

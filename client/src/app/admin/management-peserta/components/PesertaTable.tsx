@@ -3,7 +3,7 @@ import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React, { FC } from "react";
 import {
   DropdownMenu,
@@ -93,7 +93,6 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
               setId(row.original.id);
             }}
           />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -102,7 +101,7 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
               <DropdownMenuItem
                 onClick={() => navigate(`/peserta-cbt/edit/${row.original.id}`)}
               >
-                Lihat Detail Peserta
+                Edit Peserta
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

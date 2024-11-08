@@ -107,6 +107,11 @@
         "type": "hook",
         "name": "handle-user-answer",
         "source": "src/handle-user-answer/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "rules",
+        "source": "src/rules/index.js"
       }
     ],
     "host": "10.8.2"

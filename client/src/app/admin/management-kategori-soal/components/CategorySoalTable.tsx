@@ -9,6 +9,12 @@ import { IKategori } from "@/types/collection/kategori.type";
 import { PaginationTableProps } from "@/components/table-pagination";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationKategoriSoal from "../hooks/useDeleteMutationKategoriSoal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type IKategoriTable = {
   data: IKategori[];
@@ -99,7 +105,20 @@ const CategorySoalTable: React.FC<IKategoriTable> = ({
               setId(row.original.id);
             }}
           />
-          <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(`/kategori-soal/edit/${row.original.id}`)
+                }
+              >
+                Edit
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
       enableSorting: false,

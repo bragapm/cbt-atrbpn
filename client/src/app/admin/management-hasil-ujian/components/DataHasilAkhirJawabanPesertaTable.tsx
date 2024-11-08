@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
@@ -9,12 +10,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { Download, MoreVertical, Trash } from "lucide-react";
-import React from "react";
+import { MoreVertical } from "lucide-react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetQuestionMetricsQuery, {
   QuestionMetric,
 } from "../hooks/useGetQuestionMetricsQuery";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export const DataHasilAkhirJawabanPesertaTable = () => {
   const navigate = useNavigate();
@@ -55,13 +62,40 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
       accessorKey: "question_text",
       header: "Soal Pertanyaan",
       cell: ({ row }) => {
-        const question = row.original.question_text;
+        const questionHtml = row.original.question_text;
+        const previewText = questionHtml?.replace(/<[^>]+>/g, "").slice(0, 50);
+        const [isOpen, setIsOpen] = useState(false);
+
         return (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: question,
-            }}
-          />
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            onValueChange={(value) =>
+              setIsOpen(value === row.original.question_id.toString())
+            }
+          >
+            <AccordionItem
+              value={row.original.question_id.toString()}
+              className="border-none"
+            >
+              <AccordionTrigger className="hover:no-underline py-0">
+                {!isOpen && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-normal">
+                      {previewText}...
+                    </span>
+                  </div>
+                )}
+              </AccordionTrigger>
+              <AccordionContent className="pt-2">
+                <div
+                  dangerouslySetInnerHTML={{ __html: questionHtml }}
+                  className="text-sm text-gray-600"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         );
       },
     },
@@ -82,13 +116,6 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
       header: "Actions",
       cell: () => (
         <div className="flex space-x-2">
-          <Trash
-            className="cursor-pointer text-gray-400 w-4 h-4"
-            onClick={() => {
-              setIsOpenDeleteConfirm(true);
-            }}
-          />
-          <Download className="cursor-pointer text-gray-400 w-4 h-4" />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
