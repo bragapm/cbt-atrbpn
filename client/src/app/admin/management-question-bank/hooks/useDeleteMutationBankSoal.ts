@@ -2,6 +2,8 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { IBaseErrorResponse } from "@/types/errors";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { IBaseResponse } from "@/types/base-response";
+import { IQuestionChoice } from "@/types/collection/question-choice.type";
 
 type IUseMutateBankSoal = {
   onSuccess?: () => void;
@@ -17,23 +19,23 @@ const useDeleteMutationBankSoal = ({
 
   return useMutation({
     mutationFn: async (data: { id: string | number }) => {
-      const response = await service.sendDeleteRequest(
-        `/items/questions_bank/${data.id}`
-      );
-
-      const choices = await service.sendGetRequest<{
-        data: { id: string | number }[];
-      }>(`/items/questions_choice?filter[question_id][_eq]=${data.id}`);
+      const choices = await service.sendGetRequest<
+        IBaseResponse<IQuestionChoice[]>
+      >(`/items/question_options?filter[question_id][_eq]=${data.id}`);
 
       if (Array.isArray(choices.data) && choices.data.length > 0) {
         await Promise.all(
           choices.data.map(async (choice) => {
             await service.sendDeleteRequest(
-              `/items/questions_choice/${choice.id}`
+              `/items/question_options/${choice.id}`
             );
           })
         );
       }
+
+      const response = await service.sendDeleteRequest(
+        `/items/questions_bank/${data.id}`
+      );
 
       return response;
     },
