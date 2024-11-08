@@ -1,11 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import type { PDFDocumentProxy } from "pdfjs-dist";
-import { Document, Page, pdfjs } from "react-pdf";
+
 import { FC, useEffect, useState } from "react";
 import { Upload } from "lucide-react";
-
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import "react-pdf/dist/esm/Page/TextLayer.css";
 
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,30 +10,12 @@ import { Input } from "@/components/ui/input";
 
 import useUploadFile from "../hooks/useUploadFile";
 import useGetTatib from "../hooks/useGetTatib";
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
-const options = {
-  cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
-};
-
-const maxWidth = 800;
+import PDFViewers from "../components/PDFViewers";
 
 const TatibPages: FC = () => {
   const [file, setFile] = useState<any>(null);
-  const [numPages, setNumPages] = useState<number>();
   const [openImport, setOpenImport] = useState(false);
   const { data: fileTatib } = useGetTatib();
-
-  const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
-  const [containerWidth, setContainerWidth] = useState<number>();
-
-  function onDocumentLoadSuccess({
-    numPages: nextNumPages,
-  }: PDFDocumentProxy): void {
-    setNumPages(nextNumPages);
-  }
 
   function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = event.target;
@@ -70,6 +48,7 @@ const TatibPages: FC = () => {
       setFile(url);
     }
   }, [fileTatib, openImport]);
+  console.log(file);
 
   return (
     <div>
@@ -148,23 +127,7 @@ const TatibPages: FC = () => {
             </div>
           </>
         )}
-        <div className="max-w-[100%-2em]" ref={setContainerRef}>
-          <Document
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            options={options}
-          >
-            {Array.from(new Array(numPages), (_el, index) => (
-              <Page
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                width={
-                  containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth
-                }
-              />
-            ))}
-          </Document>
-        </div>
+        <PDFViewers file={file} />
       </Card>
     </div>
   );

@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useGetUserTatib } from "../hooks/useGetUserTatib";
+import PDFViewers from "@/app/admin/management-tatib/components/PDFViewers";
 
 interface IPeraturanUjian {
   check: any;
@@ -15,6 +16,10 @@ const PeraturanUjian: FC<IPeraturanUjian> = ({
 }) => {
   const { data, error, getTatib } = useGetUserTatib();
 
+  useEffect(() => {
+    getTatib();
+  }, []);
+
   return (
     <div className="w-full h-full flex gap-4 flex-col ">
       <div className="flex gap-2 items-center justify-between ">
@@ -22,12 +27,8 @@ const PeraturanUjian: FC<IPeraturanUjian> = ({
         <p className="text-xl text-light font-semibold">Peraturan Ujian</p>
         <p></p>
       </div>
-      <div className="border rounded-lg p-4 bg-gray-200 h-full">
-        Body Text placeholder dolor sit amet consectetur. Diam feugiat arcu ut
-        massa diam duis diam mauris. Orci posuere tincidunt netus augue. Augue
-        at facilisi cursus laoreet semper vel elementum. Lacinia massa porta
-        nibh nunc magna quam id gravida. Sem egestas curabitur aenean malesuada.
-        Lorem facilisi elementum.
+      <div className="border rounded-lg p-4 bg-gray-200 h-full overflow-auto">
+        <PDFViewers file={data} />
       </div>
       <div className="flex gap-2">
         <input

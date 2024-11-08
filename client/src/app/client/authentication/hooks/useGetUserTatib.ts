@@ -22,7 +22,9 @@ export const useGetUserTatib = () => {
       }
       const result = await response.json();
       if(result?.data[0]){
-        setData(result?.data[0]?.file_link || "")
+        const url = import.meta.env.VITE_DIRECTUS_PUBLIC_URL +
+        "/assets/" +result?.data[0]?.file_link 
+        setData(url)
       }
     } catch (err: any) {
       setError(err.message);

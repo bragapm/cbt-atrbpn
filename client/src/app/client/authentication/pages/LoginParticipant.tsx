@@ -55,7 +55,7 @@ const LoginParticipant: FC = () => {
         login ? "justify-center" : "justify-end"
       } items-center`}
     >
-      <Card className="w-[642px] p-4 h-full">
+      <Card className={`${login ? "w-fit" : "w-[642px]"}  p-4 h-full`}>
         {login ? (
           <PeraturanUjian
             check={checked}
