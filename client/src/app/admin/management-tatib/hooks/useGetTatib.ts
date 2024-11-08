@@ -9,7 +9,7 @@ const useGetTatib = () => {
     queryKey: ["tatib-get", ""],
     queryFn: () => {
       const response = service.sendGetRequest<any>(
-        `/metric-score/`,
+        `/rules`,
      
       );
       return response;

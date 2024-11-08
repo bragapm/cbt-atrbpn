@@ -11,7 +11,7 @@ export const useGetUserTatib = () => {
     try {
       const response = await fetch(
         import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
-        "/user-session-tests",
+        "/rules",
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("user_token")}` },
         method: "GET",
@@ -21,9 +21,8 @@ export const useGetUserTatib = () => {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
-      setData(result?.data[0]);
       if(result?.data[0]){
-        localStorage.setItem("session_id",result?.data[0]["session-id"])
+        setData(result?.data[0]?.file_link || "")
       }
     } catch (err: any) {
       setError(err.message);

@@ -1,30 +1,42 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import { Document, Page, pdfjs } from "react-pdf";
+import { FC, useEffect, useState } from "react";
 import { Upload } from "lucide-react";
-import { FC, useState } from "react";
+
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import MemoLoader from "@/components/ui/Loader";
 import { Input } from "@/components/ui/input";
 
 import useUploadFile from "../hooks/useUploadFile";
 import useGetTatib from "../hooks/useGetTatib";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   "pdfjs-dist/build/pdf.worker.min.mjs",
-//   import.meta.url
-// ).toString();
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+const options = {
+  cMapUrl: "/cmaps/",
+  standardFontDataUrl: "/standard_fonts/",
+};
+
+const maxWidth = 800;
+
 const TatibPages: FC = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>();
   const [openImport, setOpenImport] = useState(false);
   const { data: fileTatib } = useGetTatib();
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
+  const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState<number>();
+
+  function onDocumentLoadSuccess({
+    numPages: nextNumPages,
+  }: PDFDocumentProxy): void {
+    setNumPages(nextNumPages);
   }
 
   function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -35,17 +47,29 @@ const TatibPages: FC = () => {
     }
   }
 
-  const { mutateAsync: createPendistribusianSoal, isLoading } = useUploadFile({
+  const { mutate, isLoading } = useUploadFile({
     onSuccess: () => {
-      // setIsSuccess(true);
-      // setConfirmationDialog(false);
+      setFile(null);
+      setOpenImport(false);
     },
   });
 
-  const onSubmit = (data) => {
-    const obj = {};
-    createPendistribusianSoal(obj);
+  const onSubmit = () => {
+    const formData = new FormData();
+    formData.append("name", "tatib");
+    formData.append("file", file);
+    mutate(formData);
   };
+
+  useEffect(() => {
+    if (fileTatib?.data && openImport === false) {
+      const url =
+        import.meta.env.VITE_DIRECTUS_PUBLIC_URL +
+        "/assets/" +
+        fileTatib?.data?.data[0].file_link;
+      setFile(url);
+    }
+  }, [fileTatib, openImport]);
 
   return (
     <div>
@@ -87,40 +111,60 @@ const TatibPages: FC = () => {
                 variant="actions"
                 size="actions"
                 startContent={<Upload />}
+                onClick={() => onSubmit()}
               >
-                upload File
+                {isLoading ? (
+                  <div className="">
+                    <MemoLoader width={20} height={20} color={"white"} />
+                  </div>
+                ) : (
+                  "upload File"
+                )}
               </Button>
             </CardFooter>
-            {file && (
-              <div className="">
-                <hr />
-                <p className="font-medium underline pt-4">Preview Pdf</p>
-                <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-                  <Page pageNumber={numPages} />
-                </Document>
-              </div>
-            )}
           </>
         ) : (
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <h1 className="text-base font-medium text-gray-600">
-                Import Tata Tertib
-              </h1>
-              <p className="text-sm font-light">
-                Mata Ujian Peraturan Jabatan PPAT
-              </p>
+          <>
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-base font-medium text-gray-600">
+                  Import Tata Tertib
+                </h1>
+                <p className="text-sm font-light">
+                  Mata Ujian Peraturan Jabatan PPAT
+                </p>
+              </div>
+              <Button
+                variant="actions"
+                size="actions"
+                startContent={<Upload />}
+                onClick={() => {
+                  setOpenImport(true);
+                  setFile(null);
+                }}
+              >
+                Import Tata tertib
+              </Button>
             </div>
-            <Button
-              variant="actions"
-              size="actions"
-              startContent={<Upload />}
-              onClick={() => setOpenImport(true)}
-            >
-              Import Tata tertib
-            </Button>
-          </div>
+          </>
         )}
+        <div className="max-w-[100%-2em]" ref={setContainerRef}>
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            options={options}
+          >
+            {Array.from(new Array(numPages), (_el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={
+                  containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth
+                }
+              />
+            ))}
+          </Document>
+        </div>
       </Card>
     </div>
   );

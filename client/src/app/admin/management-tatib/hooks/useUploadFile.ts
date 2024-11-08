@@ -18,7 +18,7 @@ const useUploadFile = ({
   return useMutation({
     mutationFn: async (data: any) => {
       const response = await service.sendPostRequest(
-        "/items/distribusi_soal",
+        "/rules",
         data
       );
 
