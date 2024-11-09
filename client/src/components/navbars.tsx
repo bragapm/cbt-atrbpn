@@ -1,6 +1,15 @@
+import useGetCurrentUser from "@/hooks/useGetCurrentUser";
 import Profile from "./profile";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getAccessToken } from "@/midlewares/token";
 
 const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
+  const accessToken = getAccessToken();
+
+  const { data: currentUser, isLoading } = useGetCurrentUser({
+    enabled: !!accessToken,
+  });
+
   if (variant === "admin") {
     return (
       <div className="w-full h-[80px] p-5 fixed z-[50]">
@@ -12,7 +21,11 @@ const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
               <p className="text-xs font-light">Pejabat Pembuat Akte Tanah</p>
             </div>
           </div>
-          <Profile />
+          {isLoading ? (
+            <Skeleton className="h-12 w-12 rounded-full" />
+          ) : (
+            <Profile data={currentUser?.data} />
+          )}
         </header>
       </div>
     );
@@ -27,7 +40,7 @@ const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
           <p className="text-xs font-light">Pejabat Pembuat Akte Tanah</p>
         </div>
       </div>
-      <Profile />
+      <Profile data={currentUser?.data} />
     </header>
   );
 };

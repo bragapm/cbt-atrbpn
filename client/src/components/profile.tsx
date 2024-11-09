@@ -1,12 +1,54 @@
-import { User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { RESOLVE_ROLE } from "@/constants/ROLE";
+import useLogoutUser from "@/hooks/useLogoutUser";
+import { IUser } from "@/types/collection/user.type";
 
-const Profile = () => {
+type IProfile = {
+  data: IUser;
+};
+
+const Profile: React.FC<IProfile> = ({ data }) => {
+  const { mutate: logoutUser } = useLogoutUser();
+
+  const getFirstName = () => {
+    return data?.first_name[0];
+  };
+
+  const getRoleName = () => {
+    return RESOLVE_ROLE[data?.role];
+  };
+
   return (
-    <div className="w-fit h-fit px-2 py-2 border border-gray-200 rounded-xl">
-      <div className="w-fit h-fit p-1 bg-primary rounded-full">
-        <User className="text-white" />
-      </div>
-    </div>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div className="flex gap-2 items-center">
+            <div className="flex gap-3">
+              <p className="text-sm font-light">{getRoleName()}</p>
+              <p className="text-sm">
+                {data?.first_name} {data?.last_name}
+              </p>
+            </div>
+
+            <div className="w-10 h-10 bg-primary justify-center items-center flex p-4 rounded-full">
+              <p className="text-white text-base font-bold">{getFirstName()}</p>
+            </div>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={() => logoutUser()}>
+            Logout
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
 
