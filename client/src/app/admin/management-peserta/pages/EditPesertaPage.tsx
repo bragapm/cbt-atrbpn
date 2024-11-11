@@ -20,6 +20,7 @@ import useUpdateUserSessionMutation from "../hooks/useUpdateUserSessionMutation"
 import useUpdateCouponMutation from "../hooks/useUpdateCouponMutation";
 import SuccessDialog from "@/components/success-dialog";
 import ConfirmationDialog from "@/components/confirmation-dialog";
+import { toast } from "react-toastify";
 
 const EditPesertaFormInner = ({
   openDialogConfirmation,
@@ -133,6 +134,16 @@ export const EditPesertaPage = () => {
         setIsSuccess(true);
         setConfirmationDialog(false);
       },
+      onError: (errorMessage) => {
+        if (!users) {
+          toast.error("ID peserta tidak ditemukan");
+          setConfirmationDialog(false);
+          return;
+        }
+
+        toast.error(errorMessage);
+        setConfirmationDialog(false);
+      },
     });
 
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
@@ -155,6 +166,10 @@ export const EditPesertaPage = () => {
         nama_peserta: data.nama_peserta,
         nomor_kontak: data.nomor_kontak,
       });
+    } else {
+      toast.error("ID peserta tidak ditemukan");
+      setConfirmationDialog(false);
+      return;
     }
   };
 
