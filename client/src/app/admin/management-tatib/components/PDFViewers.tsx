@@ -21,11 +21,11 @@ const PDFViewers: FC<IPDFView> = ({ file }) => {
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
 
-  function onDocumentLoadSuccess({
+  const onDocumentLoadSuccess = ({
     numPages: nextNumPages,
-  }: PDFDocumentProxy): void {
+  }: PDFDocumentProxy) => {
     setNumPages(nextNumPages);
-  }
+  };
   return (
     <div className="max-w-[100%-2em] mx-auto" ref={setContainerRef}>
       <Document
