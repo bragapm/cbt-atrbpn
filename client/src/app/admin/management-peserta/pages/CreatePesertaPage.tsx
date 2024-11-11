@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createManagementPesertaSchema } from "../schemas/CreateManagementPesertaSchema";
 import useUpdateCouponMutation from "../hooks/useUpdateCouponMutation";
+import { toast } from "react-toastify";
 
 const CreatePesertaFormInner = ({
   openDialogConfirmation,
@@ -117,6 +118,16 @@ export const CreatePesertaPage = () => {
         setIsSuccess(true);
         setConfirmationDialog(false);
       },
+      onError: (errorMessage) => {
+        if (!users) {
+          toast.error("ID peserta tidak ditemukan");
+          setConfirmationDialog(false);
+          return;
+        }
+
+        toast.error(errorMessage);
+        setConfirmationDialog(false);
+      },
     });
 
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
@@ -127,22 +138,22 @@ export const CreatePesertaPage = () => {
   );
 
   const onSubmit = (data: CreatePesertaCBTFormValue) => {
-    try {
-      if (users.data.data?.[0]) {
-        const user = users.data.data[0];
-        createUserSession({
-          user: user?.user_id?.id,
-          session: data.sesiUjian,
-          info_peserta: String(user?.id),
-        });
+    if (users.data.data?.[0]) {
+      const user = users.data.data[0];
+      createUserSession({
+        user: user?.user_id?.id,
+        session: data.sesiUjian,
+        info_peserta: String(user?.id),
+      });
 
-        updateCoupon({
-          nama_peserta: data.namaPeserta,
-          nomor_kontak: data.nomorKontak,
-        });
-      }
-    } catch (error) {
-      console.log(error);
+      updateCoupon({
+        nama_peserta: data.namaPeserta,
+        nomor_kontak: data.nomorKontak,
+      });
+    } else {
+      toast.error("ID peserta tidak ditemukan");
+      setConfirmationDialog(false);
+      return;
     }
   };
 
