@@ -6,39 +6,44 @@ import useGetHasilUjian from "../hooks/useGetHasilUjian";
 import MemoLoader from "@/components/ui/Loader";
 import Skeletons from "./Skeletons";
 
+const legenda: any[] = [
+  {
+    label: "Rata-Rata Nilai Ujian Peserta",
+    color: "bg-[#699EB2]",
+  },
+];
+
 const StatistikHasil = () => {
-  const { data: dataBar } = useGetHasilUjian("");
-  const { data: bysesi } = useGetHasilUjian("2024-11-04");
+  const [filter, setFilter] = useState(new Date().toISOString().slice(0, 10));
 
-  console.log(bysesi?.data);
   const [dataChartDataAverage, setChartDataAverage] = useState<any>(null);
-  const legenda: any[] = [
-    {
-      label: "Rata-Rata Nilai Ujian Peserta",
-      color: "bg-[#699EB2]",
-    },
-  ];
+  const [barData, setBarData] = useState<any>(null);
+
+  const { data: bysesi } = useGetHasilUjian(filter);
+  const { data: dataPie } = useGetHasilUjian("all");
+  const { data: dataBar } = useGetHasilUjian("");
+
   useEffect(() => {
-    let label: string[] = ["Sulit", "Sangat Mudah"];
-    let newData: any[] = [50, 30];
-    let bgColors: string[] = ["#2A6083", "#699EB2"];
+    if (dataPie?.data) {
+      const data = {
+        labels: ["rata - rata", ""],
+        datasets: [
+          {
+            label: "",
+            data: [
+              dataPie?.data?.averageScore[0]?.average_score,
+              100 - dataPie?.data?.averageScore[0]?.average_score,
+            ],
+            backgroundColor: ["#699EB2", "#2A6083"],
+            borderWidth: 0,
+            color: "#fff",
+          },
+        ],
+      };
+      setChartDataAverage(data);
+    }
+  }, [dataPie]);
 
-    const data = {
-      labels: label,
-      datasets: [
-        {
-          label: "",
-          data: newData,
-          backgroundColor: bgColors,
-          borderWidth: 0,
-          color: "#fff",
-        },
-      ],
-    };
-    setChartDataAverage(data);
-  }, []);
-
-  const [barData, setBarData] = useState(null);
   useEffect(() => {
     if (dataBar?.data) {
       let dat = dataBar?.data?.averageScoreByDate;
@@ -54,23 +59,27 @@ const StatistikHasil = () => {
   }, [dataBar]);
 
   return (
-    <div className=" space-y-4 ">
+    <div className="space-y-4">
       <CardHeader
         title={"Statistik Hasil Ujian"}
         subtitle={"Data ditampilkan sesuai dengan filter"}
         listOption={[]}
+        selectData={filter}
+        setData={setFilter}
         listName="Pilih Tanggal"
+        isDate
+        hide
       />
       <div className="p-4 bg-white rounded-lg">
         <div className="grid grid-cols-6 gap-4 w-full justify-between p-4">
           <div className="col-span-2 border rounded-lg flex">
-            {/* {dataChartDataAverage ? (
+            {dataChartDataAverage ? (
               <ChartCard
                 datas={dataChartDataAverage}
                 legend={legenda}
                 height={220}
                 centerContent={{
-                  label: "Presentase",
+                  label: " ",
                   value: " ",
                 }}
               />
@@ -78,9 +87,9 @@ const StatistikHasil = () => {
               <div className="m-auto">
                 <MemoLoader width={30} height={30} color={"#2A6083"} />
               </div>
-            )} */}
+            )}
           </div>
-          <div className=" col-span-1 p-4 border rounded-lg text-xs flex flex-col gap-2 bg-white ">
+          <div className="col-span-1 p-4 border rounded-lg text-xs flex flex-col gap-2 bg-white ">
             <p>Nilai Rata-Rata Persesi</p>
             {bysesi?.data ? (
               bysesi?.data?.averageScoreBySession?.map((el, idx) => (
