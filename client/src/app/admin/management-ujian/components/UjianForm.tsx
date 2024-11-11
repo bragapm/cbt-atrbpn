@@ -26,13 +26,18 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
     isError,
   } = useGetDetailManajemenUjian(id);
 
+  console.log({ detailData });
+
   useEffect(() => {
     if (id && detailData) {
       form.setValue("name", detailData.name || "");
       form.setValue("start_time", new Date(detailData.start_time));
       form.setValue("end_time", new Date(detailData.end_time));
       if (detailData.user) {
-        form.setValue("user", detailData.user.user);
+        form.setValue(
+          "user",
+          Array.isArray(detailData.user) ? detailData.user : []
+        );
       }
     }
   }, [id, detailData]);
@@ -112,8 +117,10 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
               <FormItem>
                 <FormControl>
                   <UjianTablePeserta
-                    value={field.value}
-                    onChange={field.onChange}
+                    value={Array.isArray(field.value) ? field.value : []}
+                    onChange={(selectedValues) => {
+                      field.onChange(selectedValues);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
