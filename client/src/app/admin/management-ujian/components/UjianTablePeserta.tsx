@@ -1,4 +1,6 @@
+import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
 import useGetUserUjian from "@/app/admin/management-ujian/hooks/useGetUserUjian";
+import useMutatePinUjian from "@/app/admin/management-ujian/hooks/useMutatePinUjian";
 import { DataTable } from "@/components/data-table";
 import SearchBox from "@/components/search-box";
 import { Button } from "@/components/ui/button";
@@ -12,9 +14,7 @@ import {
 import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import useMutatePinUjian from "../hooks/useMutatePinUjian";
-import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
+import React, { useState } from "react";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
@@ -33,8 +33,11 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [modalPIN, setModalPIN] = useState(false);
 
   const [studentVal, setStudentVal] = useState<string[]>([]);
+
+  const { mutate: mutatePinUjian, isLoading, data } = useMutatePinUjian({});
 
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
@@ -64,6 +67,8 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     }
   };
 
+  console.log({ data });
+
   const getCheckValue = (val: string) => {
     return studentVal.includes(val);
   };
@@ -83,8 +88,13 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   // };
 
   const handleSubmit = () => {
-    onChange(studentVal[0]);
-    setIsOpen(false);
+    if (isDetail) {
+      setModalPIN(true);
+      mutatePinUjian({ session_id: sessionId });
+    } else {
+      onChange(studentVal[0]);
+      setIsOpen(false);
+    }
   };
 
   const columns: ColumnDef<IUser>[] = [
@@ -161,6 +171,13 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
           </p>
         </Button>
       )}
+
+      <UjianPIN
+        open={modalPIN}
+        onOpenChange={setModalPIN}
+        data={data}
+        isLoading={isLoading}
+      />
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="pt-10 max-w-4xl">

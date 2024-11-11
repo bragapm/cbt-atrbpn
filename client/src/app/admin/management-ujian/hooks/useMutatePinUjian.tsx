@@ -8,7 +8,7 @@ type IPinRequest = {
   session_id: string | number;
 };
 
-type IPin = {
+export type IPin = {
   pin: string;
 };
 
@@ -23,12 +23,12 @@ const useMutatePinUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
 
   return useMutation({
     mutationFn: async (data: IPinRequest) => {
-      const response = await service.sendPostRequest<
-        IPinRequest,
-        IBaseResponse<IPin>
-      >("/generate-pin", data);
+      const response = await service.sendPostRequest<IPinRequest, IPin>(
+        "/generate-pin",
+        data
+      );
 
-      return response;
+      return response?.data;
     },
 
     onSuccess: () => {
