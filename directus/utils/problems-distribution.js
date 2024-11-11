@@ -8,8 +8,8 @@ export const findOrCreateCoupon = async (couponService, couponData) => {
   });
 
   if (existingCoupons && existingCoupons.length > 0) {
-    // If found, return the existing coupon
-    return existingCoupons[0];
+    // If found, return the existing coupon id
+    return existingCoupons[0].id;
   }
 
   // Otherwise, create a new coupon entry
