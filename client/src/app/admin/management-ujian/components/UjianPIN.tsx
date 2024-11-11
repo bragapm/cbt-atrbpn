@@ -1,7 +1,8 @@
+import useMutateBankSoal from "@/app/admin/management-question-bank/hooks/useMutateBankSoal";
+import { IPin } from "@/app/admin/management-ujian/hooks/useMutatePinUjian";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -10,16 +11,22 @@ import { Info, Lock } from "lucide-react";
 import React from "react";
 
 type IUjianTablePeserta = {
-  triggerButton: React.ReactNode;
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+  data: IPin;
+  isLoading: boolean;
 };
 
-const UjianPIN: React.FC<IUjianTablePeserta> = ({ triggerButton }) => {
+const UjianPIN: React.FC<IUjianTablePeserta> = ({
+  open,
+  onOpenChange,
+  data,
+  isLoading,
+}) => {
   // hadle this state change to use state
-  const isLoading = false;
 
   return (
-    <Dialog>
-      <DialogTrigger>{triggerButton}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="pt-10 max-w-sm">
         <div className="w-full flex flex-row justify-between items-center">
           <DialogTitle>PIN Ujian</DialogTitle>
@@ -35,7 +42,7 @@ const UjianPIN: React.FC<IUjianTablePeserta> = ({ triggerButton }) => {
 
             <div className="flex flex-col gap-1">
               <p className="text-sm font-ligt text-gray-500">PIN Ujian</p>
-              <h1 className="text-3xl font-semibold">21ED1B35</h1>
+              <h1 className="text-3xl font-semibold">{data?.pin}</h1>
             </div>
           </div>
         )}
