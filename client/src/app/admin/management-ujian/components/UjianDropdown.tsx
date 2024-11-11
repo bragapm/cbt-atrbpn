@@ -10,9 +10,13 @@ import UjianTablePeserta from "@/app/admin/management-ujian/components/UjianTabl
 
 type IUjianPopupProps = {
   ujianData: IUjian;
+  sessionId: string | number;
 };
 
-const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
+const UjianDropdown: React.FC<IUjianPopupProps> = ({
+  ujianData,
+  sessionId,
+}) => {
   const navigate = useNavigate();
   const endTime = new Date(ujianData?.end_time);
   const now = new Date();
@@ -22,7 +26,7 @@ const UjianDropdown: React.FC<IUjianPopupProps> = ({ ujianData }) => {
       <DropdownMenuContent className="bg-white p-2">
         {now > endTime ? (
           <>
-            <UjianTablePeserta isDetail />
+            <UjianTablePeserta isDetail sessionId={sessionId} />
             <DropdownMenuItem
               onClick={() => navigate(`/ujian/edit/${ujianData.id}`)}
             >

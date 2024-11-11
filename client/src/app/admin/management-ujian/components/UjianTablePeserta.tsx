@@ -1,4 +1,3 @@
-import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
 import useGetUserUjian from "@/app/admin/management-ujian/hooks/useGetUserUjian";
 import { DataTable } from "@/components/data-table";
 import SearchBox from "@/components/search-box";
@@ -14,15 +13,19 @@ import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import useMutatePinUjian from "../hooks/useMutatePinUjian";
+import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
   value?: string;
+  sessionId?: string | number;
   onChange?: (value: string) => void;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   isDetail = false,
+  sessionId,
   value,
   onChange,
 }) => {
