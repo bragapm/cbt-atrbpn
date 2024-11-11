@@ -34,8 +34,14 @@ const TatibPages: FC = () => {
 
   const onSubmit = () => {
     const formData = new FormData();
-    formData.append("name", "tatib");
+    if (fileTatib?.data) {
+      formData.append("name", fileTatib?.data?.data[0].name);
+      formData.append("file_link", fileTatib?.data?.data[0].file_link);
+    } else {
+      formData.append("name", "tatib");
+    }
     formData.append("file", file);
+
     mutate(formData);
   };
 
