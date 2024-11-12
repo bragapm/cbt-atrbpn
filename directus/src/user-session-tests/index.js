@@ -54,7 +54,6 @@ export default (router, { services }) => {
         schema: req.schema,
       });
 
-      console.log({ user });
       // Fetch the session test by ID and make sure it belongs to the user
       const userSession = await userSessionService.readByQuery({
         filter: {
@@ -66,8 +65,7 @@ export default (router, { services }) => {
           "id",
           "start_attempt_at",
           "session.start_time",
-          "end_time",
-          "session.start_attempt_at",
+          "session.end_time",
           "session.PIN",
           "problems",
         ], // Retrieve necessary fields
@@ -99,7 +97,7 @@ export default (router, { services }) => {
 
       // Check if the current time is within the start and end time of the session
       if (now < sessionStartTime || now > sessionEndTime) {
-        return res.status(400).json({
+        return res.status(500).json({
           status: "error",
           message:
             "Session cannot be started outside of the allowed time range.",
@@ -107,16 +105,14 @@ export default (router, { services }) => {
       }
 
       if (session.start_attempt_at !== null) {
-        res.json({
+        return res.json({
           status: "success",
           data: {
             session_test_id: session.id,
             start_attempt_at: session.start_attempt_at,
-            problems: JSON.parse(session.problems),
+            problems: session.problems,
           },
         });
-
-        return;
       }
 
       await userSessionService.updateOne(session.id, {
@@ -130,7 +126,7 @@ export default (router, { services }) => {
         data: {
           session_test_id: session.id,
           start_attempt_at: now,
-          problems: JSON.parse(session.problems),
+          problems: session.problems,
         },
       });
     } catch (error) {
