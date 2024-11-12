@@ -22,6 +22,7 @@ export default (router, { services }) => {
           }, // Relational filter on session.end_time
         },
         fields: [
+          "id",
           "session.id",
           "session.name",
           "session.start_time",
@@ -31,7 +32,7 @@ export default (router, { services }) => {
 
       // Map response to the desired format
       const formattedSessions = userSessions.map((session) => ({
-        "session-id": session.session.id,
+        "session-id": session.id,
         "session-name": session.session.name,
         "session-start-time": session.session.start_time,
         "session-end-time": session.session.end_time,
