@@ -26,17 +26,25 @@ const useMutateUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
         IBaseResponse<IUjian>
       >("/items/session_test", data);
 
-      // Modify the data for the next request
-      const modifiedData = {
-        user: data.user[0], //Get User index 0
-        session: response.data.data.id,
-      };
+      // Extract the session ID from the response
+      const sessionId = response.data.data.id;
 
-      // Send the modified data to "/items/user_session_test"
-      await service.sendPostRequest<
-        IUserSessionTestRequest,
-        IBaseResponse<IUserSessionTest>
-      >("/items/user_session_test", modifiedData);
+      // Prepare requests for each user in `data.user`
+      const userRequests = data.user.map((userId) => {
+        const modifiedData = {
+          user: userId,
+          session: sessionId,
+        };
+
+        // Send the modified data to "/items/user_session_test"
+        return service.sendPostRequest<
+          IUserSessionTestRequest,
+          IBaseResponse<IUserSessionTest>
+        >("/items/user_session_test", modifiedData);
+      });
+
+      // Execute all user requests concurrently
+      await Promise.all(userRequests);
 
       return response;
     },

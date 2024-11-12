@@ -18,9 +18,9 @@ import React, { useState } from "react";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
-  value?: string;
+  value?: string[];
   sessionId?: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (value: string[]) => void;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
@@ -36,7 +36,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [modalPIN, setModalPIN] = useState(false);
 
   const [studentVal, setStudentVal] = useState<string[]>([]);
-
+  console.log({ studentVal });
   const { mutate: mutatePinUjian, isLoading, data } = useMutatePinUjian({});
 
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
@@ -50,49 +50,39 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     setPage(1);
   };
 
-  const getCurrentUser = () => {
-    if (value) {
-      return dataUser?.data?.find((item) => item.id === value);
-    }
-    return "";
-  };
-
-  const currentUser = getCurrentUser();
-
   const handleCheckValue = (val: string, bool: boolean) => {
-    if (bool) {
-      setStudentVal([val]);
-    } else {
-      setStudentVal([]);
-    }
+    setStudentVal((prev) => {
+      if (bool) {
+        return [...prev, val];
+      } else {
+        return prev.filter((item) => item !== val);
+      }
+    });
   };
-
-  console.log({ data });
 
   const getCheckValue = (val: string) => {
     return studentVal.includes(val);
   };
 
   // TODO: UNCOMMENT THIS IF USERS RETRIVE ARRAY
+  const handleCheckAll = (bool: boolean) => {
+    if (bool) {
+      setStudentVal(dataUser?.data?.map((item) => item.id));
+    } else {
+      setStudentVal([]);
+    }
+  };
 
-  // const handleCheckAll = (bool: boolean) => {
-  //   if (bool) {
-  //     setStudentVal(dataUser?.data?.map((item) => item.id));
-  //   } else {
-  //     setStudentVal([]);
-  //   }
-  // };
-
-  // const getCheckAll = () => {
-  //   return studentVal.length === dataUser?.data?.length;
-  // };
+  const getCheckAll = () => {
+    return studentVal.length === dataUser?.data?.length;
+  };
 
   const handleSubmit = () => {
     if (isDetail) {
       setModalPIN(true);
       mutatePinUjian({ session_id: sessionId });
     } else {
-      onChange(studentVal[0]);
+      onChange?.(studentVal);
       setIsOpen(false);
     }
   };
@@ -100,17 +90,14 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const columns: ColumnDef<IUser>[] = [
     {
       id: "select",
-      header: ({ table }) => (
-        // TODO: UNCOMENT THIS IF USER RETRIVE ARRAY
-        // <Checkbox
-        //   checked={getCheckAll()}
-        //   onCheckedChange={(value) => {
-        //     table.toggleAllPageRowsSelected(!!value);
-        //     handleCheckAll(!!value);
-        //   }}
-        //   aria-label="Select all"
-        // />
-        <></>
+      header: () => (
+        <Checkbox
+          checked={getCheckAll()}
+          onCheckedChange={(value) => {
+            handleCheckAll(!!value);
+          }}
+          aria-label="Select all"
+        />
       ),
       cell: ({ row }) => (
         <Checkbox
@@ -158,15 +145,15 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
           className="w-full items-start flex flex-col gap-1 h-[60px] border-gray-300"
           onClick={() => {
             if (value) {
-              setStudentVal([value]);
+              setStudentVal(value);
             }
             setIsOpen(true);
           }}
         >
           <p className="text-gray-500 font-light text-xs">Peserta Ujian</p>
           <p>
-            {currentUser
-              ? `${currentUser?.first_name} - ${currentUser?.last_name}`
+            {value.length > 0
+              ? `${value.length} Peserta`
               : "Data Peserta Ujian"}
           </p>
         </Button>
