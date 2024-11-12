@@ -18,7 +18,7 @@ const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
             <img src="/images/logo.svg" alt="logo" />
             <div className="flex flex-col ">
               <p className="text-sm font-light">Computer Based Test</p>
-              <p className="text-xs font-light">Pejabat Pembuat Akte Tanah</p>
+              <p className="text-xs font-light">Pejabat Pembuat Akta Tanah</p>
             </div>
           </div>
           {isLoading ? (
@@ -37,7 +37,7 @@ const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
         <img src="/images/logo.svg" alt="logo" />
         <div className="flex flex-col ">
           <p className="text-sm font-light">Computer Based Test</p>
-          <p className="text-xs font-light">Pejabat Pembuat Akte Tanah</p>
+          <p className="text-xs font-light">Pejabat Pembuat Akta Tanah</p>
         </div>
       </div>
       <Profile data={currentUser?.data} />

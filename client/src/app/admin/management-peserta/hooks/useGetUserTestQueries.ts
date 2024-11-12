@@ -43,7 +43,6 @@ const useGetUserTestQueries = (queries?: IUserTestArgs) => {
             "problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*",
           ],
           filter: {
-            status: { _eq: "published" },
             user: { _eq: pesertaId },
             problem: {
               id: {
