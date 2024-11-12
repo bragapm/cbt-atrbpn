@@ -140,7 +140,6 @@ export default (router, { services, exceptions, getSchema }) => {
                 updated_at: new Date(),
                 user_id: directusUser,
               });
-
               // Step 3: Generate Problems Array for User Session Test
               const problems = await generateProblemsArray(
                 distribusiSoalService,
@@ -153,7 +152,7 @@ export default (router, { services, exceptions, getSchema }) => {
                 status: "active",
                 user: directusUser,
                 problems,
-                info_peserta: coupon.id,
+                info_peserta: coupon,
               });
               console.log("success");
             } catch (error) {

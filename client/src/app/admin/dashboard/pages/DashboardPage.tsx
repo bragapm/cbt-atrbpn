@@ -55,7 +55,11 @@ const Dashboardpage: React.FC = () => {
             </div>
             <div className="">
               <p className="text-xs">{el.name}</p>
-              <p className="font-bold text-xl">{el.value}</p>
+              {el.value ? (
+                <p className="font-bold text-xl">{el.value}</p>
+              ) : (
+                <div className="h-4 w-full mt-2 bg-gray-200 rounded-md animate-pulse" />
+              )}
             </div>
           </div>
         ))}

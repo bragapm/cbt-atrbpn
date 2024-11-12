@@ -2,19 +2,18 @@ import { DirectusInterceptor } from "@/services/directus-interceptors";
 import { useQuery } from "react-query";
 
 
-const useGetHasilUjian = (date?: string) => {
+const useGetTatib = () => {
   const service = new DirectusInterceptor(); 
-  let query = date === "all" ? "all" : date ? "by-session?date="+date : "by-date"
 
   return useQuery({
-    queryKey: ["hasi-ujian-average", date],
+    queryKey: ["tatib-get", ""],
     queryFn: () => {
       const response = service.sendGetRequest<any>(
-        `/metric-score/`+query,
+        `/rules`,
      
       );
       return response;
     },
   });
 };
-export default useGetHasilUjian;
+export default useGetTatib;

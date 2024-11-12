@@ -12,8 +12,10 @@ const useGetDetailManajemenUjian = (id: string | number | undefined) => {
       if (!id) throw new Error("ID is required");
 
       const userSessionResponse = await service.sendGetRequest<
-        IBaseResponse<IUserSessionTest>
+        IBaseResponse<IUserSessionTest[]>
       >(`/items/user_session_test?filter[session][_eq]=${id}`);
+
+      const userIds = userSessionResponse.data.data.map((user) => user.user);
 
       const ujianResponse = await service.sendGetRequest<IBaseResponse<IUjian>>(
         `/items/session_test/${id}`,
@@ -23,7 +25,7 @@ const useGetDetailManajemenUjian = (id: string | number | undefined) => {
       const response = {
         data: {
           ...ujianResponse.data.data,
-          user: userSessionResponse.data.data[0],
+          user: userIds,
         },
       };
 
