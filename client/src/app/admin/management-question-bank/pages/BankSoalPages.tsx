@@ -1,12 +1,13 @@
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
+import TableSearch from "@/components/table-search";
 import { Button } from "@/components/ui/button";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 import { Cloud, Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BankSoalTable from "../components/BankSoalTable";
 import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
-import SearchBox from "@/components/search-box";
 
 const limit: number = 20;
 
@@ -14,10 +15,13 @@ const BankSoalPages = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,
+    search: debouncedSearch,
   });
 
   return (
@@ -66,7 +70,9 @@ const BankSoalPages = () => {
           </div>
         }
       />
-      <div className="flex w-full justify-end"></div>
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <BankSoalTable
         data={data?.data}
         isLoading={isLoading}
