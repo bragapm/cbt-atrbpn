@@ -6,7 +6,11 @@ const AuthLayout = () => {
     <MainLayout variant="auth">
       <div
         className="bg-gray-200 w-full h-[85vh] rounded-lg p-8"
-        style={{ backgroundImage: `url(/images/bg-login-1.png)` }}
+        style={{
+          backgroundImage: `url(/images/bg-login.png)`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
       >
         <Outlet />
       </div>
