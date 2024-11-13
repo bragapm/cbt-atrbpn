@@ -4,15 +4,19 @@ import { useQuery } from "react-query";
 import { IUjian } from "@/types/collection/ujian.type";
 import { IDirectusQueryParams } from "@/types/directus.type";
 
-const useGetManagementUjian = ({ page, limit }: IDirectusQueryParams) => {
+const useGetManagementUjian = ({
+  page,
+  limit,
+  search,
+}: IDirectusQueryParams) => {
   const service = new DirectusInterceptor();
 
   return useQuery({
-    queryKey: ["management-ujian", page, limit],
+    queryKey: ["management-ujian", page, limit, search],
     queryFn: async () => {
       const response = await service.sendGetRequest<IBaseResponse<IUjian[]>>(
         "/items/session_test",
-        { fields: ["*.*"], meta: "*", page, limit }
+        { fields: ["*.*"], meta: "*", page, limit, search: search }
       );
       return response?.data;
     },
