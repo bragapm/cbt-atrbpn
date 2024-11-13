@@ -19,14 +19,15 @@ export type IDistribusiSoal = {
 const useGetManagementDistribusiSoal = ({
   page,
   limit,
+  search,
 }: IDirectusQueryParams) => {
   const service = new DirectusInterceptor();
   return useQuery({
-    queryKey: ["pendistribusi-soal"],
+    queryKey: ["pendistribusi-soal", page, limit, search],
     queryFn: () => {
       const response = service.sendGetRequest<IBaseResponse<IDistribusiSoal[]>>(
         "/items/distribusi_soal",
-        { fields: ["*.*"], meta: "*", page, limit }
+        { fields: ["*.*"], meta: "*", page, limit, search: search }
       );
       return response;
     },
