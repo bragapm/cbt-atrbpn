@@ -15,7 +15,8 @@ import {
 import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
@@ -36,11 +37,10 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [modalPIN, setModalPIN] = useState(false);
   const [studentVal, setStudentVal] = useState<string[]>([]);
-  const [pin, setPin] = useState<string | null>(null);
   console.log({ studentVal });
   const { mutate: mutatePinUjian, isLoading, data } = useMutatePinUjian({});
   const { data: sessionDetail } = useGetDetailManajemenUjian(sessionId);
-  console.log("pin",sessionDetail?.PIN );
+  console.log("pin", sessionDetail?.PIN);
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
@@ -78,6 +78,8 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     return studentVal.length === dataUser?.data?.length;
   };
 
+  const queryClient = useQueryClient();
+
   //check if pin exists
   //only generate pin if it not exists
   const handleSubmit = () => {
@@ -89,6 +91,10 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
         console.log("pin not exists, generating new pin");
         setModalPIN(true);
         mutatePinUjian({ session_id: sessionId });
+        // Refetch Session Detail
+        queryClient.invalidateQueries({
+          queryKey: ["management-ujian-detail", sessionId],
+        });
       }
     } else {
       onChange?.(studentVal);
@@ -197,8 +203,8 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
               buttonAction={handleSubmit}
               iconButtonAction={isDetail ? <Lock /> : <></>}
               labelButtonAction={
-                isDetail 
-                  ? sessionDetail?.PIN 
+                isDetail
+                  ? sessionDetail?.PIN
                     ? "Lihat PIN Ujian"
                     : "Generate PIN Ujian"
                   : "Pilih Peserta"

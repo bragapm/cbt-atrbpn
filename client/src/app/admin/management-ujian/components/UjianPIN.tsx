@@ -1,11 +1,5 @@
-import useMutateBankSoal from "@/app/admin/management-question-bank/hooks/useMutateBankSoal";
 import { IPin } from "@/app/admin/management-ujian/hooks/useMutatePinUjian";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Info, Lock } from "lucide-react";
 import React from "react";
