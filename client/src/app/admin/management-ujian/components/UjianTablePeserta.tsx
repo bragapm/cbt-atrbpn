@@ -216,7 +216,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
               isLoading={isLoadingUser}
               pagination={{
                 pageSize: limit,
-                totalItems: dataUser?.meta.total_count,
+                totalItems: dataUser?.meta.filter_count,
                 onPageChange: (page) => setPage(page),
                 currentPage: page,
               }}

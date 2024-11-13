@@ -9,7 +9,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -19,17 +18,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronsUpDown, MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";
 import TableHeaderSorting from "@/components/table-header-sorting";
+import useGetKategoriSoal from "../hooks/useGetKategoriSoal";
+import useGetMateriSoal from "../hooks/useGetMateriSoal";
 
 type IBankSoalTable = {
   data: IBankSoal[];
   isLoading: boolean;
   pagination: PaginationTableProps;
   refetch: () => void;
+  onSelectCategory?: (category: string | null) => void;
+  onSelectMateri?: (materi: string | null) => void;
 };
 
 const BankSoalTable: React.FC<IBankSoalTable> = ({
@@ -37,12 +40,27 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
   isLoading,
   pagination,
   refetch,
+  onSelectCategory,
+  onSelectMateri,
 }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [id, setId] = React.useState<string | number>("");
   const [isOpen, setIsOpen] = useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
+
+  const [selectedCategory, setSelectedCategory] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+  const [selectedMateri, setSelectedMateri] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
+  const { data: dataMateri, isLoading: isLoadingMateri } = useGetMateriSoal();
+  const { data: dataKategori, isLoading: isLoadingKategori } =
+    useGetKategoriSoal();
 
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeleteMutationBankSoal({
@@ -126,10 +144,19 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
         return (
           <TableHeaderSorting
             title="Kategori"
-            // TODO:HANDLE DROPDOWN IN this array
-            dropdownData={[{ label: "test", value: "test" }]}
-            selectedDropdownValue={{ label: "", value: "" }}
-            onSelectedDropdownValue={() => {}}
+            dropdownData={
+              isLoadingKategori
+                ? [{ label: "Loading...", value: "" }]
+                : dataKategori?.data?.map((item) => ({
+                    value: String(item.id),
+                    label: item.nama_kategori,
+                  }))
+            }
+            selectedDropdownValue={selectedCategory}
+            onSelectedDropdownValue={(selected) => {
+              setSelectedCategory(selected);
+              onSelectCategory(selected.value);
+            }}
           />
         );
       },
@@ -144,10 +171,19 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
         return (
           <TableHeaderSorting
             title="Materi"
-            // TODO:HANDLE DROPDOWN IN this array
-            dropdownData={[{ label: "test", value: "test" }]}
-            selectedDropdownValue={{ label: "", value: "" }}
-            onSelectedDropdownValue={() => {}}
+            dropdownData={
+              isLoadingMateri
+                ? [{ label: "Loading...", value: "" }]
+                : dataMateri?.data?.map((item) => ({
+                    value: String(item.id),
+                    label: item.materi,
+                  }))
+            }
+            selectedDropdownValue={selectedMateri}
+            onSelectedDropdownValue={(selected) => {
+              setSelectedMateri(selected);
+              onSelectMateri(selected.value);
+            }}
           />
         );
       },

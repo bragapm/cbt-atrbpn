@@ -17,11 +17,15 @@ const BankSoalPages = () => {
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
   const [search, setSearch] = useState<string>("");
   const debouncedSearch = useDebounceSearch({ value: search });
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedMateri, setSelectedMateri] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,
     search: debouncedSearch,
+    category: selectedCategory,
+    materi: selectedMateri,
   });
 
   return (
@@ -83,6 +87,8 @@ const BankSoalPages = () => {
           currentPage: page,
         }}
         refetch={refetch}
+        onSelectCategory={setSelectedCategory}
+        onSelectMateri={setSelectedMateri}
       />
     </div>
   );
