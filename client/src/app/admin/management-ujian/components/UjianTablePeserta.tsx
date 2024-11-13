@@ -37,10 +37,20 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [modalPIN, setModalPIN] = useState(false);
   const [studentVal, setStudentVal] = useState<string[]>([]);
-  console.log({ studentVal });
-  const { mutate: mutatePinUjian, isLoading, data } = useMutatePinUjian({});
+  const queryClient = useQueryClient();
+  const {
+    mutate: mutatePinUjian,
+    isLoading,
+    data,
+  } = useMutatePinUjian({
+    onSuccess: () => {
+      // Refetch Session Detail
+      queryClient.invalidateQueries({
+        queryKey: ["management-ujian-detail", sessionId],
+      });
+    },
+  });
   const { data: sessionDetail } = useGetDetailManajemenUjian(sessionId);
-  console.log("pin", sessionDetail?.PIN);
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
@@ -78,23 +88,15 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     return studentVal.length === dataUser?.data?.length;
   };
 
-  const queryClient = useQueryClient();
-
   //check if pin exists
   //only generate pin if it not exists
   const handleSubmit = () => {
     if (isDetail) {
       if (sessionDetail?.PIN) {
         setModalPIN(true);
-        console.log("pin exists", sessionDetail?.PIN);
       } else {
-        console.log("pin not exists, generating new pin");
         setModalPIN(true);
         mutatePinUjian({ session_id: sessionId });
-        // Refetch Session Detail
-        queryClient.invalidateQueries({
-          queryKey: ["management-ujian-detail", sessionId],
-        });
       }
     } else {
       onChange?.(studentVal);
