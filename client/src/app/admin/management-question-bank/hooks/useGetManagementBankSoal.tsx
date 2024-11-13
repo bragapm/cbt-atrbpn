@@ -31,6 +31,7 @@ const useGetManagementBankSoal = ({
           page,
           limit,
           filter: filters,
+          search: search,
         }
       );
 
