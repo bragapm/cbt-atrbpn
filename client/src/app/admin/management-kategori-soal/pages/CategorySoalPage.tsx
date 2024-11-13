@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CategorySoalTable from "../components/CategorySoalTable";
 import useGetCategorySoal from "../hooks/useGetCategorySoal";
+import TableSearch from "@/components/table-search";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 
 const limit: number = 10;
 
@@ -13,10 +15,13 @@ const CategorySoalPage = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const { data, isLoading, refetch } = useGetCategorySoal({
     page: page,
     limit: limit,
+    search: debouncedSearch,
   });
 
   return (
@@ -55,6 +60,9 @@ const CategorySoalPage = () => {
           </div>
         }
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <CategorySoalTable
         data={data?.data.data}
         isLoading={isLoading}

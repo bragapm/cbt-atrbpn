@@ -33,9 +33,11 @@ const SelectForm: React.FC<ISelectForm> = ({
       ) : (
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger className="w-[180px]">
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-xs text-gray-500">{title}</span>
-              <SelectValue placeholder="Pilihan" />
+            <div className="flex flex-col items-start gap-1 w-full">
+              <span className="text-xs  text-gray-500">{title}</span>
+              <div className="w-[90px] truncate overflow-hidden">
+                <SelectValue placeholder="Pilihan" />
+              </div>
             </div>
           </SelectTrigger>
           <SelectContent>

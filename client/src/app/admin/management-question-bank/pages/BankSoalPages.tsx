@@ -1,6 +1,8 @@
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableActions from "@/components/table-actions";
+import TableSearch from "@/components/table-search";
 import { Button } from "@/components/ui/button";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 import { Cloud, Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,10 +15,17 @@ const BankSoalPages = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedMateri, setSelectedMateri] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,
+    search: debouncedSearch,
+    category: selectedCategory,
+    materi: selectedMateri,
   });
 
   return (
@@ -65,6 +74,9 @@ const BankSoalPages = () => {
           </div>
         }
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <BankSoalTable
         data={data?.data}
         isLoading={isLoading}
@@ -75,6 +87,8 @@ const BankSoalPages = () => {
           currentPage: page,
         }}
         refetch={refetch}
+        onSelectCategory={setSelectedCategory}
+        onSelectMateri={setSelectedMateri}
       />
     </div>
   );
