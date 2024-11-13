@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BankSoalTable from "../components/BankSoalTable";
 import useGetManagementBankSoal from "../hooks/useGetManagementBankSoal";
+import SearchBox from "@/components/search-box";
 
 const limit: number = 20;
 
@@ -65,6 +66,7 @@ const BankSoalPages = () => {
           </div>
         }
       />
+      <div className="flex w-full justify-end"></div>
       <BankSoalTable
         data={data?.data}
         isLoading={isLoading}

@@ -15,7 +15,7 @@ const SearchBox: React.FC<ISearchBox> = ({ onSearch }) => {
   };
 
   return (
-    <div className="w-full h-full border border-gray-400 py-1 px-2 rounded-xl flex justify-between items-center">
+    <div className="w-full h-full border border-gray-400 py-1 px-2 rounded-xl flex justify-between items-center bg-white">
       <div className="flex flex-col gap-1">
         <p className="text-xs text-gray-500 ">Cari Peserta</p>
         <Input

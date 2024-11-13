@@ -3,7 +3,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { ChevronsUpDown } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
