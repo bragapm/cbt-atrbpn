@@ -3,6 +3,13 @@ import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
 import { PaginationTableProps } from "@/components/table-pagination";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -10,19 +17,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Trash } from "lucide-react";
-import React from "react";
+import { ChevronsUpDown, MoreVertical, Trash } from "lucide-react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useDeleteMutationBankSoal from "../hooks/useDeleteMutationBankSoal";
-import { useState } from "react";
+import TableHeaderSorting from "@/components/table-header-sorting";
 
 type IBankSoalTable = {
   data: IBankSoal[];
@@ -74,11 +75,15 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
     },
     {
       accessorKey: "id",
-      header: "ID Soal",
+      header: () => {
+        return <TableHeaderSorting title="ID Soal" />;
+      },
     },
     {
       accessorKey: "question",
-      header: "Soal",
+      header: () => {
+        return <TableHeaderSorting title="Soal" />;
+      },
       cell: ({ row }) => {
         const questionHtml = row.original.question;
         const previewText = questionHtml?.replace(/<[^>]+>/g, "").slice(0, 50);
@@ -117,7 +122,17 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
     },
     {
       accessorKey: "category",
-      header: "Kategori Soal",
+      header: () => {
+        return (
+          <TableHeaderSorting
+            title="Kategori"
+            // TODO:HANDLE DROPDOWN IN this array
+            dropdownData={[{ label: "test", value: "test" }]}
+            selectedDropdownValue={{ label: "", value: "" }}
+            onSelectedDropdownValue={() => {}}
+          />
+        );
+      },
       cell: ({ row }) => {
         const kategori = row?.original.kategori_id?.nama_kategori;
         return <BadgeCategory name={kategori} />;
@@ -125,7 +140,17 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
     },
     {
       accessorKey: "materiSoal",
-      header: "Materi Soal",
+      header: () => {
+        return (
+          <TableHeaderSorting
+            title="Materi"
+            // TODO:HANDLE DROPDOWN IN this array
+            dropdownData={[{ label: "test", value: "test" }]}
+            selectedDropdownValue={{ label: "", value: "" }}
+            onSelectedDropdownValue={() => {}}
+          />
+        );
+      },
       cell: ({ row }) => {
         return <p>{row?.original?.materi_id?.materi || "-"}</p>;
       },
