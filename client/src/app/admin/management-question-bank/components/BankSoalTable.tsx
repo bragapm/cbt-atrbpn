@@ -45,7 +45,6 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
 }) => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [id, setId] = React.useState<string | number>("");
-  const [isOpen, setIsOpen] = useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
 
@@ -105,6 +104,8 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       cell: ({ row }) => {
         const questionHtml = row.original.question;
         const previewText = questionHtml?.replace(/<[^>]+>/g, "").slice(0, 50);
+        const [isOpen, setIsOpen] = useState(false);
+
         return (
           <Accordion
             type="single"
