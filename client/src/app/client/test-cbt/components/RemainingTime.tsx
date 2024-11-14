@@ -36,6 +36,7 @@ const RemainingTime: FC<IRemaining> = ({ endTime }) => {
       } else {
         clearInterval(intervalId);
         setTimeLeft("Waktu habis");
+        handleEndExam();
       }
     }, 1000);
 
