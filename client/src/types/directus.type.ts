@@ -7,4 +7,6 @@ export interface IDirectusQueryParams {
   page?: number;
   alias?: string | Array<string>;
   search?: string;
+  category?: string;
+  materi?: string;
 }

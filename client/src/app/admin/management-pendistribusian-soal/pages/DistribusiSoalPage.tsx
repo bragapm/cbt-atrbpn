@@ -6,6 +6,8 @@ import useGetManagementDistribusiSoal from "../hooks/useGetManagementDistribusiS
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "@/components/confirmation-dialog";
+import TableSearch from "@/components/table-search";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 
 const limit: number = 20;
 
@@ -13,10 +15,13 @@ const DistribusiSoalPage = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const { data, isLoading, refetch } = useGetManagementDistribusiSoal({
     page: page,
     limit: limit,
+    search: debouncedSearch,
   });
 
   return (
@@ -56,6 +61,9 @@ const DistribusiSoalPage = () => {
           </div>
         }
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <DistribusiSoalTable
         data={data?.data?.data}
         isLoading={isLoading}

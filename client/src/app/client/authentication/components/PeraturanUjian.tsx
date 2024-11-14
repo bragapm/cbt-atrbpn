@@ -24,7 +24,7 @@ const PeraturanUjian: FC<IPeraturanUjian> = ({
     <div className="w-full h-full flex gap-4 flex-col ">
       <div className="flex gap-2 items-center justify-between ">
         <img src="/images/logo.svg" alt="logo" />
-        <p className="text-xl text-light font-semibold">Peraturan Ujian</p>
+        <p className="text-xl text-light font-semibold">Tata Tertib Ujian</p>
         <p></p>
       </div>
       <div className="border rounded-lg p-4 bg-gray-200 h-full overflow-auto">

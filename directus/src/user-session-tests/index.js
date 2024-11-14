@@ -110,6 +110,8 @@ export default (router, { services }) => {
           data: {
             session_test_id: session.id,
             start_attempt_at: session.start_attempt_at,
+            start_time: session.start_time,
+            end_time: session.end_time,
             problems: session.problems,
           },
         });
@@ -127,6 +129,8 @@ export default (router, { services }) => {
           session_test_id: session.id,
           start_attempt_at: now,
           problems: session.problems,
+          start_time: session.start_time,
+          end_time: session.end_time,
         },
       });
     } catch (error) {
