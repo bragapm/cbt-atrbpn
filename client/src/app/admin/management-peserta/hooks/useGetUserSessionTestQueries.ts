@@ -30,7 +30,8 @@ export type IUserSessionTest = {
 type IUserSessionTestArgs = {
   limit: number;
   page: number;
-  sessionId?: string;
+  sessionId?: string | null;
+  search?: string;
 };
 
 const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
@@ -47,9 +48,15 @@ const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
         offset: (page - 1) * limit,
         meta: "*",
         filter: {
-          session: {
-            _eq: queries?.sessionId,
-          },
+          session:
+            queries?.sessionId === null
+              ? { _null: true }
+              : { _eq: queries?.sessionId },
+          ...(queries?.search && {
+            info_peserta: {
+              nama_peserta: { _contains: queries?.search },
+            },
+          }),
         },
         sort: "info_peserta.nama_peserta",
       });
