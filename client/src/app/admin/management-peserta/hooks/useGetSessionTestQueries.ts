@@ -17,11 +17,6 @@ const useGetSessionTestQueries = () => {
         `/items/session_test`,
         {
           fields: "*.*",
-          filter: {
-            status: {
-              _eq: "published",
-            },
-          },
         }
       );
       return response;

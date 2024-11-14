@@ -34,7 +34,7 @@ export const FormSelect: FC<FormSelectProps> = ({ name, label, options }) => {
               <SelectValue placeholder="Pilihan" />
             </div>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className=" max-h-60 overflow-y-scroll">
             {options.map((option, idx) => (
               <SelectItem key={idx} value={option.value}>
                 {option.label}
