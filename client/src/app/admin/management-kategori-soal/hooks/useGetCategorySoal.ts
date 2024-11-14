@@ -4,10 +4,14 @@ import { useQuery } from "react-query";
 import { IKategori } from "@/types/collection/kategori.type";
 import { IDirectusQueryParams } from "@/types/directus.type";
 
-const useGetQuestionCategorySoal = ({ page, limit }: IDirectusQueryParams) => {
+const useGetQuestionCategorySoal = ({
+  page,
+  limit,
+  search,
+}: IDirectusQueryParams) => {
   const service = new DirectusInterceptor();
   return useQuery({
-    queryKey: ["category-soal"],
+    queryKey: ["category-soal", page, limit, search],
     queryFn: () => {
       const response = service.sendGetRequest<IBaseResponse<IKategori[]>>(
         `/items/kategori_soal`,
@@ -16,6 +20,7 @@ const useGetQuestionCategorySoal = ({ page, limit }: IDirectusQueryParams) => {
           meta: "*",
           page,
           limit,
+          search: search,
         }
       );
       return response;

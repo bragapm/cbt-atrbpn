@@ -226,7 +226,7 @@ const BankSoalForm: React.FC = () => {
             control={form.control}
             name="image"
             render={({ field }) => (
-              <FormItem className="w-full h-full">
+              <FormItem className="w-auto h-full">
                 <FormControl>
                   <UploadFile
                     title="Unggah Gambar"

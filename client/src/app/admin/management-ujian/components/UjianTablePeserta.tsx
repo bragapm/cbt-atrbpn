@@ -1,6 +1,7 @@
 import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
 import useGetUserUjian from "@/app/admin/management-ujian/hooks/useGetUserUjian";
 import useMutatePinUjian from "@/app/admin/management-ujian/hooks/useMutatePinUjian";
+import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 import { DataTable } from "@/components/data-table";
 import SearchBox from "@/components/search-box";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
 import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
@@ -34,17 +36,26 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [modalPIN, setModalPIN] = useState(false);
-
   const [studentVal, setStudentVal] = useState<string[]>([]);
-  console.log({ studentVal });
-  const { mutate: mutatePinUjian, isLoading, data } = useMutatePinUjian({});
-
+  const queryClient = useQueryClient();
+  const {
+    mutate: mutatePinUjian,
+    isLoading,
+    data,
+  } = useMutatePinUjian({
+    onSuccess: () => {
+      // Refetch Session Detail
+      queryClient.invalidateQueries({
+        queryKey: ["management-ujian-detail", sessionId],
+      });
+    },
+  });
+  const { data: sessionDetail } = useGetDetailManajemenUjian(sessionId);
   const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
     page: page,
     limit: limit,
     search: search,
   });
-
   const handleSearchChange = (searchTerm: string) => {
     setSearch(searchTerm);
     setPage(1);
@@ -77,10 +88,16 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     return studentVal.length === dataUser?.data?.length;
   };
 
+  //check if pin exists
+  //only generate pin if it not exists
   const handleSubmit = () => {
     if (isDetail) {
-      setModalPIN(true);
-      mutatePinUjian({ session_id: sessionId });
+      if (sessionDetail?.PIN) {
+        setModalPIN(true);
+      } else {
+        setModalPIN(true);
+        mutatePinUjian({ session_id: sessionId });
+      }
     } else {
       onChange?.(studentVal);
       setIsOpen(false);
@@ -163,6 +180,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
         open={modalPIN}
         onOpenChange={setModalPIN}
         data={data}
+        existingPin={sessionDetail?.PIN}
         isLoading={isLoading}
       />
 
@@ -187,14 +205,18 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
               buttonAction={handleSubmit}
               iconButtonAction={isDetail ? <Lock /> : <></>}
               labelButtonAction={
-                isDetail ? "Generate Pin Ujian" : "Pilih Peserta"
+                isDetail
+                  ? sessionDetail?.PIN
+                    ? "Lihat PIN Ujian"
+                    : "Generate PIN Ujian"
+                  : "Pilih Peserta"
               }
               data={dataUser?.data || []}
               columns={columns}
               isLoading={isLoadingUser}
               pagination={{
                 pageSize: limit,
-                totalItems: dataUser?.meta.total_count,
+                totalItems: dataUser?.meta.filter_count,
                 onPageChange: (page) => setPage(page),
                 currentPage: page,
               }}

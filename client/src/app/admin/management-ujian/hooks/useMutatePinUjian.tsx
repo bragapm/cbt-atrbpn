@@ -8,6 +8,10 @@ type IPinRequest = {
   session_id: string | number;
 };
 
+type IUserSessionRequest = {
+  PIN: string;
+};
+
 export type IPin = {
   pin: string;
 };
@@ -27,6 +31,15 @@ const useMutatePinUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
         "/generate-pin",
         data
       );
+
+      //Update Session Test with Pin
+      const userSessionResponse = await service.sendPatchRequest<
+        IUserSessionRequest,
+        IBaseResponse<IUserSessionRequest>
+      >(`/items/session_test/${data.session_id}`, {
+        PIN: response.data.pin,
+      });
+      console.log({ userSessionResponse });
 
       return response?.data;
     },

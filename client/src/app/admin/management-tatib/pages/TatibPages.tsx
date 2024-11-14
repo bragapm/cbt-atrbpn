@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import useUploadFile from "../hooks/useUploadFile";
 import useGetTatib from "../hooks/useGetTatib";
 import PDFViewers from "../components/PDFViewers";
+import usePatchFile from "../hooks/usePatchFile";
 
 const TatibPages: FC = () => {
   const [file, setFile] = useState<any>(null);
@@ -32,17 +33,24 @@ const TatibPages: FC = () => {
     },
   });
 
+  const { mutate: patchFile, isLoading: loadPatch } = usePatchFile({
+    onSuccess: () => {
+      setFile(null);
+      setOpenImport(false);
+    },
+  });
+
   const onSubmit = () => {
     const formData = new FormData();
+    formData.append("file", file);
     if (fileTatib?.data) {
       formData.append("name", fileTatib?.data?.data[0].name);
       formData.append("file_link", fileTatib?.data?.data[0].file_link);
+      patchFile({ data: formData, id: fileTatib?.data?.data[0].id });
     } else {
       formData.append("name", "tatib");
+      mutate(formData);
     }
-    formData.append("file", file);
-
-    mutate(formData);
   };
 
   useEffect(() => {
@@ -54,7 +62,6 @@ const TatibPages: FC = () => {
       setFile(url);
     }
   }, [fileTatib, openImport]);
-  console.log(file);
 
   return (
     <div>
@@ -98,7 +105,7 @@ const TatibPages: FC = () => {
                 startContent={<Upload />}
                 onClick={() => onSubmit()}
               >
-                {isLoading ? (
+                {isLoading || loadPatch ? (
                   <div className="">
                     <MemoLoader width={20} height={20} color={"white"} />
                   </div>
