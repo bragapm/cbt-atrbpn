@@ -24,7 +24,7 @@ export default (router, { services, exceptions, getSchema }) => {
             const kategoriService = new ItemsService('kategori_soal', { schema });
             const fileService = new FilesService({ schema });
 
-            
+            let questionCount = 0;
             const headerRow = worksheet.getRow(1);
             const headers = {};
             headerRow.eachCell((cell, colNumber) => {
@@ -37,11 +37,11 @@ export default (router, { services, exceptions, getSchema }) => {
                 const materiName = row.getCell(headers['material']).value;
                 const kategoriName = row.getCell(headers['category']).value;
                 const materiRecord = await materiService.readByQuery({
-                    filter: { materi: materiName },
+                    filter: { materi: { _icontains: materiName } },
                     limit: 1
                 });
                 const kategoriRecord = await kategoriService.readByQuery({
-                    filter: { nama_kategori: kategoriName },
+                    filter: { nama_kategori: { _icontains: kategoriName } },
                     limit: 1
                 });
 
@@ -62,17 +62,16 @@ export default (router, { services, exceptions, getSchema }) => {
                     question: questionText,
                     materi_id: materi_id,
                     kategori_id: kategori_id,
-                    random_question: randomQuestion,
+                    is_required: randomQuestion,
                     random_options: randomOption
                 });
-                console.log("newQuestion", newQuestion);
+                //console.log("newQuestion", newQuestion);
                
                 
                 const options = ['option_a', 'option_b', 'option_c', 'option_d', 'option_e'];
                 for (const option of options) {
                     const optionCell = row.getCell(headers[option]);
                     let optionRecord = { question_id: newQuestion, is_correct: row.getCell(headers['correct_answer']).value === option };
-
                     const images = worksheet.getImages();
                     const imageInCell = images.find(image => {
                         const { tl } = image.range;
@@ -84,7 +83,7 @@ export default (router, { services, exceptions, getSchema }) => {
                     if (imageInCell) {
                         const imageData = workbook.getImage(imageInCell.imageId);
                         const uploadedImage = await uploadImage(fileService, imageData.buffer, imageData.extension);
-                        console.log("uploadedImage", uploadedImage);
+                        //console.log("uploadedImage", uploadedImage);
                         optionRecord.option_image = uploadedImage;
                     } else {
                         optionRecord.option_text = optionCell.value;
@@ -92,6 +91,8 @@ export default (router, { services, exceptions, getSchema }) => {
 
                     await optionService.createOne(optionRecord);
                 }
+                questionCount++;
+                console.log(`Total questions imported so far: ${questionCount}`);
             }
 
             res.status(200).send({ message: 'Questions and options imported successfully' });
