@@ -4,7 +4,7 @@ import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { File, MoreVertical, Trash } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
@@ -14,7 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModalHasilUjianVideotron } from "./ModalHasilUjianVideotron";
 import useDeletePesertaMutation from "../../management-peserta/hooks/useDeletePesertaMutation";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +22,6 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
-  const [isOpenModalDetail, setIsOpenModalDetail] = useState<boolean>(false);
 
   const [id, setId] = React.useState<string | number>("");
 
@@ -139,11 +137,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         }}
         labelButtonAction="Lihat Hasil Ujian"
         iconButtonAction={<File className="w-5 h-5" />}
-        buttonAction={() => setIsOpenModalDetail(true)}
-      />
-      <ModalHasilUjianVideotron
-        opened={isOpenModalDetail}
-        onOpenChange={() => setIsOpenModalDetail(!isOpenModalDetail)}
+        buttonAction={() => navigate("/hasil-ujian/videotron")}
       />
     </>
   );

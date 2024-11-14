@@ -30,6 +30,7 @@ export type IUserSessionTest = {
 type IUserSessionTestArgs = {
   limit: number;
   page: number;
+  sessionId?: string;
 };
 
 const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
@@ -40,11 +41,18 @@ const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
     queryFn: () => {
       const response = service.sendGetRequest<
         IBaseResponse<IUserSessionTest[]>
-      >(
-        `/items/user_session_test?fields=id,info_peserta.*,session.*,score,score_summary&limit=${limit}&offset=${
-          (page - 1) * limit
-        }&meta=*`
-      );
+      >(`/items/user_session_test`, {
+        fields: ["*.*"],
+        limit,
+        offset: (page - 1) * limit,
+        meta: "*",
+        filter: {
+          session: {
+            _eq: queries?.sessionId,
+          },
+        },
+        sort: "info_peserta.nama_peserta",
+      });
       return response;
     },
   });
