@@ -94,7 +94,7 @@ const StatistikHasil = () => {
             {bysesi?.data ? (
               bysesi?.data?.averageScoreBySession?.map((el, idx) => (
                 <div key={idx}>
-                  <p className="font-bold">{el.average_score.toFixed(6)}</p>
+                  <p className="font-bold">{el.average_score?.toFixed(6)}</p>
                   <p className="text-[10px]">sesi {el.session_name}</p>
                 </div>
               ))
