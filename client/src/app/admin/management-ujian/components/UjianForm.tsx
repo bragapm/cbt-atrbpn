@@ -26,8 +26,6 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
     isError,
   } = useGetDetailManajemenUjian(id);
 
-  console.log({ detailData });
-
   useEffect(() => {
     if (id && detailData) {
       form.setValue("name", detailData.name || "");
@@ -117,6 +115,7 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
               <FormItem>
                 <FormControl>
                   <UjianTablePeserta
+                    sessionId={id}
                     value={Array.isArray(field.value) ? field.value : []}
                     onChange={(selectedValues) => {
                       field.onChange(selectedValues);
