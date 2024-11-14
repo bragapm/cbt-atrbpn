@@ -109,7 +109,7 @@ export default (router, { services, exceptions, getSchema }) => {
     try {
       const { id } = req.params;
       const { name } = req.body;
-      const file = req.files?.file_link;
+      const file = req.files?.file;
 
       const schema = await getSchema();
       const itemsService = new ItemsService("rules", {
@@ -130,8 +130,15 @@ export default (router, { services, exceptions, getSchema }) => {
       let fileId = existingRule.file_link;
       // If a new file is uploaded, replace the existing file
       if (file) {
-        const uploadedFile = await filesService.uploadOne(file);
-        fileId = uploadedFile.id;
+        const data = {
+          filename_download: `${Date.now()}_${file.name}`,
+          type: file.mimetype,
+          storage: "s3",
+          folder: "22064a39-5b41-4629-9a13-e22a1d64bc10",
+        };
+
+        const uploadedFile = await filesService.uploadOne(file.data, data);
+        fileId = uploadedFile;
       }
 
       // Update the rule record
@@ -144,10 +151,6 @@ export default (router, { services, exceptions, getSchema }) => {
       // Respond with the updated rule data
       res.json({
         status: "success",
-        data: {
-          ...updatedRule,
-          file_link: `${req.directus.url}/assets/${fileId}`,
-        },
       });
     } catch (error) {
       return res.status(500).json({ status: "error", message: error.message });
@@ -177,7 +180,6 @@ export default (router, { services, exceptions, getSchema }) => {
 
       res.json({
         status: "success",
-        data: { message: "Rule deleted successfully" },
       });
     } catch (error) {
       return res.status(500).json({ status: "error", message: error.message });
