@@ -137,7 +137,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         }}
         labelButtonAction="Lihat Hasil Ujian"
         iconButtonAction={<File className="w-5 h-5" />}
-        buttonAction={() => navigate("/hasil-ujian/videotron")}
+        buttonAction={() => window.open("/hasil-ujian/videotron")}
       />
     </>
   );
