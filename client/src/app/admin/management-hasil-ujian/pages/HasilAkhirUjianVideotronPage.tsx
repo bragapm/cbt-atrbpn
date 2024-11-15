@@ -95,7 +95,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
               <SelectTrigger className=" px-3 w-[200px]">
                 <SelectValue placeholder="Pilih Sesi Ujian" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className=" max-h-60 overflow-y-scroll">
                 {sessionTestOption.map((option, idx) => (
                   <SelectItem key={idx} value={option.value}>
                     {option.label}

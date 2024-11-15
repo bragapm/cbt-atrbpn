@@ -13,10 +13,13 @@ importers:
         version: 10.0.3
       '@directus/extensions-sdk':
         specifier: 12.1.0
-        version: 12.1.0(@unhead/vue@1.11.10)(pg@8.11.0)(pinia@2.2.5)
+        version: 12.1.0(@types/node@22.8.4)(@unhead/vue@1.11.10(vue@3.3.4))(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(pinia@2.2.5(vue@3.3.4))(terser@5.36.0)(vue-router@4.2.0(vue@3.3.4))
       '@directus/sdk':
         specifier: ^17.0.2
         version: 17.0.2
+      date-fns-tz:
+        specifier: ^3.2.0
+        version: 3.2.0(date-fns@4.1.0)
       exceljs:
         specifier: ^4.4.0
         version: 4.4.0
@@ -32,7 +35,7 @@ importers:
     devDependencies:
       directus:
         specifier: 10.8.2
-        version: 10.8.2(vue@3.4.27)
+        version: 10.8.2(@types/node@22.8.4)(encoding@0.1.13)(lodash@4.17.21)(terser@5.36.0)(vue@3.3.4)
 
 packages:
 
@@ -2247,6 +2250,11 @@ packages:
   data-view-byte-offset@1.0.0:
     resolution: {integrity: sha512-t/Ygsytq+R995EJ5PZlD4Cu56sWa8InXySaViRzw9apusqsOO2bQP+SbYzAhR0pFKoB+43lYy8rWban9JSuXnA==}
     engines: {node: '>= 0.4'}
+
+  date-fns-tz@3.2.0:
+    resolution: {integrity: sha512-sg8HqoTEulcbbbVXeg84u5UnlsQa8GS5QXMqjjYIhS4abEVVKIUwe0/l/UhrZdKaL/W5eWZNlbTeEIiOXTcsBQ==}
+    peerDependencies:
+      date-fns: ^3.0.0 || ^4.0.0
 
   date-fns@2.30.0:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
@@ -4642,9 +4650,6 @@ packages:
 
   sqlite3@5.1.6:
     resolution: {integrity: sha512-olYkWoKFVNSSSQNvxVUfjiVbz3YtBwTJj+mfV5zpHmqW3sELx2Cf4QCdirMelhM5Zh+KDVaKgQHqCxrqiWHybw==}
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
 
   sqlstring@2.3.1:
     resolution: {integrity: sha512-ooAzh/7dxIG5+uDik1z/Rd1vli0+38izZhGzSa34FwR7IbelPWCCKSNIl8jlL/F7ERvy8CB2jNeM1E9i9mXMAQ==}
@@ -6054,6 +6059,7 @@ snapshots:
       tslib: 2.8.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-http-compat@2.1.2':
     dependencies:
@@ -6062,8 +6068,9 @@ snapshots:
       '@azure/core-rest-pipeline': 1.17.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
-  '@azure/core-http@3.0.4':
+  '@azure/core-http@3.0.4(encoding@0.1.13)':
     dependencies:
       '@azure/abort-controller': 1.1.0
       '@azure/core-auth': 1.9.0
@@ -6073,7 +6080,7 @@ snapshots:
       '@types/node-fetch': 2.6.11
       '@types/tunnel': 0.0.3
       form-data: 4.0.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       process: 0.11.10
       tslib: 2.8.0
       tunnel: 0.0.6
@@ -6105,6 +6112,7 @@ snapshots:
       tslib: 2.8.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-tracing@1.0.0-preview.13':
     dependencies:
@@ -6114,6 +6122,7 @@ snapshots:
   '@azure/core-tracing@1.2.0':
     dependencies:
       tslib: 2.8.0
+    optional: true
 
   '@azure/core-util@1.11.0':
     dependencies:
@@ -6140,6 +6149,7 @@ snapshots:
       uuid: 8.3.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/keyvault-common@2.0.0':
     dependencies:
@@ -6153,6 +6163,7 @@ snapshots:
       tslib: 2.8.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/keyvault-keys@4.9.0':
     dependencies:
@@ -6170,6 +6181,7 @@ snapshots:
       tslib: 2.8.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/logger@1.1.4':
     dependencies:
@@ -6178,23 +6190,28 @@ snapshots:
   '@azure/msal-browser@2.39.0':
     dependencies:
       '@azure/msal-common': 13.3.3
+    optional: true
 
-  '@azure/msal-common@13.3.1': {}
+  '@azure/msal-common@13.3.1':
+    optional: true
 
-  '@azure/msal-common@13.3.3': {}
+  '@azure/msal-common@13.3.3':
+    optional: true
 
-  '@azure/msal-common@7.6.0': {}
+  '@azure/msal-common@7.6.0':
+    optional: true
 
   '@azure/msal-node@1.18.4':
     dependencies:
       '@azure/msal-common': 13.3.1
       jsonwebtoken: 9.0.1
       uuid: 8.3.2
+    optional: true
 
-  '@azure/storage-blob@12.14.0':
+  '@azure/storage-blob@12.14.0(encoding@0.1.13)':
     dependencies:
       '@azure/abort-controller': 1.1.0
-      '@azure/core-http': 3.0.4
+      '@azure/core-http': 3.0.4(encoding@0.1.13)
       '@azure/core-lro': 2.7.2
       '@azure/core-paging': 1.6.2
       '@azure/core-tracing': 1.0.0-preview.13
@@ -6227,33 +6244,33 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@directus/api@14.1.2(vue@3.4.27)':
+  '@directus/api@14.1.2(@types/node@22.8.4)(encoding@0.1.13)(lodash@4.17.21)(terser@5.36.0)(vue@3.3.4)':
     dependencies:
       '@authenio/samlify-node-xmllint': 2.0.0(samlify@2.8.10)
       '@aws-sdk/client-ses': 3.332.0
       '@directus/app': 10.13.2
       '@directus/constants': 11.0.1
       '@directus/errors': 0.2.0
-      '@directus/extensions': 0.2.0(vue@3.4.27)
-      '@directus/extensions-sdk': 10.2.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      '@directus/extensions': 0.2.0(vue@3.3.4)
+      '@directus/extensions-sdk': 10.2.0(@types/node@22.8.4)(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)(terser@5.36.0)
       '@directus/format-title': 10.1.0
-      '@directus/pressure': 1.0.13(vue@3.4.27)
-      '@directus/schema': 11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      '@directus/pressure': 1.0.13(vue@3.3.4)
+      '@directus/schema': 11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
       '@directus/specs': 10.2.4
       '@directus/storage': 10.0.7
-      '@directus/storage-driver-azure': 10.0.14(vue@3.4.27)
-      '@directus/storage-driver-cloudinary': 10.0.14(vue@3.4.27)
-      '@directus/storage-driver-gcs': 10.0.14(vue@3.4.27)
-      '@directus/storage-driver-local': 10.0.14(vue@3.4.27)
-      '@directus/storage-driver-s3': 10.0.14(vue@3.4.27)
-      '@directus/storage-driver-supabase': 1.0.6(vue@3.4.27)
-      '@directus/utils': 11.0.2(vue@3.4.27)
-      '@directus/validation': 0.0.9(vue@3.4.27)
+      '@directus/storage-driver-azure': 10.0.14(encoding@0.1.13)(vue@3.3.4)
+      '@directus/storage-driver-cloudinary': 10.0.14(vue@3.3.4)
+      '@directus/storage-driver-gcs': 10.0.14(encoding@0.1.13)(vue@3.3.4)
+      '@directus/storage-driver-local': 10.0.14(vue@3.3.4)
+      '@directus/storage-driver-s3': 10.0.14(vue@3.3.4)
+      '@directus/storage-driver-supabase': 1.0.6(encoding@0.1.13)(vue@3.3.4)
+      '@directus/utils': 11.0.2(vue@3.3.4)
+      '@directus/validation': 0.0.9(vue@3.3.4)
       '@godaddy/terminus': 4.12.0
       '@rollup/plugin-alias': 5.0.0(rollup@3.22.0)
       '@rollup/plugin-node-resolve': 15.0.2(rollup@3.22.0)
       '@rollup/plugin-virtual': 3.0.1(rollup@3.22.0)
-      argon2: 0.31.1
+      argon2: 0.31.1(encoding@0.1.13)
       async: 3.2.4
       axios: 1.4.0
       busboy: 1.6.0
@@ -6292,7 +6309,7 @@ snapshots:
       json2csv: 5.0.7
       jsonwebtoken: 9.0.1
       keyv: 4.5.2
-      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
       ldapjs: 2.3.3
       liquidjs: 10.7.1
       lodash-es: 4.17.21
@@ -6336,10 +6353,10 @@ snapshots:
     optionalDependencies:
       '@keyv/redis': 2.5.8
       mysql: 2.18.1
-      nodemailer-mailgun-transport: 2.1.5
+      nodemailer-mailgun-transport: 2.1.5(lodash@4.17.21)
       nodemailer-sendgrid: 1.0.3
       pg: 8.11.0
-      sqlite3: 5.1.6
+      sqlite3: 5.1.6(encoding@0.1.13)
       tedious: 16.1.0
     transitivePeerDependencies:
       - '@aws-sdk/signature-v4-crt'
@@ -6451,12 +6468,12 @@ snapshots:
 
   '@directus/exceptions@10.0.3': {}
 
-  '@directus/extensions-sdk@10.2.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)':
+  '@directus/extensions-sdk@10.2.0(@types/node@22.8.4)(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)(terser@5.36.0)':
     dependencies:
       '@directus/composables': 10.1.6(vue@3.3.4)
       '@directus/constants': 11.0.1
       '@directus/extensions': 0.2.0(vue@3.3.4)
-      '@directus/types': 11.0.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      '@directus/types': 11.0.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
       '@directus/utils': 11.0.2(vue@3.3.4)
       '@rollup/plugin-commonjs': 25.0.0(rollup@3.22.0)
       '@rollup/plugin-json': 6.0.0(rollup@3.22.0)
@@ -6464,7 +6481,7 @@ snapshots:
       '@rollup/plugin-replace': 5.0.2(rollup@3.22.0)
       '@rollup/plugin-terser': 0.4.3(rollup@3.22.0)
       '@rollup/plugin-virtual': 3.0.1(rollup@3.22.0)
-      '@vitejs/plugin-vue': 4.2.3(vite@4.3.7)(vue@3.3.4)
+      '@vitejs/plugin-vue': 4.2.3(vite@4.3.7(@types/node@22.8.4)(terser@5.36.0))(vue@3.3.4)
       chalk: 5.2.0
       commander: 10.0.1
       esbuild: 0.17.19
@@ -6475,7 +6492,7 @@ snapshots:
       rollup: 3.22.0
       rollup-plugin-esbuild: 5.0.0(esbuild@0.17.19)(rollup@3.22.0)
       rollup-plugin-styles: 4.0.0(rollup@3.22.0)
-      vite: 4.3.7
+      vite: 4.3.7(@types/node@22.8.4)(terser@5.36.0)
       vue: 3.3.4
     transitivePeerDependencies:
       - '@types/node'
@@ -6494,13 +6511,13 @@ snapshots:
       - tedious
       - terser
 
-  '@directus/extensions-sdk@12.1.0(@unhead/vue@1.11.10)(pg@8.11.0)(pinia@2.2.5)':
+  '@directus/extensions-sdk@12.1.0(@types/node@22.8.4)(@unhead/vue@1.11.10(vue@3.3.4))(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(pinia@2.2.5(vue@3.3.4))(terser@5.36.0)(vue-router@4.2.0(vue@3.3.4))':
     dependencies:
       '@directus/composables': 11.1.1(vue@3.4.27)
       '@directus/constants': 12.0.0
-      '@directus/extensions': 2.0.2(@unhead/vue@1.11.10)(pg@8.11.0)(pinia@2.2.5)(vue@3.4.27)
-      '@directus/themes': 1.0.1(@unhead/vue@1.11.10)(pinia@2.2.5)(vue@3.4.27)
-      '@directus/types': 12.1.0(pg@8.11.0)(vue@3.4.27)
+      '@directus/extensions': 2.0.2(@unhead/vue@1.11.10(vue@3.3.4))(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(pinia@2.2.5(vue@3.3.4))(vue-router@4.2.0(vue@3.3.4))(vue@3.4.27)
+      '@directus/themes': 1.0.1(@unhead/vue@1.11.10(vue@3.3.4))(pinia@2.2.5(vue@3.3.4))(vue@3.4.27)
+      '@directus/types': 12.1.0(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(vue@3.4.27)
       '@directus/utils': 12.0.1(vue@3.4.27)
       '@rollup/plugin-commonjs': 25.0.8(rollup@3.29.4)
       '@rollup/plugin-json': 6.1.0(rollup@3.29.4)
@@ -6508,7 +6525,7 @@ snapshots:
       '@rollup/plugin-replace': 5.0.7(rollup@3.29.4)
       '@rollup/plugin-terser': 0.4.4(rollup@3.29.4)
       '@rollup/plugin-virtual': 3.0.2(rollup@3.29.4)
-      '@vitejs/plugin-vue': 4.6.2(vite@4.5.2)(vue@3.4.27)
+      '@vitejs/plugin-vue': 4.6.2(vite@4.5.2(@types/node@22.8.4)(terser@5.36.0))(vue@3.4.27)
       chalk: 5.3.0
       commander: 10.0.1
       esbuild: 0.17.19
@@ -6519,7 +6536,7 @@ snapshots:
       rollup: 3.29.4
       rollup-plugin-esbuild: 5.0.0(esbuild@0.17.19)(rollup@3.29.4)
       rollup-plugin-styles: 4.0.0(rollup@3.29.4)
-      vite: 4.5.2
+      vite: 4.5.2(@types/node@22.8.4)(terser@5.36.0)
       vue: 3.4.27
     transitivePeerDependencies:
       - '@types/node'
@@ -6555,27 +6572,20 @@ snapshots:
     transitivePeerDependencies:
       - vue
 
-  '@directus/extensions@0.2.0(vue@3.4.27)':
-    dependencies:
-      '@directus/utils': 11.0.2(vue@3.4.27)
-      fs-extra: 11.1.1
-      lodash-es: 4.17.21
-      tmp: 0.2.1
-      zod: 3.22.4
-    transitivePeerDependencies:
-      - vue
-
-  '@directus/extensions@2.0.2(@unhead/vue@1.11.10)(pg@8.11.0)(pinia@2.2.5)(vue@3.4.27)':
+  '@directus/extensions@2.0.2(@unhead/vue@1.11.10(vue@3.3.4))(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(pinia@2.2.5(vue@3.3.4))(vue-router@4.2.0(vue@3.3.4))(vue@3.4.27)':
     dependencies:
       '@directus/constants': 12.0.0
-      '@directus/themes': 1.0.1(@unhead/vue@1.11.10)(pinia@2.2.5)(vue@3.4.27)
-      '@directus/types': 12.1.0(pg@8.11.0)(vue@3.4.27)
+      '@directus/themes': 1.0.1(@unhead/vue@1.11.10(vue@3.3.4))(pinia@2.2.5(vue@3.3.4))(vue@3.4.27)
+      '@directus/types': 12.1.0(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(vue@3.4.27)
       '@directus/utils': 12.0.1(vue@3.4.27)
       '@types/express': 4.17.21
       fs-extra: 11.2.0
       lodash-es: 4.17.21
-      vue: 3.4.27
       zod: 3.23.8
+    optionalDependencies:
+      knex: 3.1.0(pg@8.11.0)
+      vue: 3.4.27
+      vue-router: 4.2.0(vue@3.3.4)
     transitivePeerDependencies:
       - '@unhead/vue'
       - better-sqlite3
@@ -6590,15 +6600,15 @@ snapshots:
 
   '@directus/format-title@10.1.0': {}
 
-  '@directus/pressure@1.0.13(vue@3.4.27)':
+  '@directus/pressure@1.0.13(vue@3.3.4)':
     dependencies:
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
     transitivePeerDependencies:
       - vue
 
-  '@directus/schema@11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)':
+  '@directus/schema@11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)':
     dependencies:
-      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
     transitivePeerDependencies:
       - better-sqlite3
       - mysql
@@ -6628,59 +6638,59 @@ snapshots:
     dependencies:
       openapi3-ts: 4.1.2
 
-  '@directus/storage-driver-azure@10.0.14(vue@3.4.27)':
+  '@directus/storage-driver-azure@10.0.14(encoding@0.1.13)(vue@3.3.4)':
     dependencies:
-      '@azure/storage-blob': 12.14.0
+      '@azure/storage-blob': 12.14.0(encoding@0.1.13)
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
     transitivePeerDependencies:
       - encoding
       - vue
 
-  '@directus/storage-driver-cloudinary@10.0.14(vue@3.4.27)':
+  '@directus/storage-driver-cloudinary@10.0.14(vue@3.3.4)':
     dependencies:
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
       p-queue: 7.3.4
       undici: 5.22.1
     transitivePeerDependencies:
       - vue
 
-  '@directus/storage-driver-gcs@10.0.14(vue@3.4.27)':
+  '@directus/storage-driver-gcs@10.0.14(encoding@0.1.13)(vue@3.3.4)':
     dependencies:
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
-      '@google-cloud/storage': 6.10.1
+      '@directus/utils': 11.0.2(vue@3.3.4)
+      '@google-cloud/storage': 6.10.1(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - supports-color
       - vue
 
-  '@directus/storage-driver-local@10.0.14(vue@3.4.27)':
+  '@directus/storage-driver-local@10.0.14(vue@3.3.4)':
     dependencies:
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
     transitivePeerDependencies:
       - vue
 
-  '@directus/storage-driver-s3@10.0.14(vue@3.4.27)':
+  '@directus/storage-driver-s3@10.0.14(vue@3.3.4)':
     dependencies:
       '@aws-sdk/abort-controller': 3.329.0
       '@aws-sdk/client-s3': 3.332.0
       '@aws-sdk/lib-storage': 3.332.0(@aws-sdk/abort-controller@3.329.0)(@aws-sdk/client-s3@3.332.0)
       '@aws-sdk/node-http-handler': 3.344.0
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
     transitivePeerDependencies:
       - '@aws-sdk/signature-v4-crt'
       - aws-crt
       - vue
 
-  '@directus/storage-driver-supabase@1.0.6(vue@3.4.27)':
+  '@directus/storage-driver-supabase@1.0.6(encoding@0.1.13)(vue@3.3.4)':
     dependencies:
       '@directus/storage': 10.0.7
-      '@directus/utils': 11.0.2(vue@3.4.27)
-      '@supabase/storage-js': 2.5.1
+      '@directus/utils': 11.0.2(vue@3.3.4)
+      '@supabase/storage-js': 2.5.1(encoding@0.1.13)
       undici: 5.22.1
     transitivePeerDependencies:
       - encoding
@@ -6690,26 +6700,26 @@ snapshots:
 
   '@directus/system-data@2.0.0': {}
 
-  '@directus/themes@1.0.1(@unhead/vue@1.11.10)(pinia@2.2.5)(vue@3.4.27)':
+  '@directus/themes@1.0.1(@unhead/vue@1.11.10(vue@3.3.4))(pinia@2.2.5(vue@3.3.4))(vue@3.4.27)':
     dependencies:
       '@directus/utils': 12.0.1(vue@3.4.27)
       '@sinclair/typebox': 0.33.11
-      '@unhead/vue': 1.11.10(vue@3.4.27)
+      '@unhead/vue': 1.11.10(vue@3.3.4)
       decamelize: 6.0.0
       flat: 6.0.1
       lodash-es: 4.17.21
-      pinia: 2.2.5(vue@3.4.27)
+      pinia: 2.2.5(vue@3.3.4)
       vue: 3.4.27
 
-  '@directus/types@11.0.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)':
+  '@directus/types@11.0.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)':
     dependencies:
       '@directus/constants': 11.0.1
-      '@directus/schema': 11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      '@directus/schema': 11.0.0(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
       '@types/express': 4.17.17
       '@types/geojson': 7946.0.10
       express: 4.18.2
       geojson: 0.5.0
-      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0)
       pino: 8.14.1
       vue: 3.3.4
       vue-router: 4.2.0(vue@3.3.4)
@@ -6724,11 +6734,13 @@ snapshots:
       - supports-color
       - tedious
 
-  '@directus/types@12.1.0(pg@8.11.0)(vue@3.4.27)':
+  '@directus/types@12.1.0(knex@3.1.0(pg@8.11.0))(pg@8.11.0)(vue@3.4.27)':
     dependencies:
       '@directus/constants': 12.0.0
       '@directus/schema': 12.1.1(pg@8.11.0)
       '@types/geojson': 7946.0.14
+    optionalDependencies:
+      knex: 3.1.0(pg@8.11.0)
       vue: 3.4.27
     transitivePeerDependencies:
       - better-sqlite3
@@ -6758,18 +6770,8 @@ snapshots:
       lodash-es: 4.17.21
       micromustache: 8.0.3
       tmp: 0.2.1
+    optionalDependencies:
       vue: 3.3.4
-
-  '@directus/utils@11.0.2(vue@3.4.27)':
-    dependencies:
-      '@directus/constants': 11.0.1
-      date-fns: 2.30.0
-      fs-extra: 11.1.1
-      joi: 17.9.2
-      lodash-es: 4.17.21
-      micromustache: 8.0.3
-      tmp: 0.2.1
-      vue: 3.4.27
 
   '@directus/utils@12.0.1(vue@3.4.27)':
     dependencies:
@@ -6781,12 +6783,13 @@ snapshots:
       js-yaml: 4.1.0
       lodash-es: 4.17.21
       micromustache: 8.0.3
+    optionalDependencies:
       vue: 3.4.27
 
-  '@directus/validation@0.0.9(vue@3.4.27)':
+  '@directus/validation@0.0.9(vue@3.3.4)':
     dependencies:
       '@directus/errors': 0.2.0
-      '@directus/utils': 11.0.2(vue@3.4.27)
+      '@directus/utils': 11.0.2(vue@3.3.4)
       joi: 17.9.2
     transitivePeerDependencies:
       - vue
@@ -6958,7 +6961,7 @@ snapshots:
 
   '@google-cloud/promisify@3.0.1': {}
 
-  '@google-cloud/storage@6.10.1':
+  '@google-cloud/storage@6.10.1(encoding@0.1.13)':
     dependencies:
       '@google-cloud/paginator': 3.0.7
       '@google-cloud/projectify': 3.0.0
@@ -6969,13 +6972,13 @@ snapshots:
       duplexify: 4.1.3
       ent: 2.2.1
       extend: 3.0.2
-      gaxios: 5.1.3
-      google-auth-library: 8.9.0
+      gaxios: 5.1.3(encoding@0.1.13)
+      google-auth-library: 8.9.0(encoding@0.1.13)
       mime: 3.0.0
       mime-types: 2.1.35
       p-limit: 3.1.0
       retry-request: 5.0.2
-      teeny-request: 8.0.3
+      teeny-request: 8.0.3(encoding@0.1.13)
       uuid: 8.3.2
     transitivePeerDependencies:
       - encoding
@@ -7013,7 +7016,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@js-joda/core@5.6.3': {}
+  '@js-joda/core@5.6.3':
+    optional: true
 
   '@keyv/redis@2.5.8':
     dependencies:
@@ -7022,12 +7026,12 @@ snapshots:
       - supports-color
     optional: true
 
-  '@mapbox/node-pre-gyp@1.0.11':
+  '@mapbox/node-pre-gyp@1.0.11(encoding@0.1.13)':
     dependencies:
       detect-libc: 2.0.3
       https-proxy-agent: 5.0.1
       make-dir: 3.1.0
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
@@ -7117,8 +7121,9 @@ snapshots:
 
   '@rollup/plugin-alias@5.0.0(rollup@3.22.0)':
     dependencies:
-      rollup: 3.22.0
       slash: 4.0.0
+    optionalDependencies:
+      rollup: 3.22.0
 
   '@rollup/plugin-commonjs@25.0.0(rollup@3.22.0)':
     dependencies:
@@ -7128,6 +7133,7 @@ snapshots:
       glob: 8.1.0
       is-reference: 1.2.1
       magic-string: 0.27.0
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/plugin-commonjs@25.0.8(rollup@3.29.4)':
@@ -7138,16 +7144,19 @@ snapshots:
       glob: 8.1.0
       is-reference: 1.2.1
       magic-string: 0.30.12
+    optionalDependencies:
       rollup: 3.29.4
 
   '@rollup/plugin-json@6.0.0(rollup@3.22.0)':
     dependencies:
       '@rollup/pluginutils': 5.1.3(rollup@3.22.0)
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/plugin-json@6.1.0(rollup@3.29.4)':
     dependencies:
       '@rollup/pluginutils': 5.1.3(rollup@3.29.4)
+    optionalDependencies:
       rollup: 3.29.4
 
   '@rollup/plugin-node-resolve@15.0.2(rollup@3.22.0)':
@@ -7158,6 +7167,7 @@ snapshots:
       is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.8
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/plugin-node-resolve@15.2.3(rollup@3.29.4)':
@@ -7168,40 +7178,45 @@ snapshots:
       is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.8
+    optionalDependencies:
       rollup: 3.29.4
 
   '@rollup/plugin-replace@5.0.2(rollup@3.22.0)':
     dependencies:
       '@rollup/pluginutils': 5.1.3(rollup@3.22.0)
       magic-string: 0.27.0
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/plugin-replace@5.0.7(rollup@3.29.4)':
     dependencies:
       '@rollup/pluginutils': 5.1.3(rollup@3.29.4)
       magic-string: 0.30.12
+    optionalDependencies:
       rollup: 3.29.4
 
   '@rollup/plugin-terser@0.4.3(rollup@3.22.0)':
     dependencies:
-      rollup: 3.22.0
       serialize-javascript: 6.0.2
       smob: 1.5.0
       terser: 5.36.0
+    optionalDependencies:
+      rollup: 3.22.0
 
   '@rollup/plugin-terser@0.4.4(rollup@3.29.4)':
     dependencies:
-      rollup: 3.29.4
       serialize-javascript: 6.0.2
       smob: 1.5.0
       terser: 5.36.0
+    optionalDependencies:
+      rollup: 3.29.4
 
   '@rollup/plugin-virtual@3.0.1(rollup@3.22.0)':
-    dependencies:
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/plugin-virtual@3.0.2(rollup@3.29.4)':
-    dependencies:
+    optionalDependencies:
       rollup: 3.29.4
 
   '@rollup/pluginutils@4.2.1':
@@ -7214,6 +7229,7 @@ snapshots:
       '@types/estree': 1.0.6
       estree-walker: 2.0.2
       picomatch: 4.0.2
+    optionalDependencies:
       rollup: 3.22.0
 
   '@rollup/pluginutils@5.1.3(rollup@3.29.4)':
@@ -7221,6 +7237,7 @@ snapshots:
       '@types/estree': 1.0.6
       estree-walker: 2.0.2
       picomatch: 4.0.2
+    optionalDependencies:
       rollup: 3.29.4
 
   '@sendgrid/client@6.5.5':
@@ -7254,9 +7271,9 @@ snapshots:
 
   '@sindresorhus/is@5.6.0': {}
 
-  '@supabase/storage-js@2.5.1':
+  '@supabase/storage-js@2.5.1(encoding@0.1.13)':
     dependencies:
-      cross-fetch: 3.1.8
+      cross-fetch: 3.1.8(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -7381,23 +7398,23 @@ snapshots:
     dependencies:
       '@unhead/schema': 1.11.10
 
-  '@unhead/vue@1.11.10(vue@3.4.27)':
+  '@unhead/vue@1.11.10(vue@3.3.4)':
     dependencies:
       '@unhead/schema': 1.11.10
       '@unhead/shared': 1.11.10
       defu: 6.1.4
       hookable: 5.5.3
       unhead: 1.11.10
-      vue: 3.4.27
-
-  '@vitejs/plugin-vue@4.2.3(vite@4.3.7)(vue@3.3.4)':
-    dependencies:
-      vite: 4.3.7
       vue: 3.3.4
 
-  '@vitejs/plugin-vue@4.6.2(vite@4.5.2)(vue@3.4.27)':
+  '@vitejs/plugin-vue@4.2.3(vite@4.3.7(@types/node@22.8.4)(terser@5.36.0))(vue@3.3.4)':
     dependencies:
-      vite: 4.5.2
+      vite: 4.3.7(@types/node@22.8.4)(terser@5.36.0)
+      vue: 3.3.4
+
+  '@vitejs/plugin-vue@4.6.2(vite@4.5.2(@types/node@22.8.4)(terser@5.36.0))(vue@3.4.27)':
+    dependencies:
+      vite: 4.5.2(@types/node@22.8.4)(terser@5.36.0)
       vue: 3.4.27
 
   '@vue/compiler-core@3.3.4':
@@ -7546,6 +7563,7 @@ snapshots:
       debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   agentkeepalive@4.5.0:
     dependencies:
@@ -7642,9 +7660,9 @@ snapshots:
       readable-stream: 3.6.2
     optional: true
 
-  argon2@0.31.1:
+  argon2@0.31.1(encoding@0.1.13):
     dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
+      '@mapbox/node-pre-gyp': 1.0.11(encoding@0.1.13)
       '@phc/format': 1.0.0
       node-addon-api: 7.1.1
     transitivePeerDependencies:
@@ -7664,6 +7682,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       is-array-buffer: 3.0.4
+    optional: true
 
   array-flatten@1.1.1: {}
 
@@ -7677,6 +7696,7 @@ snapshots:
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
+    optional: true
 
   arrify@2.0.1: {}
 
@@ -7701,6 +7721,7 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
+    optional: true
 
   aws-sign2@0.7.0:
     optional: true
@@ -7767,7 +7788,8 @@ snapshots:
 
   big-integer@1.6.52: {}
 
-  bignumber.js@9.0.0: {}
+  bignumber.js@9.0.0:
+    optional: true
 
   bignumber.js@9.1.2: {}
 
@@ -7855,7 +7877,8 @@ snapshots:
 
   buffer-indexof-polyfill@1.0.2: {}
 
-  buffer-writer@2.0.0: {}
+  buffer-writer@2.0.0:
+    optional: true
 
   buffer@5.6.0:
     dependencies:
@@ -8080,9 +8103,11 @@ snapshots:
 
   console-control-strings@1.1.0: {}
 
-  consolidate@0.15.1:
+  consolidate@0.15.1(lodash@4.17.21):
     dependencies:
       bluebird: 3.7.2
+    optionalDependencies:
+      lodash: 4.17.21
     optional: true
 
   content-disposition@0.5.4:
@@ -8130,9 +8155,9 @@ snapshots:
     dependencies:
       luxon: 3.5.0
 
-  cross-fetch@3.1.8:
+  cross-fetch@3.1.8(encoding@0.1.13):
     dependencies:
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -8223,18 +8248,25 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
+    optional: true
 
   data-view-byte-length@1.0.1:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
+    optional: true
 
   data-view-byte-offset@1.0.0:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
+    optional: true
+
+  date-fns-tz@3.2.0(date-fns@4.1.0):
+    dependencies:
+      date-fns: 4.1.0
 
   date-fns@2.30.0:
     dependencies:
@@ -8284,13 +8316,15 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.0.1
 
-  define-lazy-prop@2.0.0: {}
+  define-lazy-prop@2.0.0:
+    optional: true
 
   define-properties@1.2.1:
     dependencies:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
+    optional: true
 
   defu@6.1.4: {}
 
@@ -8306,9 +8340,9 @@ snapshots:
 
   detect-libc@2.0.3: {}
 
-  directus@10.8.2(vue@3.4.27):
+  directus@10.8.2(@types/node@22.8.4)(encoding@0.1.13)(lodash@4.17.21)(terser@5.36.0)(vue@3.3.4):
     dependencies:
-      '@directus/api': 14.1.2(vue@3.4.27)
+      '@directus/api': 14.1.2(@types/node@22.8.4)(encoding@0.1.13)(lodash@4.17.21)(terser@5.36.0)(vue@3.3.4)
       '@directus/update-check': 11.0.3
     transitivePeerDependencies:
       - '@aws-sdk/signature-v4-crt'
@@ -8527,6 +8561,7 @@ snapshots:
       typed-array-length: 1.0.6
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.15
+    optional: true
 
   es-aggregate-error@1.0.13:
     dependencies:
@@ -8538,6 +8573,7 @@ snapshots:
       globalthis: 1.0.4
       has-property-descriptors: 1.0.2
       set-function-name: 2.0.2
+    optional: true
 
   es-define-property@1.0.0:
     dependencies:
@@ -8550,18 +8586,21 @@ snapshots:
   es-object-atoms@1.0.0:
     dependencies:
       es-errors: 1.3.0
+    optional: true
 
   es-set-tostringtag@2.0.3:
     dependencies:
       get-intrinsic: 1.2.4
       has-tostringtag: 1.0.2
       hasown: 2.0.2
+    optional: true
 
   es-to-primitive@1.2.1:
     dependencies:
       is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
+    optional: true
 
   esbuild@0.17.19:
     optionalDependencies:
@@ -8807,6 +8846,7 @@ snapshots:
   for-each@0.3.3:
     dependencies:
       is-callable: 1.2.7
+    optional: true
 
   forever-agent@0.6.1:
     optional: true
@@ -8884,8 +8924,10 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       functions-have-names: 1.2.3
+    optional: true
 
-  functions-have-names@1.2.3: {}
+  functions-have-names@1.2.3:
+    optional: true
 
   gauge@3.0.2:
     dependencies:
@@ -8911,19 +8953,19 @@ snapshots:
       wide-align: 1.1.5
     optional: true
 
-  gaxios@5.1.3:
+  gaxios@5.1.3(encoding@0.1.13):
     dependencies:
       extend: 3.0.2
       https-proxy-agent: 5.0.1
       is-stream: 2.0.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  gcp-metadata@5.3.0:
+  gcp-metadata@5.3.0(encoding@0.1.13):
     dependencies:
-      gaxios: 5.1.3
+      gaxios: 5.1.3(encoding@0.1.13)
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - encoding
@@ -8950,6 +8992,7 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
+    optional: true
 
   get-tsconfig@4.8.1:
     dependencies:
@@ -8991,16 +9034,17 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       gopd: 1.0.1
+    optional: true
 
-  google-auth-library@8.9.0:
+  google-auth-library@8.9.0(encoding@0.1.13):
     dependencies:
       arrify: 2.0.1
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
       fast-text-encoding: 1.0.6
-      gaxios: 5.1.3
-      gcp-metadata: 5.3.0
-      gtoken: 6.1.2
+      gaxios: 5.1.3(encoding@0.1.13)
+      gcp-metadata: 5.3.0(encoding@0.1.13)
+      gtoken: 6.1.2(encoding@0.1.13)
       jws: 4.0.0
       lru-cache: 6.0.0
     transitivePeerDependencies:
@@ -9046,9 +9090,9 @@ snapshots:
 
   graphql@16.8.1: {}
 
-  gtoken@6.1.2:
+  gtoken@6.1.2(encoding@0.1.13):
     dependencies:
-      gaxios: 5.1.3
+      gaxios: 5.1.3(encoding@0.1.13)
       google-p12-pem: 4.0.1
       jws: 4.0.0
     transitivePeerDependencies:
@@ -9064,7 +9108,8 @@ snapshots:
       har-schema: 2.0.0
     optional: true
 
-  has-bigints@1.0.2: {}
+  has-bigints@1.0.2:
+    optional: true
 
   has-flag@3.0.0: {}
 
@@ -9081,6 +9126,7 @@ snapshots:
   has-tostringtag@1.0.2:
     dependencies:
       has-symbols: 1.0.3
+    optional: true
 
   has-unicode@2.0.1: {}
 
@@ -9137,6 +9183,7 @@ snapshots:
       debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   http-signature@1.2.0:
     dependencies:
@@ -9163,6 +9210,7 @@ snapshots:
       debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   human-signals@4.3.1: {}
 
@@ -9180,6 +9228,7 @@ snapshots:
   iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
+    optional: true
 
   icss-utils@5.1.0(postcss@8.4.47):
     dependencies:
@@ -9250,6 +9299,7 @@ snapshots:
       es-errors: 1.3.0
       hasown: 2.0.2
       side-channel: 1.0.6
+    optional: true
 
   interpret@2.2.0: {}
 
@@ -9279,6 +9329,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       get-intrinsic: 1.2.4
+    optional: true
 
   is-arrayish@0.2.1: {}
 
@@ -9287,6 +9338,7 @@ snapshots:
   is-bigint@1.0.4:
     dependencies:
       has-bigints: 1.0.2
+    optional: true
 
   is-binary-path@2.1.0:
     dependencies:
@@ -9296,12 +9348,14 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       has-tostringtag: 1.0.2
+    optional: true
 
   is-builtin-module@3.2.1:
     dependencies:
       builtin-modules: 3.3.0
 
-  is-callable@1.2.7: {}
+  is-callable@1.2.7:
+    optional: true
 
   is-core-module@2.15.1:
     dependencies:
@@ -9310,12 +9364,15 @@ snapshots:
   is-data-view@1.0.1:
     dependencies:
       is-typed-array: 1.1.13
+    optional: true
 
   is-date-object@1.0.5:
     dependencies:
       has-tostringtag: 1.0.2
+    optional: true
 
-  is-docker@2.2.1: {}
+  is-docker@2.2.1:
+    optional: true
 
   is-extglob@2.1.1: {}
 
@@ -9334,11 +9391,13 @@ snapshots:
 
   is-module@1.0.0: {}
 
-  is-negative-zero@2.0.3: {}
+  is-negative-zero@2.0.3:
+    optional: true
 
   is-number-object@1.0.7:
     dependencies:
       has-tostringtag: 1.0.2
+    optional: true
 
   is-number@7.0.0: {}
 
@@ -9352,10 +9411,12 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       has-tostringtag: 1.0.2
+    optional: true
 
   is-shared-array-buffer@1.0.3:
     dependencies:
       call-bind: 1.0.7
+    optional: true
 
   is-stream@2.0.1: {}
 
@@ -9364,14 +9425,17 @@ snapshots:
   is-string@1.0.7:
     dependencies:
       has-tostringtag: 1.0.2
+    optional: true
 
   is-symbol@1.0.4:
     dependencies:
       has-symbols: 1.0.3
+    optional: true
 
   is-typed-array@1.1.13:
     dependencies:
       which-typed-array: 1.1.15
+    optional: true
 
   is-typedarray@1.0.0:
     optional: true
@@ -9385,14 +9449,17 @@ snapshots:
   is-weakref@1.0.2:
     dependencies:
       call-bind: 1.0.7
+    optional: true
 
   is-wsl@2.2.0:
     dependencies:
       is-docker: 2.2.1
+    optional: true
 
   isarray@1.0.0: {}
 
-  isarray@2.0.5: {}
+  isarray@2.0.5:
+    optional: true
 
   isexe@2.0.0: {}
 
@@ -9423,7 +9490,8 @@ snapshots:
 
   joycon@3.1.1: {}
 
-  js-md4@0.3.2: {}
+  js-md4@0.3.2:
+    optional: true
 
   js-tokens@4.0.0: {}
 
@@ -9435,7 +9503,8 @@ snapshots:
     dependencies:
       xmlcreate: 2.0.4
 
-  jsbi@4.3.0: {}
+  jsbi@4.3.0:
+    optional: true
 
   jsbn@0.1.1:
     optional: true
@@ -9527,7 +9596,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  knex@2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0):
+  knex@2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@16.1.0):
     dependencies:
       colorette: 2.0.19
       commander: 9.5.0
@@ -9538,15 +9607,16 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql: 2.18.1
-      pg: 8.11.0
       pg-connection-string: 2.5.0
       rechoir: 0.8.0
       resolve-from: 5.0.0
-      sqlite3: 5.1.6
       tarn: 3.0.2
-      tedious: 16.1.0
       tildify: 2.0.0
+    optionalDependencies:
+      mysql: 2.18.1
+      pg: 8.11.0
+      sqlite3: 5.1.6(encoding@0.1.13)
+      tedious: 16.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -9561,12 +9631,13 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      pg: 8.11.0
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      pg: 8.11.0
     transitivePeerDependencies:
       - supports-color
 
@@ -9821,6 +9892,7 @@ snapshots:
       readable-stream: 2.3.7
       safe-buffer: 5.1.2
       sqlstring: 2.3.1
+    optional: true
 
   nanoid@3.3.7: {}
 
@@ -9830,7 +9902,8 @@ snapshots:
 
   napi-build-utils@1.0.2: {}
 
-  native-duplexpair@1.0.0: {}
+  native-duplexpair@1.0.0:
+    optional: true
 
   ndjson@2.0.0:
     dependencies:
@@ -9849,17 +9922,21 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
-  node-abort-controller@3.1.1: {}
+  node-abort-controller@3.1.1:
+    optional: true
 
-  node-addon-api@4.3.0: {}
+  node-addon-api@4.3.0:
+    optional: true
 
   node-addon-api@6.1.0: {}
 
   node-addon-api@7.1.1: {}
 
-  node-fetch@2.7.0:
+  node-fetch@2.7.0(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
+    optionalDependencies:
+      encoding: 0.1.13
 
   node-forge@1.3.1: {}
 
@@ -9896,9 +9973,9 @@ snapshots:
 
   node-xmllint@1.0.0: {}
 
-  nodemailer-mailgun-transport@2.1.5:
+  nodemailer-mailgun-transport@2.1.5(lodash@4.17.21):
     dependencies:
-      consolidate: 0.15.1
+      consolidate: 0.15.1(lodash@4.17.21)
       form-data: 4.0.1
       mailgun.js: 8.2.2
     transitivePeerDependencies:
@@ -10009,7 +10086,8 @@ snapshots:
 
   object-inspect@1.13.2: {}
 
-  object-keys@1.1.1: {}
+  object-keys@1.1.1:
+    optional: true
 
   object.assign@4.1.5:
     dependencies:
@@ -10017,6 +10095,7 @@ snapshots:
       define-properties: 1.2.1
       has-symbols: 1.0.3
       object-keys: 1.1.1
+    optional: true
 
   oidc-token-hash@5.0.3: {}
 
@@ -10045,6 +10124,7 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    optional: true
 
   openapi3-ts@4.1.2:
     dependencies:
@@ -10131,7 +10211,8 @@ snapshots:
 
   p-timeout@5.1.0: {}
 
-  packet-reader@1.0.0: {}
+  packet-reader@1.0.0:
+    optional: true
 
   pako@1.0.11: {}
 
@@ -10178,15 +10259,19 @@ snapshots:
 
   pg-connection-string@2.6.2: {}
 
-  pg-connection-string@2.7.0: {}
+  pg-connection-string@2.7.0:
+    optional: true
 
-  pg-int8@1.0.1: {}
+  pg-int8@1.0.1:
+    optional: true
 
   pg-pool@3.7.0(pg@8.11.0):
     dependencies:
       pg: 8.11.0
+    optional: true
 
-  pg-protocol@1.7.0: {}
+  pg-protocol@1.7.0:
+    optional: true
 
   pg-types@2.2.0:
     dependencies:
@@ -10195,6 +10280,7 @@ snapshots:
       postgres-bytea: 1.0.0
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
+    optional: true
 
   pg@8.11.0:
     dependencies:
@@ -10207,10 +10293,12 @@ snapshots:
       pgpass: 1.0.5
     optionalDependencies:
       pg-cloudflare: 1.1.1
+    optional: true
 
   pgpass@1.0.5:
     dependencies:
       split2: 4.2.0
+    optional: true
 
   picocolors@1.1.1: {}
 
@@ -10218,11 +10306,11 @@ snapshots:
 
   picomatch@4.0.2: {}
 
-  pinia@2.2.5(vue@3.4.27):
+  pinia@2.2.5(vue@3.3.4):
     dependencies:
       '@vue/devtools-api': 6.6.4
-      vue: 3.4.27
-      vue-demi: 0.14.10(vue@3.4.27)
+      vue: 3.3.4
+      vue-demi: 0.14.10(vue@3.3.4)
 
   pino-abstract-transport@0.4.0:
     dependencies:
@@ -10314,7 +10402,8 @@ snapshots:
     dependencies:
       find-up: 6.3.0
 
-  possible-typed-array-names@1.0.0: {}
+  possible-typed-array-names@1.0.0:
+    optional: true
 
   postcss-calc@8.2.4(postcss@8.4.47):
     dependencies:
@@ -10498,15 +10587,19 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postgres-array@2.0.0: {}
+  postgres-array@2.0.0:
+    optional: true
 
-  postgres-bytea@1.0.0: {}
+  postgres-bytea@1.0.0:
+    optional: true
 
-  postgres-date@1.0.7: {}
+  postgres-date@1.0.7:
+    optional: true
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+    optional: true
 
   prebuild-install@7.1.2:
     dependencies:
@@ -10563,7 +10656,8 @@ snapshots:
 
   punycode@1.4.1: {}
 
-  punycode@2.3.1: {}
+  punycode@2.3.1:
+    optional: true
 
   qs@6.11.0:
     dependencies:
@@ -10629,6 +10723,7 @@ snapshots:
       safe-buffer: 5.1.2
       string_decoder: 1.1.1
       util-deprecate: 1.0.2
+    optional: true
 
   readable-stream@2.3.8:
     dependencies:
@@ -10682,6 +10777,7 @@ snapshots:
       define-properties: 1.2.1
       es-errors: 1.3.0
       set-function-name: 2.0.2
+    optional: true
 
   request@2.88.2:
     dependencies:
@@ -10845,6 +10941,7 @@ snapshots:
       get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       isarray: 2.0.5
+    optional: true
 
   safe-buffer@5.1.2: {}
 
@@ -10855,6 +10952,7 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-regex: 1.1.4
+    optional: true
 
   safe-stable-stringify@2.5.0: {}
 
@@ -10946,6 +11044,7 @@ snapshots:
       es-errors: 1.3.0
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.2
+    optional: true
 
   setimmediate@1.0.5: {}
 
@@ -11054,11 +11153,12 @@ snapshots:
 
   split2@4.2.0: {}
 
-  sprintf-js@1.1.3: {}
+  sprintf-js@1.1.3:
+    optional: true
 
-  sqlite3@5.1.6:
+  sqlite3@5.1.6(encoding@0.1.13):
     dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
+      '@mapbox/node-pre-gyp': 1.0.11(encoding@0.1.13)
       node-addon-api: 4.3.0
       tar: 6.2.1
     optionalDependencies:
@@ -11067,8 +11167,10 @@ snapshots:
       - bluebird
       - encoding
       - supports-color
+    optional: true
 
-  sqlstring@2.3.1: {}
+  sqlstring@2.3.1:
+    optional: true
 
   ssf@0.11.2:
     dependencies:
@@ -11151,18 +11253,21 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-object-atoms: 1.0.0
+    optional: true
 
   string.prototype.trimend@1.0.8:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+    optional: true
 
   string.prototype.trimstart@1.0.8:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+    optional: true
 
   string_decoder@0.10.31: {}
 
@@ -11283,12 +11388,13 @@ snapshots:
       sprintf-js: 1.1.3
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
-  teeny-request@8.0.3:
+  teeny-request@8.0.3(encoding@0.1.13):
     dependencies:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       stream-events: 1.0.5
       uuid: 9.0.0
     transitivePeerDependencies:
@@ -11381,6 +11487,7 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-typed-array: 1.1.13
+    optional: true
 
   typed-array-byte-length@1.0.1:
     dependencies:
@@ -11389,6 +11496,7 @@ snapshots:
       gopd: 1.0.1
       has-proto: 1.0.3
       is-typed-array: 1.1.13
+    optional: true
 
   typed-array-byte-offset@1.0.2:
     dependencies:
@@ -11398,6 +11506,7 @@ snapshots:
       gopd: 1.0.1
       has-proto: 1.0.3
       is-typed-array: 1.1.13
+    optional: true
 
   typed-array-length@1.0.6:
     dependencies:
@@ -11407,6 +11516,7 @@ snapshots:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
+    optional: true
 
   typedarray@0.0.7: {}
 
@@ -11416,6 +11526,7 @@ snapshots:
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
+    optional: true
 
   undici-types@6.19.8: {}
 
@@ -11504,25 +11615,29 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.4.1
 
-  vite@4.3.7:
+  vite@4.3.7(@types/node@22.8.4)(terser@5.36.0):
     dependencies:
       esbuild: 0.17.19
       postcss: 8.4.47
       rollup: 3.22.0
     optionalDependencies:
+      '@types/node': 22.8.4
       fsevents: 2.3.3
+      terser: 5.36.0
 
-  vite@4.5.2:
+  vite@4.5.2(@types/node@22.8.4)(terser@5.36.0):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.47
       rollup: 3.29.4
     optionalDependencies:
+      '@types/node': 22.8.4
       fsevents: 2.3.3
+      terser: 5.36.0
 
-  vue-demi@0.14.10(vue@3.4.27):
+  vue-demi@0.14.10(vue@3.3.4):
     dependencies:
-      vue: 3.4.27
+      vue: 3.3.4
 
   vue-router@4.2.0(vue@3.3.4):
     dependencies:
@@ -11568,6 +11683,7 @@ snapshots:
       is-number-object: 1.0.7
       is-string: 1.0.7
       is-symbol: 1.0.4
+    optional: true
 
   which-typed-array@1.1.15:
     dependencies:
@@ -11576,6 +11692,7 @@ snapshots:
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.2
+    optional: true
 
   which@2.0.2:
     dependencies:
@@ -11639,7 +11756,8 @@ snapshots:
 
   xpath@0.0.32: {}
 
-  xtend@4.0.2: {}
+  xtend@4.0.2:
+    optional: true
 
   yallist@4.0.0: {}
 

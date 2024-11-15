@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
 import { IUjianRequest } from "@/types/collection/ujian.type";
 import React from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import UjianForm from "../components/UjianForm";
 import useMutateUjian from "../hooks/useMutateUjian";
 import { useNavigate } from "react-router-dom";
 import SuccessDialog from "@/components/success-dialog";
+import { addHours } from "date-fns";
 
 const UjianCreatePages: React.FC = () => {
   const form = useForm();
+  const { setValue } = form;
   const [confirmationDialog, setConfirmationDialog] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigation = useNavigate();
@@ -21,10 +23,28 @@ const UjianCreatePages: React.FC = () => {
       setIsSuccess(true);
       setConfirmationDialog(false);
     },
+    onError: () => {
+      console.log("errr");
+    },
   });
 
+  const startTime = useWatch({
+    control: form.control,
+    name: "start_time",
+  });
+
+  React.useEffect(() => {
+    if (startTime) {
+      setValue("end_time", addHours(new Date(startTime), 2));
+    }
+  }, [startTime, setValue]);
+
   const onSubmit = (data: IUjianRequest) => {
-    mutate(data);
+    mutate({
+      ...data,
+      start_time: addHours(new Date(data.start_time), 7), // force to GMT + 7
+      end_time: addHours(new Date(data.end_time), 7), // force to GMT + 7
+    });
   };
 
   return (

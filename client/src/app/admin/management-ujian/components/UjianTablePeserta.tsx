@@ -1,5 +1,4 @@
 import UjianPIN from "@/app/admin/management-ujian/components/UjianPIN";
-import useGetUserUjian from "@/app/admin/management-ujian/hooks/useGetUserUjian";
 import useMutatePinUjian from "@/app/admin/management-ujian/hooks/useMutatePinUjian";
 import useGetDetailManajemenUjian from "@/app/admin/management-ujian/hooks/useGetDetailManagementUjian";
 import { DataTable } from "@/components/data-table";
@@ -12,11 +11,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { IUser } from "@/types/collection/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Lock } from "lucide-react";
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
+import useGetUserSessionTestQueries, {
+  IUserSessionTest,
+} from "../../management-peserta/hooks/useGetUserSessionTestQueries";
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
@@ -51,11 +52,19 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     },
   });
   const { data: sessionDetail } = useGetDetailManajemenUjian(sessionId);
-  const { data: dataUser, isLoading: isLoadingUser } = useGetUserUjian({
-    page: page,
-    limit: limit,
-    search: search,
-  });
+
+  const { data: dataUser, isLoading: isLoadingUser } =
+    useGetUserSessionTestQueries({
+      page,
+      limit,
+      sessionId: sessionId ? String(sessionId) : null,
+      search,
+    });
+
+  if (!dataUser) {
+    return null;
+  }
+
   const handleSearchChange = (searchTerm: string) => {
     setSearch(searchTerm);
     setPage(1);
@@ -78,14 +87,16 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   // TODO: UNCOMMENT THIS IF USERS RETRIVE ARRAY
   const handleCheckAll = (bool: boolean) => {
     if (bool) {
-      setStudentVal(dataUser?.data?.map((item) => item.id));
+      setStudentVal(
+        dataUser?.data?.data?.map((item) => item?.info_peserta?.code)
+      );
     } else {
       setStudentVal([]);
     }
   };
 
   const getCheckAll = () => {
-    return studentVal.length === dataUser?.data?.length;
+    return studentVal.length === dataUser?.data?.data?.length;
   };
 
   //check if pin exists
@@ -104,7 +115,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     }
   };
 
-  const columns: ColumnDef<IUser>[] = [
+  const columns: ColumnDef<IUserSessionTest>[] = [
     {
       id: "select",
       header: () => (
@@ -118,9 +129,9 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       ),
       cell: ({ row }) => (
         <Checkbox
-          checked={getCheckValue(row.original.id)}
+          checked={getCheckValue(row.original?.info_peserta?.code)}
           onCheckedChange={(value) => {
-            handleCheckValue(row.original.id, !!value);
+            handleCheckValue(row.original?.info_peserta?.code, !!value);
           }}
           aria-label="Select row"
         />
@@ -129,20 +140,12 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       enableHiding: false,
     },
     {
-      accessorKey: "id",
+      accessorKey: "info_peserta.code",
       header: "ID Peserta",
-      cell: ({ row }) => {
-        const id = row.original.id;
-        return id;
-      },
     },
     {
-      accessorKey: "name",
+      accessorKey: "info_peserta.nama_peserta",
       header: "Nama Peserta",
-      cell: ({ row }) => {
-        const nama = row.original.first_name + " " + row.original.last_name;
-        return nama;
-      },
     },
   ];
 
@@ -211,12 +214,12 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
                     : "Generate PIN Ujian"
                   : "Pilih Peserta"
               }
-              data={dataUser?.data || []}
+              data={dataUser?.data?.data || []}
               columns={columns}
               isLoading={isLoadingUser}
               pagination={{
                 pageSize: limit,
-                totalItems: dataUser?.meta.filter_count,
+                totalItems: dataUser?.data?.meta.filter_count,
                 onPageChange: (page) => setPage(page),
                 currentPage: page,
               }}

@@ -76,7 +76,7 @@ export function VideotronTable<TData, TValue>({
         </div>
       ) : (
         <>
-          <Table ref={containerRef} height="100%">
+          <Table refContainer={containerRef} height="100%">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

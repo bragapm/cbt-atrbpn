@@ -1,4 +1,5 @@
 import { authMiddleware } from "../middleware/auth";
+import { formatInTimeZone } from "date-fns-tz";
 
 export default (router, { services }) => {
   const { ItemsService } = services;
@@ -9,7 +10,7 @@ export default (router, { services }) => {
         schema: req.schema,
       });
 
-      const currentTime = new Date(); // Get the current time
+      const currentTime = new Date(new Date().getTime() - 7 * 60 * 60 * 1000); // Get the current time
 
       // Fetch user test sessions where session.end_time > current time and end_attempt_at is null
       const userSessions = await userSessionService.readByQuery({
@@ -89,13 +90,34 @@ export default (router, { services }) => {
       }
 
       // Update start_attempt_at and updated_at
+
+      const timezone = "Asia/Jakarta";
       const now = new Date();
 
-      // Parse the session start_time and end_time
-      const sessionStartTime = new Date(session.session.start_time);
-      const sessionEndTime = new Date(session.session.end_time);
+      const sessionStartTime = new Date(
+        new Date(session.session.start_time).getTime() - 7 * 60 * 60 * 1000
+      );
+      const sessionEndTime = new Date(
+        new Date(session.session.end_time).getTime() - 7 * 60 * 60 * 1000
+      );
 
-      // Check if the current time is within the start and end time of the session
+      // Format the dates in Asia/Jakarta timezone
+      const nowFormatted = formatInTimeZone(
+        now,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+      const sessionStartTimeFormatted = formatInTimeZone(
+        sessionStartTime,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+      const sessionEndTimeFormatted = formatInTimeZone(
+        sessionEndTime,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+
       if (now < sessionStartTime || now > sessionEndTime) {
         return res.status(500).json({
           status: "error",
@@ -110,8 +132,8 @@ export default (router, { services }) => {
           data: {
             session_test_id: session.id,
             start_attempt_at: session.start_attempt_at,
-            start_time: session.start_time,
-            end_time: session.end_time,
+            start_time: sessionStartTimeFormatted,
+            end_time: sessionEndTimeFormatted,
             problems: session.problems,
           },
         });
@@ -129,8 +151,8 @@ export default (router, { services }) => {
           session_test_id: session.id,
           start_attempt_at: now,
           problems: session.problems,
-          start_time: session.start_time,
-          end_time: session.end_time,
+          start_time: sessionStartTimeFormatted,
+          end_time: sessionEndTimeFormatted,
         },
       });
     } catch (error) {
