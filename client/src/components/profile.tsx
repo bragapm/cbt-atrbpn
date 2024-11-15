@@ -9,6 +9,7 @@ import {
 import { RESOLVE_ROLE } from "@/constants/ROLE";
 import useLogoutUser from "@/hooks/useLogoutUser";
 import { IUser } from "@/types/collection/user.type";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type IProfile = {
   data: IUser;
@@ -16,6 +17,15 @@ type IProfile = {
 
 const Profile: React.FC<IProfile> = ({ data }) => {
   const { mutate: logoutUser } = useLogoutUser();
+  const user = localStorage.getItem("username");
+  const loc = useLocation();
+  const isPageUser = loc.pathname.includes("/exam");
+  const navigate = useNavigate();
+
+  const handleLogoutUser = () => {
+    localStorage.clear();
+    navigate("/exam/login");
+  };
 
   const getFirstName = () => {
     return data?.first_name[0];
@@ -33,7 +43,7 @@ const Profile: React.FC<IProfile> = ({ data }) => {
             <div className="flex gap-3">
               <p className="text-sm font-light">{getRoleName()}</p>
               <p className="text-sm">
-                {data?.first_name} {data?.last_name}
+                {isPageUser ? user : data?.first_name + " " + data?.last_name}
               </p>
             </div>
 
@@ -43,7 +53,15 @@ const Profile: React.FC<IProfile> = ({ data }) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={() => logoutUser()}>
+          <DropdownMenuItem
+            onClick={() => {
+              if (isPageUser) {
+                handleLogoutUser();
+              } else {
+                logoutUser();
+              }
+            }}
+          >
             Logout
           </DropdownMenuItem>
         </DropdownMenuContent>

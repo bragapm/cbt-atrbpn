@@ -93,7 +93,7 @@ const ExamCbtPage = () => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <RemainingTime endTime={remaintime} />
+        <RemainingTime dataObj={dataCbt} />
         <ListQuestionNumbers
           selectSoal={selectSoal}
           setSelectSoal={handleclickSoal}
