@@ -16,7 +16,7 @@ const FinishExam: FC = () => {
   const handleSendFeedBack = () => {
     const obj = {
       user_session_id: Number(sesiId),
-      feedback: "",
+      feedback: feedback,
     };
     finishExam(obj);
   };
