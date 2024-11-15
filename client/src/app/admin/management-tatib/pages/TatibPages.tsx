@@ -45,7 +45,7 @@ const TatibPages: FC = () => {
     formData.append("file", file);
     if (fileTatib?.data) {
       formData.append("name", fileTatib?.data?.data[0].name);
-      formData.append("file_link", fileTatib?.data?.data[0].file_link);
+      // formData.append("file_link", fileTatib?.data?.data[0].file_link);
       patchFile({ data: formData, id: fileTatib?.data?.data[0].id });
     } else {
       formData.append("name", "tatib");

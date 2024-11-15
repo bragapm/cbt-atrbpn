@@ -16,7 +16,7 @@ const QuestionDetail: FC<IQuestion> = ({
   handlePrevQuestion,
 }) => {
   return (
-    <div className="w-full bg-white/80 border rounded-[16px] p-3 grid gap-3">
+    <div className="w-full bg-white/80 border rounded-[16px] p-3 flex flex-col gap-3">
       <div className="flex justify-between h-fit items-center">
         <div className="flex gap-2 items-center">
           <div
@@ -52,7 +52,7 @@ const QuestionDetail: FC<IQuestion> = ({
         </>
       ) : question ? (
         <div
-          className="p-2 rounded-lg border bg-white max-h-64 overflow-auto"
+          className="p-2 rounded-lg border bg-white max-h-64 overflow-auto flex-1"
           dangerouslySetInnerHTML={{ __html: question }}
         ></div>
       ) : (

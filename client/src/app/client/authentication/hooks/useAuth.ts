@@ -12,6 +12,7 @@ interface IAuthToken {
   access_token: string;
   expires: number;
   refresh_token: string;
+  full_name:string
 }
 
 export type IAuthUserRequest = z.infer<typeof formAuthUser>;
@@ -31,6 +32,7 @@ const useAuth = ({ onSuccess, onError }: IUseAuthUser) => {
     onSuccess: (response: AxiosResponse<{ data: IAuthToken }>) => {
       setUserToken(response?.data?.data?.access_token)
       localStorage.setItem("refresh_token_user", response?.data?.data?.refresh_token)
+      localStorage.setItem("username", response?.data?.data?.full_name)
       onSuccess?.();
     },
     onError: (error: AxiosError<any>) => {

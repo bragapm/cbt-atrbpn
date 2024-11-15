@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 
 interface IListQuestion {
   selectSoal: any;
@@ -26,9 +26,9 @@ const ListQuestionNumbers: FC<IListQuestion> = ({
       <p className="text-primary font-medium">Navigasi Nomer Soal</p>
       <div className="flex-1">
         <div className="flex flex-wrap gap-2 ">
-          {listSoal?.map((value, idx) => (
+          {listSoal?.slice(0, 100)?.map((value, idx) => (
             <div
-              key={value}
+              key={idx}
               onClick={() => {
                 if (!isloading) {
                   setSelectSoal(value, idx + 1);
