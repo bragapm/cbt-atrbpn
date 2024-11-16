@@ -9,6 +9,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import UjianForm from "../components/UjianForm";
 import useMutateUpdateUjian from "../hooks/useMutateUpdateUjian";
+import { addHours } from "date-fns";
 
 const UjianEditPage: React.FC = () => {
   const { id } = useParams();
@@ -26,7 +27,12 @@ const UjianEditPage: React.FC = () => {
 
   const onSubmit = (data: IUjianRequest) => {
     if (id) {
-      updateUjian({ ...data, id });
+      updateUjian({
+        ...data,
+        start_time: addHours(new Date(data.start_time), 7),
+        end_time: addHours(new Date(data.end_time), 7),
+        id,
+      });
     }
   };
 

@@ -12,6 +12,7 @@ import { IUjian } from "@/types/collection/ujian.type";
 import { useNavigate } from "react-router-dom";
 import { PaginationTableProps } from "@/components/table-pagination";
 import useDeleteMutationUjian from "../hooks/useDeleteMutationUjian";
+import { format } from "date-fns";
 
 type IUjianTable = {
   data: IUjian[];
@@ -68,11 +69,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       cell: ({ row }) => {
         const tanggalUjian = row.original.start_time;
         const date = new Date(tanggalUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
+        const formattedDate = format(date, "dd/MM/yyyy");
 
         return formattedDate;
       },
@@ -83,11 +80,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       cell: ({ row }) => {
         const mulaiUjian = row.original.start_time;
         const date = new Date(mulaiUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
+        const formattedDate = format(date, "HH:mm:ss");
 
         return formattedDate;
       },
@@ -98,11 +91,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       cell: ({ row }) => {
         const selesaiUjian = row.original.end_time;
         const date = new Date(selesaiUjian);
-        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
-          date.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}/${date.getFullYear()}`;
+        const formattedDate = format(date, "HH:mm:ss");
 
         return formattedDate;
       },

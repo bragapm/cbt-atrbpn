@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { FC, useEffect, useState } from "react";
+import { differenceInMilliseconds, format } from "date-fns";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface IjadwalCard {
@@ -36,6 +37,22 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
     }
   }, [data]);
 
+  const duration = useMemo(() => {
+    if (!data.start_time || !data.end_time) return null; // Jika waktu tidak valid, return null
+
+    const durationInMilliseconds = differenceInMilliseconds(
+      new Date(data.end_time),
+      new Date(data.start_time)
+    );
+
+    const durationInSeconds = Math.floor(durationInMilliseconds / 1000);
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const seconds = durationInSeconds % 60;
+
+    return { hours, minutes, seconds };
+  }, [data.start_time, data.end_time]);
+
   return (
     <div className="bg-white border rounded-lg px-5 py-4 text-xs flex flex-col justify-between w-full">
       <div
@@ -46,9 +63,7 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
       <div className="flex items-center justify-between">
         {StartEndTime(
           "Mulai",
-          new Date(data.start_time).getHours() +
-            " : " +
-            new Date(data.start_time).getMinutes(),
+          format(new Date(data.start_time), "HH:mm"),
           new Date(data.start_time).toDateString()
         )}
         <div className="bg-white shadow-md rounded-full border border-gray-50 p-3">
@@ -59,9 +74,7 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
         </div>
         {StartEndTime(
           "Selesai",
-          new Date(data.end_time).getHours() +
-            " : " +
-            new Date(data.end_time).getMinutes(),
+          format(new Date(data.end_time), "HH:mm"),
           new Date(data.end_time).toDateString()
         )}
       </div>
@@ -78,7 +91,11 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
         </div>
         <div>
           <p>Durasi</p>
-          <p className="text-sm font-bold">60 Menit</p>
+          <p className="text-sm font-bold">
+            {duration.hours > 0 && `${duration.hours} jam`}
+            {duration.minutes > 0 && `, ${duration.minutes} menit`}
+            {duration.seconds > 0 && `, ${duration.seconds} detik`}
+          </p>
         </div>
       </div>
       <div className="pt-4">
