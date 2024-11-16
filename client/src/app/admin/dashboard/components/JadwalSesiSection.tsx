@@ -30,8 +30,6 @@ const JadwalSesiSection = () => {
   const [filter, setFilter] = useState(new Date().toISOString().slice(0, 10));
   const totalPages = 50;
 
-  console.log(filter);
-
   const { data } = useGetJadwalSesi({
     page: currentPage,
     limit: 2,
