@@ -36,10 +36,13 @@ const Dashboardpage: React.FC = () => {
       <div className="bg-[#2A6083] w-full rounded-2xl py-4 flex flex-col gap-8 text-white">
         <div className=" flex justify-between items-center  px-6">
           <div>
-            <p className="text-[32px]">Hallo, {currentUser?.data?.first_name + " " + currentUser?.data?.last_name}</p>
-            <p className="text-base">
-              Selamat Datang di Dashboard Super Admin manis{" "}
+            <p className="text-[32px]">
+              Hallo,{" "}
+              {currentUser?.data?.first_name +
+                " " +
+                currentUser?.data?.last_name}
             </p>
+            <p className="text-base">Selamat Datang di Dashboard CBT PPAT</p>
           </div>
           <div>
             <Button className="bg-[#8CBAC7] text-white py-5">
