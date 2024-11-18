@@ -5,6 +5,7 @@ interface IQuestion {
   loading: boolean;
   question: any;
   noSoal: number;
+  category: string;
   handleNextQuestion: () => void;
   handlePrevQuestion: () => void;
 }
@@ -12,6 +13,7 @@ const QuestionDetail: FC<IQuestion> = ({
   loading,
   question,
   noSoal,
+  category,
   handleNextQuestion,
   handlePrevQuestion,
 }) => {

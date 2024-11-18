@@ -144,7 +144,7 @@ const JadwalSesiSection = () => {
                 </div>
               )}
             </div>
-            <div className="p-4 col-span-2 border rounded-lg text-xs flex flex-col gap-2 overflow-auto max-h-[300px]">
+            <div className="p-4 col-span-2 border rounded-lg text-xs flex flex-col gap-2">
               <p>Materi Soal</p>
               {materisoal?.data ? (
                 materisoal?.data?.data?.map((el, idx) => (
