@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RESOLVE_ROLE } from "@/constants/ROLE";
 import useLogoutUser from "@/hooks/useLogoutUser";
+import { getAccessToken } from "@/midlewares/token";
 import { IUser } from "@/types/collection/user.type";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,6 +22,7 @@ const Profile: React.FC<IProfile> = ({ data }) => {
   const loc = useLocation();
   const isPageUser = loc.pathname.includes("/exam");
   const navigate = useNavigate();
+  const accessToken = getAccessToken();
 
   const handleLogoutUser = () => {
     localStorage.clear();
@@ -43,10 +45,13 @@ const Profile: React.FC<IProfile> = ({ data }) => {
             <div className="flex gap-3">
               <p className="text-sm font-light">{getRoleName()}</p>
               <p className="text-sm">
-                {isPageUser ? user : data?.first_name + " " + data?.last_name}
+                {isPageUser
+                  ? user
+                  : data
+                  ? data.first_name + " " + data.last_name
+                  : ""}
               </p>
             </div>
-
             <div className="w-10 h-10 bg-primary justify-center items-center flex p-4 rounded-full">
               <p className="text-white text-base font-bold">{getFirstName()}</p>
             </div>

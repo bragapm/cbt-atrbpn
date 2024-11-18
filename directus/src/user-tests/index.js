@@ -1,5 +1,7 @@
 import { authMiddleware } from "../middleware/auth";
 
+import crypto from "crypto";
+
 export default (router, { services }) => {
   const { ItemsService, AuthenticationService } = services;
 
@@ -9,6 +11,10 @@ export default (router, { services }) => {
 
     try {
       const questionsService = new ItemsService("questions_bank", {
+        schema: req.schema,
+      });
+
+      const materiService = new ItemsService("materi_soal", {
         schema: req.schema,
       });
 
@@ -26,6 +32,8 @@ export default (router, { services }) => {
         throw new Error("Problems not found");
       }
 
+      const materi = await materiService.readOne(problem.materi_id);
+
       // Fetch answer choices (options) for the problem
       let answerChoices = await optionsService.readByQuery({
         filter: { question_id: problemID },
@@ -37,7 +45,17 @@ export default (router, { services }) => {
 
       // Check if options should be randomized
       if (problem.random_options) {
-        answerChoices = answerChoices.sort(() => Math.random() - 0.5); // Randomize order
+        const seed = crypto
+          .createHash("sha256")
+          .update(userTestID + problemID)
+          .digest("hex");
+        const random = (s) => {
+          let x = parseInt(s.slice(0, 8), 16);
+          return () => (x = (x * 9301 + 49297) % 233280) / 233280;
+        };
+
+        const seededRandom = random(seed);
+        answerChoices = answerChoices.sort(() => seededRandom() - 0.5);
       }
 
       const submittedAnswers = await userTestService.readByQuery({
@@ -47,6 +65,7 @@ export default (router, { services }) => {
 
       const response = {
         problem_id: problem.id,
+        category_name: materi ? materi.materi : null,
         question: problem.question,
         answerChoices: answerChoices.map((option) => ({
           text: option.option_text,
@@ -76,7 +95,14 @@ export default (router, { services }) => {
     async (req, res) => {
       const userSessionId = req.params.user_session_id;
       const { problem_id, answer_id } = req.body;
-      const user = req.user;
+
+      if (!problem_id || !answer_id || !userSessionId) {
+        return res.status(400).json({
+          status: "error",
+          message:
+            "Invalid payload: Missing problem_id, answer_id, or user_session_id.",
+        });
+      }
 
       try {
         const userTestService = new ItemsService("user_test", {
@@ -95,6 +121,7 @@ export default (router, { services }) => {
         // Check if the answer already exists for the given session and problem
         const existingAnswer = await userTestService.readByQuery({
           filter: { user_session_id: userSessionId, problem: problem_id },
+          limit: 1,
         });
 
         // Retrieve problem details to get the category ID
@@ -106,35 +133,23 @@ export default (router, { services }) => {
         if (!category) throw new Error("Category not found");
 
         // Check if the selected answer is correct
-        let answerOption;
-        let isCorrect;
-        if (answer_id !== "0") {
-          answerOption = await optionsService.readOne(answer_id);
-          isCorrect = answerOption ? answerOption.is_correct : false;
-        }
+        const answerOption =
+          answer_id !== "0" ? await optionsService.readOne(answer_id) : null;
+        const isCorrect = answerOption ? answerOption.is_correct : false;
 
-        // Set score_summary and score based on the answer's correctness
-        let score_category;
-        let score;
+        // Calculate score
+        const { score_category, score } = calculateScore(
+          answer_id,
+          isCorrect,
+          category
+        );
 
-        if (answer_id === "0") {
-          score_category = 0;
-          score = category.tidak_menjawab;
-        } else if (isCorrect) {
-          score_category = 1;
-          score = category.bobot_benar;
-        } else {
-          score_category = -1;
-          score = category.bobot_salah;
-        }
-
-        // Update or create the answer record in the user_test table
+        // Update or create the answer record
         const now = new Date();
-        let result;
 
         if (!existingAnswer.length) {
-          result = await userTestService.createOne({
-            user: user,
+          // Create new answer record
+          await userTestService.createOne({
             user_session_id: userSessionId,
             problem: problem_id,
             answer: answer_id,
@@ -144,24 +159,31 @@ export default (router, { services }) => {
             updated_at: now,
           });
 
-          res.json({
+          return res.json({
             status: "success",
-            data: result,
           });
-
-          return;
         }
         const answerRecordId = existingAnswer[0].id;
-        result = await userTestService.updateOne(answerRecordId, {
+
+        if (answer_id === "0") {
+          // Delete record if no answer is provided
+          await userTestService.deleteOne(answerRecordId);
+          return res.json({
+            status: "success",
+          });
+        }
+
+        await userTestService.updateOne(answerRecordId, {
+          user_session_id: userSessionId,
+          problem: problem_id,
           answer: answer_id === "0" ? null : answer_id,
           score_category,
           score,
           updated_at: now,
-          deleted_at: answer_id === "0" ? now : null,
         });
+
         res.json({
           status: "success",
-          data: result,
         });
       } catch (err) {
         res.status(500).json({
@@ -171,4 +193,13 @@ export default (router, { services }) => {
       }
     }
   );
+};
+
+// Helper function for score calculation
+const calculateScore = (answerId, isCorrect, category) => {
+  if (answerId === "0")
+    return { score_category: 0, score: category.tidak_menjawab };
+  return isCorrect
+    ? { score_category: 1, score: category.bobot_benar }
+    : { score_category: -1, score: category.bobot_salah };
 };
