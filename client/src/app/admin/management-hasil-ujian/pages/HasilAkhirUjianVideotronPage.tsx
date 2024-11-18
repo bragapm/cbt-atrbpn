@@ -20,7 +20,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page: 1,
     limit: 100,
-    sessionId: sessionIdSelected,
+    sessionId: "1",
   });
 
   const { data: sessionTest } = useGetSessionTestQueries();
