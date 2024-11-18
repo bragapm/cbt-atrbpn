@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RESOLVE_ROLE } from "@/constants/ROLE";
 import useLogoutUser from "@/hooks/useLogoutUser";
+import { getAccessToken } from "@/midlewares/token";
 import { IUser } from "@/types/collection/user.type";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,6 +22,7 @@ const Profile: React.FC<IProfile> = ({ data }) => {
   const loc = useLocation();
   const isPageUser = loc.pathname.includes("/exam");
   const navigate = useNavigate();
+  const accessToken = getAccessToken();
 
   const handleLogoutUser = () => {
     localStorage.clear();
@@ -34,6 +36,8 @@ const Profile: React.FC<IProfile> = ({ data }) => {
   const getRoleName = () => {
     return RESOLVE_ROLE[data?.role];
   };
+
+  // console.log(accessToken);
 
   return (
     <>

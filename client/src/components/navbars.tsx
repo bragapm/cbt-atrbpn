@@ -10,6 +10,8 @@ const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
     enabled: !!accessToken,
   });
 
+  console.log(currentUser);
+
   if (variant === "admin") {
     return (
       <div className="w-full h-[80px] p-5 fixed z-[50]">

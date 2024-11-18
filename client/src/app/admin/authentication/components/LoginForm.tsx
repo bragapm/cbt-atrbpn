@@ -14,6 +14,7 @@ import useAuthentication from "../hooks/useAuthentication";
 import { formSchemaAuth, IAuthenticationRequest } from "../types/auth.type";
 import { useState } from "react";
 import ErrorDialog from "@/components/error-dialog";
+import MemoLoader from "@/components/ui/Loader";
 
 const LoginForm = () => {
   const [errorDialog, setErrorDialog] = useState<string>("");
@@ -91,7 +92,11 @@ const LoginForm = () => {
           onClick={form.handleSubmit(onSubmit)}
           isLoading={isLoading}
         >
-          Sign In
+          {isLoading ? (
+            <MemoLoader width={30} height={30} color={"#2A6083"} />
+          ) : (
+            "  Sign In"
+          )}
         </Button>
       </div>
     </Form>
