@@ -42,7 +42,6 @@ const BankSoalForm: React.FC = () => {
   const { id } = useParams();
 
   const { data, isLoading, isError } = useGetBankSoalPreview(id);
-
   const handleFileUpload = async (file: File | null) => {
     if (!file) return;
 
@@ -109,24 +108,28 @@ const BankSoalForm: React.FC = () => {
 
       form.setValue(
         "random_question",
-        data?.questionBank?.data?.random_question ? "true" : "false"
+        data?.questionBank?.data?.is_required ? "true" : "false"
       );
       form.setValue(
         "random_options",
         data.questionBank.data.random_options ? "true" : "false"
       );
       form.setValue("question", data.questionBank.data.question);
+  
+      const questionChoices =
+        data.questionBank.data.random_options
+          ? data.questionChoices.data
+          : data.questionChoices.data?.slice().sort((a, b) => a.order - b.order);
+  
       form.setValue(
         "choice",
-        data.questionChoices.data?.map((item) => {
-          return {
-            question_id: item.question_id,
-            option_text: item.option_text,
-            is_correct: item.is_correct,
-            order: item.order,
-            option_image: item.option_image,
-          };
-        })
+        questionChoices?.map((item) => ({
+          question_id: item.question_id,
+          option_text: item.option_text,
+          is_correct: item.is_correct,
+          order: item.order,
+          option_image: item.option_image,
+        }))
       );
     }
   }, [id, data, dataMateri, dataKategori]);

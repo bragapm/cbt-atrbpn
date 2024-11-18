@@ -4,9 +4,8 @@ import StatistikHasil from "../components/StatistikHasil";
 import StatistikJadwal from "../components/StatistikJadwal";
 import React from "react";
 import useGetTotal from "../hooks/useGetTotal";
-import { getAccessToken } from "@/midlewares/token";
 import useGetCurrentUser from "@/hooks/useGetCurrentUser";
-
+import { getAccessToken } from "@/midlewares/token";
 const Dashboardpage: React.FC = () => {
   const { data } = useGetTotal();
   const accessToken = getAccessToken();
