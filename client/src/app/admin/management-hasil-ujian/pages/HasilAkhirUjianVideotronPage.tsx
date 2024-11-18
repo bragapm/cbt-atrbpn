@@ -19,7 +19,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page: 1,
-    limit: 10000,
+    limit: 100,
     sessionId: sessionIdSelected,
   });
 
