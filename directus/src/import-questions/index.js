@@ -69,21 +69,27 @@ export default (router, { services, exceptions, getSchema }) => {
                
                 
                 const options = ['option_a', 'option_b', 'option_c', 'option_d', 'option_e'];
-                for (const option of options) {
+
+                for (let index = 0; index < options.length; index++) {
+                    const option = options[index];
+                    const order = index + 1; 
+
                     const optionCell = row.getCell(headers[option]);
-                    let optionRecord = { question_id: newQuestion, is_correct: row.getCell(headers['correct_answer']).value === option };
+                    let optionRecord = {
+                        question_id: newQuestion,
+                        is_correct: row.getCell(headers['correct_answer']).value === option,
+                        order: order 
+                    };
+
                     const images = worksheet.getImages();
                     const imageInCell = images.find(image => {
                         const { tl } = image.range;
                         return tl.nativeRow === optionCell.row - 1 && tl.nativeCol === optionCell.col - 1;
                     });
-                    
 
-                   
                     if (imageInCell) {
                         const imageData = workbook.getImage(imageInCell.imageId);
                         const uploadedImage = await uploadImage(fileService, imageData.buffer, imageData.extension);
-                        //console.log("uploadedImage", uploadedImage);
                         optionRecord.option_image = uploadedImage;
                     } else {
                         optionRecord.option_text = optionCell.value;

@@ -4,9 +4,15 @@ import StatistikHasil from "../components/StatistikHasil";
 import StatistikJadwal from "../components/StatistikJadwal";
 import React from "react";
 import useGetTotal from "../hooks/useGetTotal";
-
+import useGetCurrentUser from "@/hooks/useGetCurrentUser";
+import { getAccessToken } from "@/midlewares/token";
 const Dashboardpage: React.FC = () => {
   const { data } = useGetTotal();
+  const accessToken = getAccessToken();
+
+  const { data: currentUser, isLoading } = useGetCurrentUser({
+    enabled: !!accessToken,
+  });
 
   const cardlist = [
     {
@@ -30,7 +36,7 @@ const Dashboardpage: React.FC = () => {
       <div className="bg-[#2A6083] w-full rounded-2xl py-4 flex flex-col gap-8 text-white">
         <div className=" flex justify-between items-center  px-6">
           <div>
-            <p className="text-[32px]">Hallo, Mr. Ilam Muhammad</p>
+            <p className="text-[32px]">Hallo, {currentUser?.data?.first_name + " " + currentUser?.data?.last_name}</p>
             <p className="text-base">
               Selamat Datang di Dashboard Super Admin manis{" "}
             </p>
