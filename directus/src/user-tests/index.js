@@ -14,7 +14,7 @@ export default (router, { services }) => {
         schema: req.schema,
       });
 
-      const materiService = new ItemsService("materi_soal", {
+      const kategoriService = new ItemsService("kategori_soal", {
         schema: req.schema,
       });
 
@@ -32,7 +32,7 @@ export default (router, { services }) => {
         throw new Error("Problems not found");
       }
 
-      const materi = await materiService.readOne(problem.materi_id);
+      const kategori = await kategoriService.readOne(problem.kategori_id);
 
       // Fetch answer choices (options) for the problem
       let answerChoices = await optionsService.readByQuery({
@@ -65,7 +65,7 @@ export default (router, { services }) => {
 
       const response = {
         problem_id: problem.id,
-        category_name: materi ? materi.materi : null,
+        category_name: kategori ? kategori.nama_kategori : null,
         question: problem.question,
         answerChoices: answerChoices.map((option) => ({
           text: option.option_text,
