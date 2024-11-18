@@ -35,6 +35,8 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     });
 
+  console.log(data);
+
   const columns: ColumnDef<IUjian>[] = [
     {
       id: "select",
@@ -54,6 +56,14 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       ),
       enableSorting: false,
       enableHiding: false,
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => {
+        const id = row.original.id;
+        return id;
+      },
     },
     {
       accessorKey: "namaUjian",

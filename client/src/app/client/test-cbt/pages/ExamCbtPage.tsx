@@ -80,6 +80,7 @@ const ExamCbtPage = () => {
           loading={isLoading}
           question={data?.question}
           noSoal={noSoal}
+          category={data?.category_name}
           handleNextQuestion={handleNextQuestion}
           handlePrevQuestion={handlePrevQuestion}
         />
