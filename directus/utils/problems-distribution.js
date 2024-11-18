@@ -63,7 +63,7 @@ export const generateProblemsArray = async (
   try {
     // Fetch all distributions
     const distribusiList = await distribusiService.readByQuery({
-      fields: ["kategori_id", "jumlah_soal"], // Explicitly request required fields
+      fields: ["kategori_id", "materi_id", "jumlah_soal"], // Explicitly request required fields
     });
 
     const problems = [];
@@ -74,15 +74,18 @@ export const generateProblemsArray = async (
 
     // Iterate over each distribusi item
     for (const distribusi of distribusiList) {
-      const { kategori_id, jumlah_soal } = distribusi;
+      const { kategori_id, materi_id, jumlah_soal } = distribusi;
 
-      if (!kategori_id || !jumlah_soal) {
+      if (!kategori_id || !materi_id || !jumlah_soal) {
         continue;
       }
 
-      // Fetch questions for the given category
+      // Fetch questions for the given category and materi
       const questions = await questionService.readByQuery({
-        filter: { kategori_id: { _eq: kategori_id } },
+        filter: {
+          kategori_id: { _eq: kategori_id },
+          materi_id: { _eq: materi_id },
+        },
         fields: ["id", "is_required"], // Explicitly request required fields
       });
 
@@ -102,13 +105,16 @@ export const generateProblemsArray = async (
       }
 
       // Randomly select additional questions to meet the jumlah_soal requirement
-      const randomQuestions = optionalQuestions
-        .sort(() => 0.5 - Math.random())
-        .slice(0, jumlah_soal - requiredQuestions.length);
+      const remainingSlots = jumlah_soal - requiredQuestions.length;
+      if (remainingSlots > 0) {
+        const randomQuestions = optionalQuestions
+          .sort(() => 0.5 - Math.random()) // Shuffle the optional questions
+          .slice(0, remainingSlots);
 
-      for (const question of randomQuestions) {
-        if (question.id) {
-          problems.push(question.id);
+        for (const question of randomQuestions) {
+          if (question.id) {
+            problems.push(question.id);
+          }
         }
       }
     }
