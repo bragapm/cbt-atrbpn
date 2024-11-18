@@ -22,9 +22,17 @@ const QuestionDetail: FC<IQuestion> = ({
       <div className="flex justify-between h-fit items-center">
         <div className="flex gap-2 items-center">
           <div
-            className={`text-primary bg-primary/20 rounded-md px-2 py-1 text-[10px]`}
+            className={`${
+              category === "Sulit"
+                ? "bg-[#FEF4F0] text-[#F36A1D]"
+                : category === "Sangat Mudah"
+                ? "bg-[#F2FAF2] text-green-500"
+                : category === "Sangat Mudah"
+                ? "bg-[#F2FCFC] text-[#1F93FF]"
+                : ""
+            } rounded-md px-2 py-1 text-[10px]`}
           >
-            <p className={`font-medium`}>Sulit</p>
+            <p className={`font-medium`}>{category}</p>
           </div>
           <p className="text-primary font-medium">Soal No. {noSoal}</p>
         </div>
