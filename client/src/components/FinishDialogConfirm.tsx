@@ -26,7 +26,7 @@ const FinishDialogConfirm: React.FC<FinishDialogConfirmProps> = ({
         <h1 className="text-xl font-medium">
           Anda yakin ingin mengakhiri Ujian
         </h1>
-        <p className="text-sm text-gray-500">{description}</p>
+        {/* <p className="text-sm text-gray-500">{description}</p> */}
 
         <DialogFooter className="w-full">
           <div className="w-full flex gap-2">
@@ -39,7 +39,7 @@ const FinishDialogConfirm: React.FC<FinishDialogConfirmProps> = ({
             </Button>
 
             <Button className="w-full h-12" onClick={onSubmit}>
-              Selesai
+              Akhiri
             </Button>
           </div>
         </DialogFooter>

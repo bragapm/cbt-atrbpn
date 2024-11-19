@@ -26,6 +26,8 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
     return null;
   }
 
+  console.log(userTest);
+
   const columns: ColumnDef<IUserTest>[] = [
     {
       id: "select",
@@ -79,7 +81,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
           },
           {
             label:
-              userTest?.data?.data?.[0].user_session_id?.info_peserta
+              userTest?.data?.data[0]?.user_session_id?.info_peserta
                 ?.nama_peserta,
           },
         ]}
