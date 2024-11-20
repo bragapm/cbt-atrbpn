@@ -2,10 +2,11 @@ import { authMiddleware } from "../middleware/auth";
 
 import crypto from "crypto";
 
-export default (router, { services }) => {
+export default (router, { services, database }) => {
   const { ItemsService, AuthenticationService } = services;
+  const autValidation = authMiddleware(database);
 
-  router.get("/:user_session_id", authMiddleware, async (req, res) => {
+  router.get("/:user_session_id", autValidation, async (req, res) => {
     const userTestID = req.params.user_session_id;
     const problemID = req.query.problem_id;
 
@@ -91,7 +92,7 @@ export default (router, { services }) => {
 
   router.post(
     "/:user_session_id/submit-answer",
-    authMiddleware,
+    autValidation,
     async (req, res) => {
       const userSessionId = req.params.user_session_id;
       const { problem_id, answer_id } = req.body;

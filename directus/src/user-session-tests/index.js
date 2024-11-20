@@ -1,9 +1,10 @@
 import { authMiddleware } from "../middleware/auth";
 import { formatInTimeZone } from "date-fns-tz";
 
-export default (router, { services }) => {
+export default (router, { services, database }) => {
   const { ItemsService } = services;
-  router.get("/", authMiddleware, async (req, res) => {
+  const autValidation = authMiddleware(database);
+  router.get("/", autValidation, async (req, res) => {
     try {
       const user = req.user;
       const userSessionService = new ItemsService("user_session_test", {
@@ -46,7 +47,7 @@ export default (router, { services }) => {
     }
   });
 
-  router.post("/start", authMiddleware, async (req, res) => {
+  router.post("/start", autValidation, async (req, res) => {
     try {
       const { user_session_id, pin } = req.body;
       const user = req.user;
@@ -118,7 +119,7 @@ export default (router, { services }) => {
         "yyyy-MM-dd HH:mm:ssXXX"
       );
 
-      if (now < sessionStartTime || now > sessionEndTime) {
+      if (nowFormatted < sessionStartTime || nowFormatted > sessionEndTime) {
         return res.status(500).json({
           status: "error",
           message:
@@ -164,7 +165,7 @@ export default (router, { services }) => {
     }
   });
 
-  router.post("/finish", authMiddleware, async (req, res) => {
+  router.post("/finish", autValidation, async (req, res) => {
     const { user_session_id, feedback } = req.body; // Assumes user_session_id is provided in the request body
 
     const user = req.user;

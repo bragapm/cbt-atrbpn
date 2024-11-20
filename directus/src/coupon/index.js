@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { formatInTimeZone } from "date-fns-tz";
 
 export default (router, { services, exceptions, getSchema }) => {
   const { UsersService, ItemsService, AuthenticationService } = services;
@@ -68,7 +69,7 @@ export default (router, { services, exceptions, getSchema }) => {
 
   router.post("/login", async (req, res) => {
     try {
-      const { coupon_code } = req.body;
+      const { coupon_code, device } = req.body;
 
       // Service untuk kupon
       const couponsService = new ItemsService("coupon", {
@@ -91,12 +92,68 @@ export default (router, { services, exceptions, getSchema }) => {
 
       const couponData = coupon[0];
 
-      // Dapatkan user_id dari kupon yang ditemukan
+      const userSessionService = new ItemsService("user_session_test", {
+        schema: await getSchema(),
+      });
+
+      // Cari sesi ujian yang relevan berdasarkan user_id
+      const userSession = await userSessionService.readByQuery({
+        filter: { user: couponData.user_id },
+        limit: 1,
+        fields: ["session.id", "session.start_time", "session.end_time"],
+      });
+
+      if (userSession.length === 0) {
+        return res.status(403).json({
+          status: "error",
+          message: "No active test session found for this user.",
+        });
+      }
+
+      const sessionData = userSession[0].session;
+
+      // Validasi apakah waktu sekarang berada dalam rentang sesi ujian
+      const now = new Date();
+      const timezone = "Asia/Jakarta";
+      const startTime = new Date(
+        new Date(sessionData.start_time).getTime() - 7 * 60 * 60 * 1000
+      );
+      const endTime = new Date(
+        new Date(sessionData.end_time).getTime() - 7 * 60 * 60 * 1000
+      );
+
+      const nowFormatted = formatInTimeZone(
+        now,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+      const sessionStartTimeFormatted = formatInTimeZone(
+        startTime,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+      const sessionEndTimeFormatted = formatInTimeZone(
+        endTime,
+        timezone,
+        "yyyy-MM-dd HH:mm:ssXXX"
+      );
+
+      if (
+        nowFormatted < sessionStartTimeFormatted ||
+        now > sessionEndTimeFormatted
+      ) {
+        return res.status(403).json({
+          status: "error",
+          message: "Test session is not active at this time.",
+        });
+      }
+
+      // Dapatkan user dari kupon
       const usersService = new UsersService({ schema: await getSchema() });
 
       const user = await usersService.readOne(couponData.user_id);
 
-      if (!user || user.status !== "active") {
+      if (!user) {
         return res.status(403).json({
           status: "error",
           message: "User is not authorized or inactive.",
@@ -114,12 +171,11 @@ export default (router, { services, exceptions, getSchema }) => {
         password: "CBTATRBPN2024", // Sesuaikan dengan password yang dihasilkan saat register
       });
 
-      const now = new Date();
-
-      // Update last_login_at dan updated_at untuk kupon
+      // Update last_login_at dan device untuk kupon
       await couponsService.updateOne(couponData.id, {
         last_login_at: now,
         updated_at: now,
+        device: device,
       });
 
       res.json({
@@ -131,6 +187,7 @@ export default (router, { services, exceptions, getSchema }) => {
           last_login_at: now,
           access_token: authData.accessToken,
           refresh_token: authData.refreshToken,
+          device: device,
         },
       });
     } catch (error) {
