@@ -9,6 +9,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
                 SELECT 
                     qb.materi_id,
                     ms.materi,
+                    ks.nama_kategori,
                     COUNT(*) AS jumlah_soal
                 FROM 
                     questions_bank qb
@@ -20,7 +21,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
             if (materi_id) {
                 query += ` WHERE ms.id = ?`;
             }
-            query += ` GROUP BY qb.materi_id, ms.materi;`;
+            query += ` GROUP BY qb.materi_id, ms.materi, ks.nama_kategori;`;
 
             const result = await database.raw(query, materi_id ? [materi_id] : []);
             const rows = result.rows || [];
