@@ -42,7 +42,7 @@ const FinishExam: FC = () => {
 
   const handleClearAllData = () => {
     localStorage.clear();
-    navigate("/hasil-ujian/videotron");
+    navigate("/exam/login");
   };
 
   return (

@@ -35,8 +35,6 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     });
 
-  console.log(data);
-
   const columns: ColumnDef<IUjian>[] = [
     {
       id: "select",

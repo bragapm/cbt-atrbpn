@@ -20,7 +20,7 @@ const useGetBankSoalPreview = (id: string | undefined) => {
 
       const questionChoicesResponse = await service.sendGetRequest<
         IBaseResponse<IQuestionChoice[]>
-      >(`/items/question_options?filter[question_id][_eq]=${id}`);
+      >(`/items/question_options?filter[question_id][_eq]=${id}&sort=order`);
 
       return {
         questionBank: questionBankResponse.data,

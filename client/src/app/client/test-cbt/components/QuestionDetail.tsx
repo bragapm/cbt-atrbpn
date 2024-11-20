@@ -24,13 +24,13 @@ const QuestionDetail: FC<IQuestion> = ({
           <div
             className={`${
               category === "Sulit"
-                ? "bg-[#FEF4F0] text-[#F36A1D]"
+                ? "bg-[#F36A1D]/50 text-[#F36A1D]"
                 : category === "Sangat Mudah"
-                ? "bg-[#F2FAF2] text-green-500"
+                ? "bg-green-300 text-green-500"
                 : category === "Sangat Mudah"
-                ? "bg-[#F2FCFC] text-[#1F93FF]"
+                ? "bg-[#1F93FF]/50 text-[#1F93FF]"
                 : ""
-            } rounded-md px-2 py-1 text-[10px]`}
+            } rounded-md px-2 py-1`}
           >
             <p className={`font-medium`}>{category}</p>
           </div>

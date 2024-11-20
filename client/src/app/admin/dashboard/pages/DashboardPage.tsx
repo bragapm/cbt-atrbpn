@@ -44,12 +44,12 @@ const Dashboardpage: React.FC = () => {
             </p>
             <p className="text-base">Selamat Datang di Dashboard CBT PPAT</p>
           </div>
-          <div>
+          {/* <div>
             <Button className="bg-[#8CBAC7] text-white py-5">
               Export Modul
               <img src={"/images/ic-cloud-download.svg"} className="pl-2"></img>
             </Button>
-          </div>
+          </div> */}
         </div>
         <img src={"/images/ic-dash-card.png"} className=" pl-6 w-full"></img>
       </div>

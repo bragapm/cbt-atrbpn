@@ -127,8 +127,8 @@ const JadwalSesiSection = () => {
         />
         <div className="flex flex-col justify-between gap-4 p-4 rounded-lg mt-4 border bg-white">
           <p className="font-semibold ">Data Soal</p>
-          <div className="grid grid-cols-5 gap-4  justify-between">
-            <div className="col-span-3 h-full border rounded-lg flex">
+          <div className="grid grid-cols-2 gap-4  justify-between">
+            {/* <div className="col-span-3 h-full border rounded-lg flex">
               {dataChartSoal ? (
                 <ChartCard
                   datas={dataChartSoal}
@@ -143,7 +143,7 @@ const JadwalSesiSection = () => {
                   <MemoLoader width={30} height={30} color={"#2A6083"} />
                 </div>
               )}
-            </div>
+            </div> */}
             <div className="p-4 col-span-2 border rounded-lg text-xs flex flex-col gap-2">
               <p>Materi Soal</p>
               {materisoal?.data ? (
