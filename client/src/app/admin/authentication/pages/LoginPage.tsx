@@ -2,8 +2,6 @@ import React from "react";
 import AuthLogo from "../components/AuthLogo";
 import LoginForm from "../components/LoginForm";
 import AuthCardLayout from "../layouts/AuthCardLayout";
-import { Separator } from "@/components/ui/separator";
-import GoogleAuth from "../components/GoogleAuth";
 
 const LoginPage: React.FC = () => {
   return (
@@ -11,13 +9,6 @@ const LoginPage: React.FC = () => {
       <div className="w-full h-full flex gap-4 flex-col px-20 justify-center">
         <HeaderLogin />
         <LoginForm />
-        <Separator />
-        <GoogleAuth />
-        <p className="text-primary text-center">Lupa Password</p>
-        <p className="text-xs font-light text-center">
-          Terkendala menggunakan aplikasi? <br /> Untuk bantuan teknis, hubungi
-          0812-1234-1234
-        </p>
       </div>
     </AuthCardLayout>
   );

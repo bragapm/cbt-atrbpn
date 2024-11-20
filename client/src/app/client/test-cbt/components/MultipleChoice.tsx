@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Info, RefreshCcw } from "lucide-react";
+import { Info, RefreshCcw, Check } from "lucide-react";
+
 import { FC } from "react";
 
 interface IMultiChoice {
@@ -56,6 +57,11 @@ const MultipleChoice: FC<IMultiChoice> = ({
                 <div className="flex-1">
                   <p>{el.text}</p>
                 </div>
+                {isSelected && (
+                  <div className=" mb-auto rounded-sm bg-[#2A6083] p-0.5">
+                    <Check className="text-white w-4 h-4" />
+                  </div>
+                )}
               </div>
             );
           })

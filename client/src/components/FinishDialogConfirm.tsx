@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { OctagonAlert } from "lucide-react";
 import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
@@ -21,13 +21,12 @@ const FinishDialogConfirm: React.FC<FinishDialogConfirmProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col gap-6 justify-center items-center">
         <Card className="bg-white p-8 w-fit">
-          <Check className="text-primary w-12 h-12" />
+          <OctagonAlert className="text-red-500 w-12 h-12" />
         </Card>
         <h1 className="text-xl font-medium">
           Anda yakin ingin mengakhiri Ujian
         </h1>
-        <p className="text-sm text-gray-500">{description}</p>
-
+        {/* <p className="text-sm text-gray-500">{description}</p> */}
         <DialogFooter className="w-full">
           <div className="w-full flex gap-2">
             <Button
@@ -39,7 +38,7 @@ const FinishDialogConfirm: React.FC<FinishDialogConfirmProps> = ({
             </Button>
 
             <Button className="w-full h-12" onClick={onSubmit}>
-              Selesai
+              Akhiri
             </Button>
           </div>
         </DialogFooter>

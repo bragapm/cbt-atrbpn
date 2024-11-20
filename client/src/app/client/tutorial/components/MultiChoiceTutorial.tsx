@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Info, RefreshCcw } from "lucide-react";
-import React from "react";
+import { Info, RefreshCcw, Check } from "lucide-react";
 
 const MultiChoiceTutorial = () => {
   const listJawaban = [
@@ -30,6 +29,11 @@ const MultiChoiceTutorial = () => {
           <div className="flex-1">
             <p>{listJawaban[idx]}</p>
           </div>
+          {idx === 4 && (
+            <div className=" mb-auto rounded-sm bg-[#2A6083] p-0.5">
+              <Check className="text-white w-4 h-4" />
+            </div>
+          )}
         </div>
       ))}
       <div className="flex gap-4 items-center mt-4">

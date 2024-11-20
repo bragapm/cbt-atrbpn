@@ -44,11 +44,11 @@ const useGetUserTestQueries = (queries?: IUserTestArgs) => {
           ],
           filter: {
             user: { _eq: pesertaId },
-            problem: {
-              id: {
-                _eq: problemId,
-              },
-            },
+            // problem: {
+            //   id: {
+            //     _eq: problemId,
+            //   },
+            // },
           },
           meta: "*",
           limit,

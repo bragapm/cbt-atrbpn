@@ -98,7 +98,7 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
           </p>
         </div>
       </div>
-      <div className="pt-4">
+      {/* <div className="pt-4">
         <Button
           className="bg-[#8CBAC7] text-white w-full"
           onClick={() => {
@@ -107,7 +107,7 @@ const JadwalCard: FC<IjadwalCard> = ({ data }) => {
         >
           Lihat Detail
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };
