@@ -190,7 +190,7 @@ export default (router, { services }) => {
 
       // Fetch all answers for the user session
       const userAnswers = await userTestService.readByQuery({
-        filter: { user_session_id: user_session_id, user: user },
+        filter: { user_session_id: user_session_id },
         fields: ["score_category", "score"],
       });
 
