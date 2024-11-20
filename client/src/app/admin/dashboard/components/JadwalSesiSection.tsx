@@ -84,10 +84,8 @@ const JadwalSesiSection = () => {
   }, [materisoal]);
   function groupDataByMateri(data) {
     const groupedData = {};
-
-    data.forEach((item) => {
+    data?.forEach((item) => {
       const { materi_id, materi, ...rest } = item;
-
       if (!groupedData[materi_id]) {
         groupedData[materi_id] = {
           materi_id,
