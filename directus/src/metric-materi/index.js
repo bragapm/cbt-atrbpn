@@ -9,7 +9,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
                 SELECT 
                     qb.materi_id,
                     ms.materi,
-                    ks.nama_kategori
+                    ks.nama_kategori,
                     COUNT(*) AS jumlah_soal
                 FROM 
                     questions_bank qb
