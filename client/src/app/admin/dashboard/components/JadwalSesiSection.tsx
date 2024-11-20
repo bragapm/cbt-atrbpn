@@ -82,6 +82,29 @@ const JadwalSesiSection = () => {
       setChartDataSoal(data);
     }
   }, [materisoal]);
+  function groupDataByMateri(data) {
+    const groupedData = {};
+
+    data.forEach((item) => {
+      const { materi_id, materi, ...rest } = item;
+
+      if (!groupedData[materi_id]) {
+        groupedData[materi_id] = {
+          materi_id,
+          materi,
+          data: [],
+        };
+      }
+
+      groupedData[materi_id].data.push({ ...rest });
+    });
+
+    return Object.values(groupedData);
+  }
+
+  const groupedData: any[] = groupDataByMateri(materisoal?.data?.data);
+  console.log(groupedData);
+  // console.log(materisoal?.data?.data);
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -126,8 +149,8 @@ const JadwalSesiSection = () => {
           hide
         />
         <div className="flex flex-col justify-between gap-4 p-4 rounded-lg mt-4 border bg-white">
-          <p className="font-semibold ">Data Soal</p>
-          <div className="grid grid-cols-2 gap-4  justify-between">
+          <p className="font-semibold ">Materi Soal</p>
+          <div className="grid">
             {/* <div className="col-span-3 h-full border rounded-lg flex">
               {dataChartSoal ? (
                 <ChartCard
@@ -144,13 +167,27 @@ const JadwalSesiSection = () => {
                 </div>
               )}
             </div> */}
-            <div className="p-4 col-span-2 border rounded-lg text-xs flex flex-col gap-2">
-              <p>Materi Soal</p>
-              {materisoal?.data ? (
-                materisoal?.data?.data?.map((el, idx) => (
-                  <div key={idx}>
-                    <p className="font-bold">{el.jumlah_soal}</p>
-                    <p className="text-[10px]">{el.materi}</p>
+            <div className="  text-xs grid grid-cols-2 gap-2">
+              {groupedData ? (
+                groupedData?.map((el, idx) => (
+                  <div
+                    key={idx}
+                    className="border flex-col gap-3 flex rounded-lg p-2.5"
+                  >
+                    <p className="text-xs font-medium">{el.materi}</p>
+                    <div className="flex gap-3">
+                      {el.data?.map((kat, idx) => (
+                        <div
+                          key={idx}
+                          className="p-1 px-2 border rounded-lg w-full"
+                        >
+                          <p className="text-[10px]">{kat.nama_kategori}</p>
+                          <p className="text-[11px] font-bold">
+                            {kat.jumlah_soal}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))
               ) : (
@@ -158,9 +195,9 @@ const JadwalSesiSection = () => {
               )}
             </div>
           </div>
-          <p className="text-xs">
+          {/* <p className="text-xs">
             Data ini menampilkan sesuai dengan filter yang dipilih
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
