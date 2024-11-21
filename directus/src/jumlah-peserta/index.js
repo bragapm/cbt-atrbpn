@@ -1,25 +1,42 @@
-
-// Endpoint jumlah peserta per sesi
+// Endpoint jumlah peserta per sesi pake pagination
 export default function registerEndpoint(router, { database, logger }) {
     router.get('/', async (req, res) => {
-        try {  
+        try {
+            const { limit = 10, page = 1 } = req.query;
+            
+            const offset = (page - 1) * limit;
+
             const query = `
                 SELECT 
                     session AS session_id,
-                    COUNT(*) AS user_count
+                    st.name  AS "Nama",
+                    DATE(st.start_time) as "Tanggal Ujian",
+                    st.start_time::TIME AS "Mulai Ujian",
+                    st.end_time::TIME as "Selesai Ujian",
+                    COUNT(*) AS "Jumlah Peserta"
                 FROM 
-                    user_session_test
+                    user_session_test ust
+                JOIN 
+                    session_test st 
+                ON 
+                    st.id = ust."session" 
                 GROUP BY 
-                    session
+                    session, st.name, st.start_time, st.end_time 
                 ORDER BY 
-                    session ASC;
+                    session ASC
+                LIMIT ? OFFSET ?;
             `;
-            const result = await database.raw(query);
+
+            const result = await database.raw(query, [limit, offset]);
             const rows = result.rows || [];
 
             res.json({
                 success: true,
                 data: rows,
+                meta: {
+                    page: Number(page),
+                    limit: Number(limit),
+                },
             });
         } catch (error) {
             logger.error('Error fetching user session test counts:', error);
@@ -30,5 +47,3 @@ export default function registerEndpoint(router, { database, logger }) {
         }
     });
 }
-
-
