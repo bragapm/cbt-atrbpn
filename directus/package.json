@@ -118,6 +118,11 @@
         "type": "endpoint",
         "name": "rules",
         "source": "src/rules/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "jumlah-peserta",
+        "source": "src/jumlah-peserta/index.js"
       }
     ],
     "host": "10.8.2"
