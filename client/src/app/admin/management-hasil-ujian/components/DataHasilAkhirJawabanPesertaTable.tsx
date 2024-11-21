@@ -22,21 +22,26 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import TableSearch from "@/components/table-search";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 
 export const DataHasilAkhirJawabanPesertaTable = () => {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const { data: questionMetric } = useGetQuestionMetricsQuery({
     limit: 10,
     page,
+    search: debouncedSearch,
   });
 
-  if (!questionMetric) {
-    return null;
-  }
+  // if (!questionMetric) {
+  //   return null;
+  // }
 
   const columns: ColumnDef<QuestionMetric>[] = [
     // {
@@ -152,12 +157,15 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <DataTable
-        data={questionMetric.data.data}
+        data={questionMetric?.data?.data}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: Number(questionMetric.data.pagination.totalRecords),
+          totalItems: Number(questionMetric?.data?.pagination?.totalRecords),
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

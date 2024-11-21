@@ -101,8 +101,6 @@ const JadwalSesiSection = () => {
   }
 
   const groupedData: any[] = groupDataByMateri(materisoal?.data?.data);
-  console.log(groupedData);
-  // console.log(materisoal?.data?.data);
 
   return (
     <div className="grid grid-cols-2 gap-6">

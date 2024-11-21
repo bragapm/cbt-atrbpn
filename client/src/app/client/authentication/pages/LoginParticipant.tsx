@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { z } from "zod";
 
 import useAuth, { formAuthUser, IAuthUserRequest } from "../hooks/useAuth";
@@ -26,6 +26,28 @@ const LoginParticipant: FC = () => {
   const [login, setLogin] = useState(false);
   const navigate = useNavigate();
 
+  const getDetailedDeviceInfo = () => {
+    const navigator = window.navigator;
+    const userAgent = navigator.userAgent || "Unknown";
+    const platform = navigator.platform || "Unknown";
+    const language = navigator.language || "Unknown";
+    const languages = navigator.languages
+      ? navigator.languages.join(", ")
+      : "Unknown";
+
+    const deviceInfoString = `
+      User Agent: ${userAgent}
+      Platform: ${platform}
+      Language: ${language}
+      Supported Languages: ${languages}
+    `;
+    return deviceInfoString.trim();
+  };
+
+  useEffect(() => {
+    localStorage.setItem("deviceInfo", getDetailedDeviceInfo());
+  }, []);
+
   const form = useForm<z.infer<typeof formAuthUser>>({
     resolver: zodResolver(formAuthUser),
     defaultValues: {
@@ -46,7 +68,11 @@ const LoginParticipant: FC = () => {
   });
 
   function onSubmit(values: IAuthUserRequest) {
-    mutate(values);
+    const data = {
+      coupon_code: values.coupon_code,
+      device: localStorage.getItem("deviceInfo"),
+    };
+    mutate(data);
   }
 
   return (

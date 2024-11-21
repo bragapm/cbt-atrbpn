@@ -7,26 +7,31 @@ import { useNavigate } from "react-router-dom";
 import useGetUserSessionTestQueries from "../hooks/useGetUserSessionTestQueries";
 import { useState } from "react";
 import { useExportUserSessionTest } from "../hooks/useExportUserSessionTest";
+import TableSearch from "@/components/table-search";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 
 const PAGE_LIMIT = 10;
 
 export const ManagementPesertaList = () => {
   const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const navigate = useNavigate();
 
   const { data: pesertaCbt } = useGetUserSessionTestQueries({
     limit: PAGE_LIMIT,
     page,
+    search: debouncedSearch,
   });
 
   const handleDownloadPeserta = () => {
     useExportUserSessionTest();
   };
 
-  if (!pesertaCbt) {
-    return null;
-  }
+  // if (!pesertaCbt) {
+  //   return null;
+  // }
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
@@ -64,11 +69,14 @@ export const ManagementPesertaList = () => {
           </div>
         }
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <PesertaCBTTable
         userSessionTest={pesertaCbt?.data?.data}
         currentPage={page}
         pageLimit={PAGE_LIMIT}
-        totalData={pesertaCbt.data.meta.total_count}
+        totalData={pesertaCbt?.data?.meta?.total_count}
         onChangePage={(val) => setPage(val)}
       />
     </div>
