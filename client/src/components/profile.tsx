@@ -1,3 +1,4 @@
+import useLogout from "@/app/client/test-cbt/hooks/useLogout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +25,11 @@ const Profile: React.FC<IProfile> = ({ data }) => {
   const navigate = useNavigate();
   const accessToken = getAccessToken();
 
+  const { isLoading, error, postData } = useLogout();
   const handleLogoutUser = () => {
-    localStorage.clear();
-    navigate("/exam/login");
+    // localStorage.clear();
+    // navigate("/exam/login");
+    postData();
   };
 
   const getFirstName = () => {

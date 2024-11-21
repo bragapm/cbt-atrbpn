@@ -36,8 +36,11 @@ const TableHeaderSorting: React.FC<ITableHeaderSorting> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white p-2">
-            {dropdownData?.map((item) => (
-              <DropdownMenuItem onClick={() => onSelectedDropdownValue(item)}>
+            {dropdownData?.map((item, idx) => (
+              <DropdownMenuItem
+                key={idx}
+                onClick={() => onSelectedDropdownValue(item)}
+              >
                 {item.label}
               </DropdownMenuItem>
             ))}

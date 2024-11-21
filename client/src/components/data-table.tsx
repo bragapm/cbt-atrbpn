@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={columns?.length}
                     className="h-24 text-center"
                   >
                     No results.
@@ -108,12 +108,12 @@ export function DataTable<TData, TValue>({
               )}
             </TableBody>
           </Table>
-          <div className="flex justify-between w-full items-center">
+          <div className="flex justify-center w-full items-center">
             <p className="text-xs w-full">
-              {customSelectedFooter
+              {/* {customSelectedFooter
                 ? customSelectedFooter
                 : table.getFilteredSelectedRowModel().rows.length}{" "}
-              of {table.getFilteredRowModel().rows.length} Rows Selected
+              of {table.getFilteredRowModel().rows.length} Rows Selected */}
             </p>
             <PaginationTable
               pageSize={pagination.pageSize}

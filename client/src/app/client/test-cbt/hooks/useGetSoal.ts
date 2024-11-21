@@ -17,8 +17,10 @@ export const useGetSoal = () => {
         import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
         `/user-tests/${sesiId}?problem_id=${problem_id}`,
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("user_token")}`,
-      device: localStorage.getItem("deviceInfo") },
+        headers: 
+        { Authorization: `Bearer ${localStorage.getItem("user_token")}`, 
+        device: localStorage.getItem("deviceInfo")  
+        },
         method: "GET",
       }
     );

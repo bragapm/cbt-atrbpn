@@ -29,18 +29,7 @@ const LoginParticipant: FC = () => {
   const getDetailedDeviceInfo = () => {
     const navigator = window.navigator;
     const userAgent = navigator.userAgent || "Unknown";
-    const platform = navigator.platform || "Unknown";
-    const language = navigator.language || "Unknown";
-    const languages = navigator.languages
-      ? navigator.languages.join(", ")
-      : "Unknown";
-
-    const deviceInfoString = `
-      User Agent: ${userAgent}
-      Platform: ${platform}
-      Language: ${language}
-      Supported Languages: ${languages}
-    `;
+    const deviceInfoString = `UserAgent:${userAgent}`;
     return deviceInfoString.trim();
   };
 
@@ -68,6 +57,7 @@ const LoginParticipant: FC = () => {
   });
 
   function onSubmit(values: IAuthUserRequest) {
+    localStorage.setItem("couponCode", values.coupon_code);
     const data = {
       coupon_code: values.coupon_code,
       device: localStorage.getItem("deviceInfo"),
