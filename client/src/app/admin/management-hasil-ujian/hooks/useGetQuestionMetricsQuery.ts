@@ -17,22 +17,28 @@ export type IQuestionMetricResponse = {
     currentPage: number;
     limit: number;
   };
-};
+}; 
 
 type IQuestionMetricArgs = {
   limit: number;
   page: number;
+  search?:string;
 };
 
 const useGetQuestionMetricsQuery = (queries?: IQuestionMetricArgs) => {
   const service = new DirectusInterceptor();
-  const { limit, page } = queries;
+  const { limit, page ,search} = queries;
 
   return useQuery({
     queryKey: ["question-metric", queries],
     queryFn: () => {
       const response = service.sendGetRequest<IQuestionMetricResponse>(
-        `/metric-pertanyaan?limit=${limit}&page=${page}`
+        `/metric-pertanyaan?limit=${limit}&page=${page}`,
+        {
+          fields: ["*.*"],
+          meta: "*",
+          search: search,
+        }
       );
       return response;
     },

@@ -4,7 +4,7 @@ import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { File, MoreVertical, Trash } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import useGetUserSessionTestQueries, {
   IUserSessionTest,
 } from "../../management-peserta/hooks/useGetUserSessionTestQueries";
@@ -16,12 +16,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useDeletePesertaMutation from "../../management-peserta/hooks/useDeletePesertaMutation";
 import { useNavigate } from "react-router-dom";
+import TableSearch from "@/components/table-search";
+import { useDebounceSearch } from "@/hooks/useDebounce";
 
 export const DataHasilAkhirUjianPesertaTable = () => {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounceSearch({ value: search });
 
   const [id, setId] = React.useState<string | number>("");
 
@@ -37,11 +41,12 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
     limit: 10,
+    search: debouncedSearch,
   });
 
-  if (!userSessionTest) {
-    return null;
-  }
+  // if (!userSessionTest) {
+  //   return null;
+  // }
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     // {
@@ -126,6 +131,9 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
+      <div className="flex w-full justify-end">
+        <TableSearch value={search} onChange={setSearch} />
+      </div>
       <DataTable
         data={userSessionTest?.data?.data}
         columns={columns}

@@ -23,6 +23,7 @@ const useSubmitAnswer = () => {
         {
           headers: {
             Authorization: `Bearer ${auth}`,
+            device: localStorage.getItem("deviceInfo")
           },
         }
       );
