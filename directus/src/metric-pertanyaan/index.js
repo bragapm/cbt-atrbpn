@@ -1,10 +1,10 @@
 //endpoint metric pertnyaan dengan detail kategori (jawab benar/salah/tidak jawab)
-
 export default function registerEndpoint(router, { database, logger }) {
     router.get('/', async (req, res) => {
         try {
-            const { page = 1, limit = 10 } = req.query;
+            const { page = 1, limit = 10, search = '' } = req.query;
             const offset = (page - 1) * limit;
+
             const metricSoal = await database.raw(`
                 SELECT 
                     qb.id AS question_id,
@@ -16,18 +16,20 @@ export default function registerEndpoint(router, { database, logger }) {
                     questions_bank qb
                 LEFT JOIN 
                     user_test ut ON qb.id = ut.problem 
+                WHERE 
+                    qb.question ILIKE ? 
                 GROUP BY 
                     qb.id, qb.question
                 LIMIT ?
                 OFFSET ?;
-            `, [parseInt(limit, 10), parseInt(offset, 10)]);
+            `, [`%${search}%`, parseInt(limit, 10), parseInt(offset, 10)]);
 
-            // total jumlah records 
             const totalRecordsResult = await database.raw(`
                 SELECT COUNT(DISTINCT qb.id) AS total
                 FROM questions_bank qb
-                LEFT JOIN user_test ut ON qb.id = ut.problem;
-            `);
+                LEFT JOIN user_test ut ON qb.id = ut.problem
+                WHERE qb.question ILIKE ?;
+            `, [`%${search}%`]);
             const totalRecords = totalRecordsResult.rows[0]?.total || 0;
 
             const totalPages = Math.ceil(totalRecords / limit);
