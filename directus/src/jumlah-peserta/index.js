@@ -9,11 +9,11 @@ export default function registerEndpoint(router, { database, logger }) {
             const query = `
                 SELECT 
                     session AS session_id,
-                    st.name  AS "Nama",
-                    DATE(st.start_time) as "Tanggal Ujian",
-                    st.start_time::TIME AS "Mulai Ujian",
-                    st.end_time::TIME as "Selesai Ujian",
-                    COUNT(*) AS "Jumlah Peserta"
+                    st.name  AS "nama",
+                    DATE(st.start_time) as "tangagl_ujian",
+                    st.start_time::TIME AS "mulai_ujian",
+                    st.end_time::TIME as "selesai_ujian",
+                    COUNT(*) AS "jumlah_peserta"
                 FROM 
                     user_session_test ust
                 JOIN 
