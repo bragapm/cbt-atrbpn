@@ -15,7 +15,7 @@ const useGetManagementUjian = ({
     queryKey: ["management-ujian", page, limit, search],
     queryFn: async () => {
       const response = await service.sendGetRequest<IBaseResponse<IUjian[]>>(
-        "/items/session_test",
+        "/jumlah-peserta",
         { fields: ["*.*"], meta: "*", page, limit, search: search }
       );
       return response?.data;

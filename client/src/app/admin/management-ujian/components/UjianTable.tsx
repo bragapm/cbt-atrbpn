@@ -35,7 +35,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     });
 
-  const columns: ColumnDef<IUjian>[] = [
+  const columns: ColumnDef<any>[] = [
     // {
     //   id: "select",
     //   header: ({ table }) => (
@@ -59,7 +59,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "id",
       header: "ID",
       cell: ({ row }) => {
-        const id = row.original.id;
+        const id = row.original.session_id;
         return id;
       },
     },
@@ -67,7 +67,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "namaUjian",
       header: "Nama Ujian",
       cell: ({ row }) => {
-        const namaUjian = row.original.name;
+        const namaUjian = row.original.nama;
         return namaUjian;
       },
     },
@@ -75,7 +75,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "jumlahpeserta",
       header: "Jumlah Peserta",
       cell: ({ row }) => {
-        const peserta = "-";
+        const peserta = row.original.jumlah_peserta;
         return peserta;
       },
     },
@@ -83,7 +83,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "tanggalUjian",
       header: "Tanggal Ujian",
       cell: ({ row }) => {
-        const tanggalUjian = row.original.start_time;
+        const tanggalUjian = row.original.tangagl_ujian;
         const date = new Date(tanggalUjian);
         const formattedDate = format(date, "dd/MM/yyyy");
 
@@ -94,22 +94,20 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "mulaiUjian",
       header: "Mulai Ujian",
       cell: ({ row }) => {
-        const mulaiUjian = row.original.start_time;
-        const date = new Date(mulaiUjian);
-        const formattedDate = format(date, "HH:mm:ss");
-
-        return formattedDate;
+        const mulaiUjian = row.original.mulai_ujian;
+        // const date = new Date(mulaiUjian);
+        // const formattedDate = format(date, "HH:mm:ss");
+        return mulaiUjian;
       },
     },
     {
       accessorKey: "selesaiUjian",
       header: "Selesai Ujian",
       cell: ({ row }) => {
-        const selesaiUjian = row.original.end_time;
-        const date = new Date(selesaiUjian);
-        const formattedDate = format(date, "HH:mm:ss");
-
-        return formattedDate;
+        const selesaiUjian = row.original.selesai_ujian;
+        // const date = new Date(selesaiUjian);
+        // const formattedDate = format(date, "HH:mm:ss");
+        return selesaiUjian;
       },
     },
     {
@@ -121,7 +119,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
             className="cursor-pointer text-gray-400 w-4 h-4"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
-              setId(row.original.id);
+              setId(row.original.session_id);
             }}
           />
           <DropdownMenu>
@@ -130,7 +128,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
             </DropdownMenuTrigger>
             <UjianDropdown
               ujianData={row.original}
-              sessionId={row.original.id}
+              sessionId={row.original.session_id}
             />
           </DropdownMenu>
         </div>
