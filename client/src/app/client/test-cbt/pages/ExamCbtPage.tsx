@@ -42,6 +42,7 @@ const ExamCbtPage = () => {
     if (currentIndex < listSoal.length - 1) {
       setSelectSoal(listSoal[currentIndex + 1]);
       getSoal(listSoal[currentIndex + 1]);
+      setNoSoal(noSoal + 1);
     }
   };
 
@@ -50,6 +51,7 @@ const ExamCbtPage = () => {
     if (currentIndex > 0) {
       setSelectSoal(listSoal[currentIndex - 1]);
       getSoal(listSoal[currentIndex - 1]);
+      setNoSoal(noSoal - 1);
     }
   };
 

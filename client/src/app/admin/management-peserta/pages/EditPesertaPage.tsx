@@ -79,7 +79,7 @@ const EditPesertaFormInner = ({
           disabled={!isValid}
           className="w-40"
         >
-          Tambah Peserta
+          Edit Peserta
         </Button>
       </div>
     </>

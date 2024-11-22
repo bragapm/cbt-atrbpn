@@ -69,11 +69,11 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
       header: "Kategori Soal",
     },
     {
-      accessorKey: "skor",
+      accessorKey: "score",
       header: "Skor",
     },
     {
-      accessorKey: "nilaijawab",
+      accessorKey: "correct_score",
       header: "Nilai Jawaban Benar",
     },
     {

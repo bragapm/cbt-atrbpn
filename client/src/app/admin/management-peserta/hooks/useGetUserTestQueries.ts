@@ -41,7 +41,7 @@ const useGetUserTestQueries = (queries?: IUserTestArgs) => {
         `/items/user_test`,
         {
           fields: [
-            "problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*",
+            "*,problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*",
           ],
           filter: {
             user_session_id: { _eq: user_session_id },
