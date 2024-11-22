@@ -32,7 +32,7 @@ type IUserTestArgs = {
 
 const useGetUserTestQueries = (queries?: IUserTestArgs) => {
   const service = new DirectusInterceptor();
-  const { limit, page, pesertaId, user_session_id ,problemId } = queries;
+  const { limit, page, user_session_id ,problemId } = queries;
 
   return useQuery({
     queryKey: ["user-test", queries],

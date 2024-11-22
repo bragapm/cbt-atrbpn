@@ -19,7 +19,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   const { data: userTest } = useGetUserTestQueries({
     page,
     limit: 10,
-    pesertaId: params.pesertaId,
+    user_session_id: params.pesertaId,
   });
 
   if (!userTest) {

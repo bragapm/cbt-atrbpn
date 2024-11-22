@@ -100,7 +100,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
               <DropdownMenuItem
                 onClick={() =>
                   navigate(
-                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.info_peserta.user_id}`
+                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.id}`
                   )
                 }
               >
