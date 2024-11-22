@@ -3,27 +3,31 @@ import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import useFinish from "../hooks/useFinish";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import MemoLoader from "@/components/ui/Loader";
+import useLogout from "../hooks/useLogout";
 
 const FinishExam: FC = () => {
-  const sesiId = localStorage.getItem("session_id");
+  // const sesiId = localStorage.getItem("session_id");
+  const { isLoading: load, error: err, postData } = useLogout();
   const [feedback, setFeedback] = useState("");
   const [count, setCount] = useState(10);
   const formattedTime = new Date(count * 1000).toISOString().slice(11, 19);
-  const { data, loadingFinish, error, finishExam } = useFinish();
-  const navigate = useNavigate();
+  // const { data, loadingFinish, error, finishExam } = useFinish();
+  const [submitFeedback, setSubmiteedback] = useState(false);
+  const finishData = JSON.parse(localStorage.getItem("finishData"));
   const handleSendFeedBack = () => {
-    const obj = {
-      user_session_id: Number(sesiId),
-      feedback: feedback,
-    };
-    finishExam(obj);
+    // const obj = {
+    //   user_session_id: Number(sesiId),
+    //   feedback: feedback,
+    // };
+    // finishExam(obj);
+    setSubmiteedback(true);
   };
 
   useEffect(() => {
     let intervalId;
-    if (data) {
+    if (submitFeedback) {
       intervalId = setInterval(() => {
         setCount((prevCount) => {
           if (prevCount > 0) {
@@ -37,18 +41,18 @@ const FinishExam: FC = () => {
       }, 1000);
     }
     return () => clearInterval(intervalId);
-  }, [data, count]);
-  console.log(data);
+  }, [submitFeedback, count]);
 
   const handleClearAllData = () => {
-    localStorage.clear();
-    navigate("/exam/login");
+    // localStorage.clear();
+    // navigate("/exam/login");
+    postData();
   };
 
   return (
     <div className={`w-full h-full flex justify-end items-center`}>
       <Card className="w-[642px] p-4 bg-secondary h-full">
-        {data === null ? (
+        {submitFeedback === false ? (
           <div className="w-full h-full flex gap-5 flex-col bg-secondary justify-center text-[#484A4A]">
             <div className="w-full flex justify-center">
               <div className="flex rounded-lg bg-white p-5 items-center ">
@@ -87,11 +91,12 @@ const FinishExam: FC = () => {
               className="h-14 w-fit mx-auto px-10 rounded-xl"
               onClick={handleSendFeedBack}
             >
-              {loadingFinish ? (
+              {/* {loadingFinish ? (
                 <MemoLoader width={35} height={35} color={"white"} />
               ) : (
-                "Kirim Feedback"
-              )}
+                ""
+              )} */}
+              Kirim Feedback
             </Button>
           </div>
         ) : (
@@ -109,11 +114,11 @@ const FinishExam: FC = () => {
             </div>
             <div className="border-b text-center grid gap-2.5">
               <p className="text-xs">Nama Peserta</p>
-              <p className="text-xl font-semibold">{data?.fullname}</p>
-              <p>No ID {data?.code}</p>
+              <p className="text-xl font-semibold">{finishData?.fullname}</p>
+              <p>No ID {finishData?.code}</p>
               <p>Telah menyelesaikan ujian CBT Ujian Pejabat dengan nilai</p>
               <p className="text-[#2A6083] text-[64px] font-medium">
-                {data?.totalScore}
+                {finishData?.totalScore}
               </p>
             </div>
             <div className=" p-2 text-center">

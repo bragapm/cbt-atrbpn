@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
+import useLogout from "./useLogout";
 
 export const useGetSoal = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any | null>(null);
   const sesiId = localStorage.getItem("session_id")
+  const {isLoading:load,error:err,postData} = useLogout()
 
   const fetchData = useCallback(async (problem_id:any,notClear=true) => {
     if(notClear){
@@ -17,20 +19,27 @@ export const useGetSoal = () => {
         import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
         `/user-tests/${sesiId}?problem_id=${problem_id}`,
       {
-        headers: 
-        { Authorization: `Bearer ${localStorage.getItem("user_token")}`, 
-        device: localStorage.getItem("deviceInfo")  
+        headers: { 
+          Authorization: `Bearer ${localStorage.getItem("user_token")}`, 
+          device: localStorage.getItem("deviceInfo")  
         },
         method: "GET",
       }
     );
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+
       const result = await response.json();
+      if(!response.ok){
+        console.log(result)
+        throw new Error(result?.message);
+      }
       setData(result?.data);
     } catch (err: any) {
-      setError(err.message);
+      if (err.message === "Invalid device. Login from another device is not allowed.") {
+        alert(err.message)
+        postData()
+      } else {
+        setError(err.message);
+      }
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import useLogout from './useLogout';
+import { useNavigate } from 'react-router-dom';
 
 interface PostDataProps {
   feedback: string;
@@ -11,6 +13,8 @@ const useFinish = () => {
   const [data,setData] = useState(null)
   const [loadingFinish, setIsLoading] = useState(false);
   const auth = localStorage.getItem("user_token")
+  const {isLoading:load,error:err,postData} = useLogout()
+  const navigate = useNavigate();
 
   const finishExam = async (data: PostDataProps) => {
     setIsLoading(true);
@@ -27,10 +31,17 @@ const useFinish = () => {
           },
         }
       );
+      localStorage.setItem("finishData",JSON.stringify(response.data.data))
       setData(response.data.data)
+      navigate("/exam/finish");
     } catch (error: any) {
       setError(error.message);
-      console.error('Terjadi kesalahan:', error);
+      if(error.status == 403){
+        if( error?.response?.data?.message === "Invalid device. Login from another device is not allowed.") {
+          alert(error?.response?.data?.message)
+          postData()
+        }
+      }
     } finally {
       setIsLoading(false);
     }

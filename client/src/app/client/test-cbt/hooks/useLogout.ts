@@ -27,17 +27,14 @@ const useLogout= () => {
           },
         }
       );
-      console.log('Data berhasil dikirim:', response.data.data);
-      localStorage.setItem("dataTest",JSON.stringify(response.data.data))
     } catch (error: any) {
       setError(error?.response?.data?.message);
-      console.error('Terjadi kesalahan:', error);
     } finally {
-        localStorage.clear();
+      localStorage.clear();
       setIsLoading(false);
       setTimeout(()=> {     
          navigate("/exam/login");
-      },1000)
+      },500)
     }
   };
 
