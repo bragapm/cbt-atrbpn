@@ -9,7 +9,7 @@ import useGetManagementUjian from "../hooks/useGetManagementUjian";
 import TableSearch from "@/components/table-search";
 import { useDebounceSearch } from "@/hooks/useDebounce";
 
-const limit: number = 10;
+const limit: number = 50;
 
 const UjianPages = () => {
   const navigate = useNavigate();

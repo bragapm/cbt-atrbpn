@@ -83,7 +83,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "tanggalUjian",
       header: "Tanggal Ujian",
       cell: ({ row }) => {
-        const tanggalUjian = row.original.tangagl_ujian;
+        const tanggalUjian = row.original.tanggal_ujian;
         const date = new Date(tanggalUjian);
         const formattedDate = format(date, "dd/MM/yyyy");
 
