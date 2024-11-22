@@ -207,7 +207,7 @@ export default (router, { services, database }) => {
       let incorrectAnswers = 0;
       let unanswered = 0;
       let totalScore = 0;
-
+      let maxScore = 0;
       userAnswers.forEach((answer) => {
         if (answer.score_category === 1) correctAnswers += 1;
         else if (answer.score_category === -1) incorrectAnswers += 1;
