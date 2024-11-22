@@ -108,7 +108,7 @@ const BankSoalForm: React.FC = () => {
 
       form.setValue(
         "random_question",
-        data?.questionBank?.data?.is_required ? "true" : "false"
+        data?.questionBank?.data?.is_required ? "false" : "true"
       );
       form.setValue(
         "random_options",
