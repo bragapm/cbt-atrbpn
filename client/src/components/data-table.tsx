@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   buttonAction?: () => void;
   isLoading?: boolean;
   customSelectedFooter?: React.ReactNode;
+  hidePagination?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -41,6 +42,7 @@ export function DataTable<TData, TValue>({
   isLoading,
   pagination,
   customSelectedFooter,
+  hidePagination,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -108,7 +110,11 @@ export function DataTable<TData, TValue>({
               )}
             </TableBody>
           </Table>
-          <div className="flex justify-center w-full items-center">
+          <div
+            className={`${
+              hidePagination && "hidden"
+            } flex justify-center w-full items-center`}
+          >
             <p className="text-xs w-full">
               {/* {customSelectedFooter
                 ? customSelectedFooter

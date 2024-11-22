@@ -18,7 +18,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
 
   const { data: userTest } = useGetUserTestQueries({
     page,
-    limit: 10,
+    limit: 500,
     user_session_id: params.pesertaId,
   });
 
@@ -29,25 +29,25 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   console.log(userTest);
 
   const columns: ColumnDef<IUserTest>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <Checkbox
+    //       checked={table.getIsAllPageRowsSelected()}
+    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //       aria-label="Select all"
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <Checkbox
+    //       checked={row.getIsSelected()}
+    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //       aria-label="Select row"
+    //     />
+    //   ),
+    //   enableSorting: false,
+    //   enableHiding: false,
+    // },
     {
       accessorKey: "problem.question",
       header: "Soal Pertanyaan",
@@ -55,10 +55,26 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
     {
       accessorKey: "answer.is_correct",
       header: "Jawaban",
+      cell: ({ row }) => {
+        const jawaban = row?.original?.answer.is_correct
+          ? "Benar"
+          : row?.original?.answer.is_correct === false
+          ? "Salah"
+          : "Tidak Menjawab";
+        return jawaban;
+      },
     },
     {
       accessorKey: "problem.kategori_id.nama_kategori",
       header: "Kategori Soal",
+    },
+    {
+      accessorKey: "skor",
+      header: "Skor",
+    },
+    {
+      accessorKey: "nilaijawab",
+      header: "Nilai Jawaban Benar",
     },
     {
       accessorKey: "problem.materi_id.materi",
@@ -102,6 +118,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
+        hidePagination
         data={userTest?.data?.data}
         columns={columns}
         pagination={{
