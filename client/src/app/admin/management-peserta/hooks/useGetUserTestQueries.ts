@@ -27,11 +27,12 @@ type IUserTestArgs = {
   page: number;
   pesertaId?: string;
   problemId?: string;
+  user_session_id?: string;
 };
 
 const useGetUserTestQueries = (queries?: IUserTestArgs) => {
   const service = new DirectusInterceptor();
-  const { limit, page, pesertaId, problemId } = queries;
+  const { limit, page, pesertaId, user_session_id ,problemId } = queries;
 
   return useQuery({
     queryKey: ["user-test", queries],
@@ -43,7 +44,7 @@ const useGetUserTestQueries = (queries?: IUserTestArgs) => {
             "problem.*,answer.*,problem.kategori_id.*,user_session_id.info_peserta.*,problem.materi_id.*",
           ],
           filter: {
-            user: { _eq: pesertaId },
+            user_session_id: { _eq: user_session_id },
             problem: {
               id: {
                 _eq: problemId,
