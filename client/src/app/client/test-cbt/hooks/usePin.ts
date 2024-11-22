@@ -42,7 +42,6 @@ const usePin = () => {
           },
         }
       );
-      console.log('Data berhasil dikirim:', response.data.data);
       localStorage.setItem("dataTest",JSON.stringify(response.data.data))
       navigate("/exam");
     } catch (error: any) {

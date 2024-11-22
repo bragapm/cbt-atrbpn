@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState, FC, useEffect } from "react";
+import { useState, FC } from "react";
 import { z } from "zod";
 
 import useAuth, { formAuthUser, IAuthUserRequest } from "../hooks/useAuth";
@@ -33,10 +33,6 @@ const LoginParticipant: FC = () => {
     return deviceInfoString.trim();
   };
 
-  useEffect(() => {
-    localStorage.setItem("deviceInfo", getDetailedDeviceInfo());
-  }, []);
-
   const form = useForm<z.infer<typeof formAuthUser>>({
     resolver: zodResolver(formAuthUser),
     defaultValues: {
@@ -57,10 +53,11 @@ const LoginParticipant: FC = () => {
   });
 
   function onSubmit(values: IAuthUserRequest) {
+    localStorage.setItem("deviceInfo", getDetailedDeviceInfo());
     localStorage.setItem("couponCode", values.coupon_code);
     const data = {
       coupon_code: values.coupon_code,
-      device: localStorage.getItem("deviceInfo"),
+      device: getDetailedDeviceInfo(),
     };
     mutate(data);
   }

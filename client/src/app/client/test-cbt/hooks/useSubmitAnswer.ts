@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import useLogout from './useLogout';
 
 interface PostDataProps {
   problem_id: number;
@@ -11,6 +12,7 @@ const useSubmitAnswer = () => {
   const [loadingAnswer, setIsLoading] = useState(false);
   const sesiId = localStorage.getItem("session_id")
   const auth = localStorage.getItem("user_token")
+  const {isLoading:load,error:err,postData} = useLogout()
 
   const submitAnswer = async (data: PostDataProps, handleGetsoal:()=>void) => {
     setIsLoading(true);
@@ -27,11 +29,15 @@ const useSubmitAnswer = () => {
           },
         }
       );
-      console.log('Data berhasil dikirim:', response.data.data);
       handleGetsoal()
     } catch (error: any) {
       setError(error.message);
-      console.error('Terjadi kesalahan:', error);
+      if(error.status == 403){
+        if( error?.response?.data?.message === "Invalid device. Login from another device is not allowed.") {
+          alert(error?.response?.data?.message)
+          postData()
+        }
+      }
     } finally {
       setIsLoading(false);
     }

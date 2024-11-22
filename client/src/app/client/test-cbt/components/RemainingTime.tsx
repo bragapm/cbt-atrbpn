@@ -2,6 +2,7 @@ import FinishDialogConfirm from "@/components/FinishDialogConfirm";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, FC } from "react";
+import useFinish from "../hooks/useFinish";
 
 interface ITime {
   start_time: string;
@@ -14,11 +15,22 @@ interface IRemaining {
 const RemainingTime: FC<IRemaining> = ({ dataObj }) => {
   const navigate = useNavigate();
   const [isShowSuccessDialog, setIsShowSuccessDialog] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const sesiId = localStorage.getItem("session_id");
+
+  const { data, loadingFinish, error, finishExam } = useFinish();
+
   const handleEndExam = () => {
-    navigate("/exam/finish");
+    const obj = {
+      user_session_id: Number(sesiId),
+      feedback: "-",
+    };
+    finishExam(obj);
   };
 
-  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  // const handleEndExam = () => {
+  //   navigate("/exam/finish");
+  // };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
