@@ -214,6 +214,7 @@ export default (router, { services, database }) => {
         else unanswered += 1;
 
         totalScore += answer.score;
+        maxScore += answer.correct_score;
       });
 
       // Update `end_attempt_at` in `user_session_test`
@@ -221,6 +222,7 @@ export default (router, { services, database }) => {
       await userSessionService.updateOne(user_session_id, {
         end_attempt_at: endAttemptAt,
         score: totalScore,
+        max_score: maxScore,
         score_summary: JSON.stringify({
           correct_answers: correctAnswers,
           wrong_answers: incorrectAnswers,
@@ -234,6 +236,7 @@ export default (router, { services, database }) => {
         status: "success",
         data: {
           totalScore,
+          maxScore,
           fullname: couponData.nama_peserta,
           code: couponData.code,
         },
