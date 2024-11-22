@@ -26,6 +26,7 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
     isError,
   } = useGetDetailManajemenUjian(id);
 
+  console.log(detailData);
   useEffect(() => {
     if (id && detailData) {
       form.setValue("name", detailData.name || "");

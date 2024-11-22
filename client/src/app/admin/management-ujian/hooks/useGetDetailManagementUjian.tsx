@@ -13,7 +13,7 @@ const useGetDetailManajemenUjian = (id: string | number | undefined) => {
 
       const userSessionResponse = await service.sendGetRequest<
         IBaseResponse<IUserSessionTest[]>
-      >(`/items/user_session_test?filter[session][_eq]=${id}`);
+      >(`/items/user_session_test?filter[session][_eq]=${id}&limit=1000`);
 
       const userIds = userSessionResponse.data.data.map((user) => user.user);
 
