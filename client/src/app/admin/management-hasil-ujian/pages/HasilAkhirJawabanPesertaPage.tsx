@@ -28,32 +28,45 @@ export const HasilAkhirJawabanPesertaPage: FC = () => {
   }
 
   const columns: ColumnDef<IUserTest>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <Checkbox
+    //       checked={table.getIsAllPageRowsSelected()}
+    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //       aria-label="Select all"
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <Checkbox
+    //       checked={row.getIsSelected()}
+    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //       aria-label="Select row"
+    //     />
+    //   ),
+    //   enableSorting: false,
+    //   enableHiding: false,
+    // },
     {
       accessorKey: "user_session_id.info_peserta.nama_peserta",
       header: "Nama Peserta",
+      cell: ({ row }) => {
+        const nama =
+          row?.original?.user_session_id?.info_peserta?.nama_peserta || "-";
+        return nama;
+      },
     },
     {
       accessorKey: "answer.is_correct",
       header: "Hasil Jawaban",
+      cell: ({ row }) => {
+        const jawaban = row?.original?.answer.is_correct
+          ? "Benar"
+          : row?.original?.answer.is_correct === false
+          ? "Salah"
+          : "Tidak Menjawab";
+        return jawaban;
+      },
     },
     {
       id: "actions",
@@ -81,7 +94,7 @@ export const HasilAkhirJawabanPesertaPage: FC = () => {
           { label: "List Pertanyaan", path: "/hasil-ujian/list-pertanyaan" },
           {
             label:
-              userTest?.data?.data?.[0].user_session_id?.info_peserta
+              userTest?.data?.data[0]?.user_session_id?.info_peserta
                 ?.nama_peserta,
           },
         ]}

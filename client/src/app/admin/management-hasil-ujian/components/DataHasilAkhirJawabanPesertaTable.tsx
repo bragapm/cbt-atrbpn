@@ -119,7 +119,7 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
     {
       id: "actions",
       header: "Actions",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -127,7 +127,11 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white p-2">
               <DropdownMenuItem
-                onClick={() => navigate("/hasil-ujian/list-pertanyaan/171")}
+                onClick={() =>
+                  navigate(
+                    "/hasil-ujian/list-pertanyaan/" + row.original.question_id
+                  )
+                }
               >
                 Lihat Detail Peserta
               </DropdownMenuItem>

@@ -45,11 +45,7 @@ const useGetUserTestQueries = (queries?: IUserTestArgs) => {
           ],
           filter: {
             user_session_id: { _eq: user_session_id },
-            problem: {
-              id: {
-                _eq: problemId,
-              },
-            },
+            problem: {_eq: problemId }
           },
           meta: "*",
           limit,
