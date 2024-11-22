@@ -9,6 +9,7 @@ export type IUjian = {
   deleted_at: string | null;
   PIN: number | null;
   user: IUserSessionTest[];
+  session_id?:number
 };
 
 export type IUjianRequest = {
