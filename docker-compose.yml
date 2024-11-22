@@ -38,6 +38,7 @@ services:
       # cors
       - CORS_ENABLED=true
       - CORS_ORIGIN=true
+      - CORS_ALLOWED_HEADERS=Content-Type,Authorization,device
       # redis
       - REDIS=redis://cache:6379
       # rate limiting

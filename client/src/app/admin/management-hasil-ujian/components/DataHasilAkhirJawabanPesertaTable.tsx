@@ -38,11 +38,11 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
     page,
     search: debouncedSearch,
   });
+  console.log(questionMetric);
 
   // if (!questionMetric) {
   //   return null;
   // }
-
   const columns: ColumnDef<QuestionMetric>[] = [
     // {
     //   id: "select",
@@ -161,11 +161,13 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
         <TableSearch value={search} onChange={setSearch} />
       </div>
       <DataTable
-        data={questionMetric?.data?.data}
+        data={questionMetric ? questionMetric?.data?.data : []}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: Number(questionMetric?.data?.pagination?.totalRecords),
+          totalItems: questionMetric
+            ? Number(questionMetric?.data?.pagination?.totalRecords)
+            : 0,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

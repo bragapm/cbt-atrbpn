@@ -12,7 +12,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ paths }) => {
   return (
     <nav className="flex">
       {paths.map((path, index) => (
-        <div className="flex items-center gap-2">
+        <div key={index} className="flex items-center gap-2">
           <a href={path.path} className="text-sm text-[#777674] cursor-pointer">
             {path.label}
           </a>

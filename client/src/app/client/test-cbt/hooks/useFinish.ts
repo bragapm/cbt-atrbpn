@@ -23,6 +23,7 @@ const useFinish = () => {
         {
           headers: {
             Authorization: `Bearer ${auth}`,
+            device: localStorage.getItem("deviceInfo")
           },
         }
       );

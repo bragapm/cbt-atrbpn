@@ -12,7 +12,7 @@ const TableSearch: React.FC<ITableSearch> = ({ value, onChange }) => {
   const [textSearch, setTextSearch] = useState("");
 
   useEffect(() => {
-    if (textSearch.length > 1 || textSearch.length === 0) {
+    if (textSearch?.length > 1 || textSearch?.length === 0) {
       onChange(textSearch);
     }
   }, [textSearch]);

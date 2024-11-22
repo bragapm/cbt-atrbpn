@@ -135,11 +135,11 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         <TableSearch value={search} onChange={setSearch} />
       </div>
       <DataTable
-        data={userSessionTest?.data?.data}
+        data={userSessionTest ? userSessionTest?.data?.data : []}
         columns={columns}
         pagination={{
           pageSize: 10,
-          totalItems: userSessionTest?.data?.meta?.total_count,
+          totalItems: userSessionTest?.data?.meta?.total_count || 0,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

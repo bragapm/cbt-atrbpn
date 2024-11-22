@@ -13,7 +13,10 @@ export const useGetSessionUser = () => {
         import.meta.env.VITE_DIRECTUS_PUBLIC_URL+
         "/user-session-tests",
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("user_token")}` },
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("user_token")}`,
+        device: localStorage.getItem("deviceInfo"),
+       },
         method: "GET",
       }
     );
