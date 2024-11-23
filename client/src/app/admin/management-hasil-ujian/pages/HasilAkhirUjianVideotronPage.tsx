@@ -15,12 +15,12 @@ import {
 import useGetSessionTestQueries from "../../management-peserta/hooks/useGetSessionTestQueries";
 
 export const HasilAkhirUjianVideotron: FC = () => {
-  const [sessionIdSelected, setSessionIdSelected] = useState(undefined);
+  const [sessionIdSelected, setSessionIdSelected] = useState("1");
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page: 1,
     limit: 100,
-    sessionId: "1",
+    sessionId: sessionIdSelected,
   });
 
   const { data: sessionTest } = useGetSessionTestQueries();
