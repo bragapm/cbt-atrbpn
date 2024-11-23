@@ -129,6 +129,11 @@ export function Sidebar() {
             activepath: "hasil-ujian",
           },
           {
+            icon: <Users size={18} />,
+            label: "Management Admin",
+            href: "/admin",
+          },
+          {
             icon: <Info size={18} />,
             label: "Management Tata Tertib",
             href: "/tatib",

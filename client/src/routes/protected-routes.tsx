@@ -24,6 +24,8 @@ import { EditDistribusiSoalPage } from "@/app/admin/management-pendistribusian-s
 import UjianEditPage from "@/app/admin/management-ujian/pages/UjianEditPage";
 import { HasilAkhirUjianPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirUjianPage";
 import { HasilAkhirJawabanPage } from "@/app/admin/management-hasil-ujian/pages/HasilAkhirJawabanPage";
+import AdminDataPages from "@/app/admin/management-admin/pages/AdminDataPages";
+import { CreateAdminAccount } from "@/app/admin/management-admin/pages/CreateAdminAccount";
 
 export const protectedRoutes = [
   {
@@ -129,6 +131,14 @@ export const protectedRoutes = [
       {
         path: "pendistribusian-soal/edit/:distribusiSoalId",
         element: <EditDistribusiSoalPage />,
+      },
+      {
+        path: "admin",
+        element: <AdminDataPages />,
+      },
+      {
+        path: "admin/create",
+        element: <CreateAdminAccount />,
       },
     ],
   },
