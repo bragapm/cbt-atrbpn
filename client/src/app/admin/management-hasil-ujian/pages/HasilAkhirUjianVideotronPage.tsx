@@ -25,6 +25,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
 
   const sessionTestOption = useMemo(() => {
     if (sessionTest?.data?.data) {
+      setSessionIdSelected(String(sessionTest?.data?.data[0]?.id));
       const options = sessionTest.data.data.map((item) => {
         return {
           label: item.name,
@@ -36,41 +37,25 @@ export const HasilAkhirUjianVideotron: FC = () => {
     return [];
   }, [sessionTest]);
 
-  if (!userSessionTest) {
-    return null;
-  }
+  // if (!userSessionTest) {
+  //   return null;
+  // }
 
   const columns: ColumnDef<any>[] = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "info_peserta.code",
+      accessorKey: "id_peserta",
       header: "ID Peseta",
     },
     {
-      accessorKey: "info_peserta.nama_peserta",
+      accessorKey: "nama_peserta",
       header: "Nama Peserta",
     },
     {
       accessorKey: "score",
       header: "Skor",
+      cell: ({ row }) => {
+        return row.original.score || "-";
+      },
     },
   ];
 
@@ -103,7 +88,12 @@ export const HasilAkhirUjianVideotron: FC = () => {
             </Select>
           </header>
         </div>
-        <VideotronTable data={userSessionTest?.data?.data} columns={columns} />
+        {userSessionTest && (
+          <VideotronTable
+            data={userSessionTest?.data?.data}
+            columns={columns}
+          />
+        )}
       </div>
     </>
   );

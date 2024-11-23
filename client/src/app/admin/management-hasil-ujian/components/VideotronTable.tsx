@@ -113,7 +113,7 @@ export function VideotronTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={columns?.length}
                     className="h-[70vh] text-center"
                   >
                     No results.
