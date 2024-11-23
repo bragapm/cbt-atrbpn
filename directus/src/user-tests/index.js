@@ -96,6 +96,7 @@ export default (router, { services, database }) => {
     async (req, res) => {
       const userSessionId = req.params.user_session_id;
       const { problem_id, answer_id } = req.body;
+      const user = req.user;
 
       if (!problem_id || !answer_id || !userSessionId) {
         return res.status(400).json({
@@ -147,7 +148,7 @@ export default (router, { services, database }) => {
 
         // Update or create the answer record
         const now = new Date();
-        const correct_score= category.bobot_benar;
+        const correct_score = category.bobot_benar;
         if (!existingAnswer.length) {
           // Create new answer record
           await userTestService.createOne({
@@ -155,6 +156,7 @@ export default (router, { services, database }) => {
             problem: problem_id,
             answer: answer_id,
             score_category,
+            user: user,
             score,
             correct_score,
             created_at: now,
@@ -180,6 +182,7 @@ export default (router, { services, database }) => {
           problem: problem_id,
           answer: answer_id === "0" ? null : answer_id,
           score_category,
+          user: user,
           score,
           updated_at: now,
         });

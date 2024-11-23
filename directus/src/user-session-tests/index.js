@@ -177,7 +177,7 @@ export default (router, { services, database }) => {
       const userSessionService = new ItemsService("user_session_test", {
         schema: req.schema,
       });
-      userSessionService
+      userSessionService;
       const couponsService = new ItemsService("coupon", {
         schema: req.schema,
       });
@@ -192,7 +192,7 @@ export default (router, { services, database }) => {
       // Fetch all answers for the user session
       const userAnswers = await userTestService.readByQuery({
         filter: { user_session_id: user_session_id },
-        fields: ["score_category", "score","correct_score"],
+        fields: ["score_category", "score", "correct_score"],
       });
 
       if (!userAnswers.length) {
@@ -216,6 +216,9 @@ export default (router, { services, database }) => {
         totalScore += answer.score;
         maxScore += parseFloat(answer.correct_score);
       });
+
+      totalScore = parseFloat(totalScore.toFixed(6));
+      maxScore = parseFloat(totalScore.toFixed(6));
 
       // Update `end_attempt_at` in `user_session_test`
       const endAttemptAt = new Date();

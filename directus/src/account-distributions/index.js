@@ -59,7 +59,7 @@ export default (router, { services, exceptions, getSchema }) => {
         status: "active",
         user: directusUser,
         problems,
-        info_peserta: coupon.id,
+        info_peserta: coupon,
       });
 
       // Send success response if all promises resolve successfully
@@ -83,7 +83,7 @@ export default (router, { services, exceptions, getSchema }) => {
     let userCount = 0;
     let errors = [];
     const BATCH_SIZE = 20;
-    
+
     const excelFile = req.files.file;
     const workbook = new ExcelJS.Workbook();
     try {
@@ -120,16 +120,20 @@ export default (router, { services, exceptions, getSchema }) => {
           nama_peserta: row.getCell(2).value,
           nomor_kontak: row.getCell(3).value,
           sesi: row.getCell(4).value,
-          rowNumber
+          rowNumber,
         });
       });
 
       // Process rows in batches
       for (let i = 0; i < rows.length; i += BATCH_SIZE) {
         const batch = rows.slice(i, Math.min(i + BATCH_SIZE, rows.length));
-        console.log(`\nProcessing batch ${Math.floor(i/BATCH_SIZE) + 1} (rows ${i + 1} to ${i + batch.length})`);
-        
-        const batchPromises = batch.map(rowData => 
+        console.log(
+          `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1} (rows ${
+            i + 1
+          } to ${i + batch.length})`
+        );
+
+        const batchPromises = batch.map((rowData) =>
           (async () => {
             try {
               // Generate unique ID, email, and password for the user
@@ -170,8 +174,9 @@ export default (router, { services, exceptions, getSchema }) => {
               });
 
               userCount++;
-              console.log(`✅ [${userCount}/${totalRows}] Successfully created user: ${rowData.nama_peserta} (Row ${rowData.rowNumber})`);
-
+              console.log(
+                `✅ [${userCount}/${totalRows}] Successfully created user: ${rowData.nama_peserta} (Row ${rowData.rowNumber})`
+              );
             } catch (error) {
               const errorMsg = `❌ Error processing row ${rowData.rowNumber} (${rowData.nama_peserta}): ${error.message}`;
               errors.push(errorMsg);
@@ -181,10 +186,12 @@ export default (router, { services, exceptions, getSchema }) => {
         );
 
         await Promise.all(batchPromises);
-        console.log(`Completed batch. Total progress: ${userCount}/${totalRows} users processed`);
-        
+        console.log(
+          `Completed batch. Total progress: ${userCount}/${totalRows} users processed`
+        );
+
         // Small delay between batches
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       // Final summary
@@ -192,14 +199,14 @@ export default (router, { services, exceptions, getSchema }) => {
       console.log(`Total users processed: ${userCount}/${totalRows}`);
       console.log(`Successful imports: ${userCount}`);
       console.log(`Failed imports: ${errors.length}`);
-      
+
       const response = {
         status: "success",
         message: "Bulk import completed",
         total_processed: userCount,
         total_rows: totalRows,
         successful: userCount,
-        failed: errors.length
+        failed: errors.length,
       };
 
       if (errors.length > 0) {
@@ -209,7 +216,6 @@ export default (router, { services, exceptions, getSchema }) => {
 
       // Send success response if all promises resolve successfully
       res.json({ status: "success", message: "Bulk import successful" });
-
     } catch (error) {
       // Catch any errors from Promise.all or other parts of the code
       console.error("Error uploading users:", error);
@@ -218,7 +224,7 @@ export default (router, { services, exceptions, getSchema }) => {
         message: `Error uploading users: ${error.message}`,
         processed: userCount,
         total_rows: totalRows,
-        errors
+        errors,
       });
     }
   });

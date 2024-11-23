@@ -133,6 +133,11 @@
         "type": "endpoint",
         "name": "register-user",
         "source": "src/register-user/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "videotron",
+        "source": "src/videotron/index.js"
       }
     ],
     "host": "10.8.2"

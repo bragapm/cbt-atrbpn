@@ -140,7 +140,7 @@ export default (router, { services, exceptions, getSchema }) => {
 
       if (
         nowFormatted < sessionStartTimeFormatted ||
-        now > sessionEndTimeFormatted
+        nowFormatted > sessionEndTimeFormatted
       ) {
         return res.status(403).json({
           status: "error",
