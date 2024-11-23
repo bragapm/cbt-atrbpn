@@ -75,69 +75,57 @@ export default (router, { services }) => {
       }
   });
 
-  // list admins
-  router.get('/list-admins', async (req, res) => {
-      const { search } = req.query;
+  router.get('/list-users', async (req, res) => {
+    const { search, limit = 10, offset = 0 } = req.query;
 
-      try {
-          const usersService = new ItemsService('directus_users', { schema: req.schema });
+    try {
+        const usersService = new ItemsService('directus_users', { schema: req.schema });
+
+        //  role mapping
+        const roleMapping = {
+            'fa064cca-97c3-473c-b9bf-2fe2c196d22e': 'Administrator', 
+            'f2acda8a-8eba-4a4f-a374-7f85e8d9e02b': 'Verifikator',  
+        };
+
+        // Build filters 
+        const filters = { role: { _in: Object.keys(roleMapping) } }; // Filter  both 
+        if (search) {
+            filters.first_name = { _contains: search }; // 
+        }
+
+        // Fetch users with pagination
+        const users = await usersService.readByQuery({
+            filter: filters,
+            fields: ['id', 'first_name', 'email', 'role', 'status'], 
+            limit: parseInt(limit, 10),
+            offset: parseInt(offset, 10),
+            sort: ['first_name'], 
+        });
+
+        // Map roles
+        const formattedUsers = users.map(user => ({
+            ...user,
+            role: roleMapping[user.role] || 'Unknown Role', // Map role ID
+        }));
+
+        res.status(200).json({
+            status: 'success',
+            data: formattedUsers,
+            pagination: {
+                limit: parseInt(limit, 10),
+                offset: parseInt(offset, 10),
+                total: formattedUsers.length,
+            },
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            message: err.message,
+        });
+    }
+});
 
 
-          const filters = { role: ADMIN_ROLE_ID }; 
-          if (search) {
-              filters.first_name = { _contains: search }; 
-          }
-
-
-          const admins = await usersService.readByQuery({
-              filter: filters,
-              fields: ['id', 'first_name', 'email', 'status'], 
-              sort: ['first_name'], 
-          });
-
-          res.status(200).json({
-              status: 'success',
-              data: admins,
-          });
-      } catch (err) {
-          res.status(500).json({
-              status: 'error',
-              message: err.message,
-          });
-      }
-  });
-
-  // list verifikators
-  router.get('/list-verifikator', async (req, res) => {
-      const { search } = req.query;
-
-      try {
-          const usersService = new ItemsService('directus_users', { schema: req.schema });
-
-
-          const filters = { role: VERIFIKATOR_ROLE_ID }; 
-          if (search) {
-              filters.first_name = { _contains: search }; 
-          }
-
-
-          const verifikators = await usersService.readByQuery({
-              filter: filters,
-              fields: ['id', 'first_name', 'email', 'status'], 
-              sort: ['first_name'], 
-          });
-
-          res.status(200).json({
-              status: 'success',
-              data: verifikators,
-          });
-      } catch (err) {
-          res.status(500).json({
-              status: 'error',
-              message: err.message,
-          });
-      }
-  });
 
    // Update user
    router.patch('/update-user/:id', async (req, res) => {
