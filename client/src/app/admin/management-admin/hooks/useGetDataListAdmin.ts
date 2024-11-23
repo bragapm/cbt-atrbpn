@@ -1,8 +1,17 @@
 import { DirectusInterceptor } from "@/services/directus-interceptors";
-import { IBaseResponse } from "@/types/base-response";
 import { useQuery } from "react-query";
 import { IKategori } from "@/types/collection/kategori.type";
 import { IDirectusQueryParams } from "@/types/directus.type";
+
+ type IBaseResponse<T> = {
+  data: T;
+  pagination: IBaseMetaResponse;
+};
+
+ type IBaseMetaResponse = {
+  total: number;
+};
+
 
 const useGetDataListAdmin = ({
   page,
@@ -13,8 +22,8 @@ const useGetDataListAdmin = ({
   return useQuery({
     queryKey: ["list-admin", page, limit, search],
     queryFn: () => {
-      const response = service.sendGetRequest<IBaseResponse<IKategori[]>>(
-        `/list-admin`,
+      const response = service.sendGetRequest<IBaseResponse<any[]>>(
+        `/register-user/list-users`,
         {
           fields: ["*.*"],
           meta: "*",

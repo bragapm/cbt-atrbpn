@@ -27,19 +27,8 @@ const AdminListTable: React.FC<IAdminTable> = ({
   pagination,
   refetch,
 }) => {
-  const [id, setId] = React.useState<string | number>("");
-  const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
-
-  //   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
-  //     useDeleteMutationKategoriSoal({
-  //       onSuccess: () => {
-  //         setIsOpenDeleteConfirm(false);
-  //         setIsShowSuccessDialog(true);
-  //         setId("");
-  //       },
-  //     });
 
   const columns: ColumnDef<any>[] = [
     {
@@ -51,40 +40,37 @@ const AdminListTable: React.FC<IAdminTable> = ({
       header: "Email",
     },
     {
-      accessorKey: "roleName",
+      accessorKey: "role",
       header: "Role",
     },
-    // {
-    //   id: "actions",
-    //   header: "Actions",
-    //   cell: ({ row }) => (
-    //     <div className="flex space-x-2">
-    //       <Trash
-    //         className="cursor-pointer text-gray-400 w-4 h-4"
-    //         onClick={() => {
-    //           setIsOpenDeleteConfirm(true);
-    //           setId(row.original.id);
-    //         }}
-    //       />
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger>
-    //           <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent className="bg-white p-2">
-    //           <DropdownMenuItem
-    //             onClick={() =>
-    //               navigate(`/admin/edit/${row.original.id}`)
-    //             }
-    //           >
-    //             Edit
-    //           </DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     </div>
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white p-2">
+              <DropdownMenuItem
+                onClick={() => {
+                  sessionStorage.setItem(
+                    "dataAdmin",
+                    JSON.stringify(row.original)
+                  );
+                  navigate(`/admin/edit/${row.original.id}`);
+                }}
+              >
+                Edit User
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
   ];
 
   return (

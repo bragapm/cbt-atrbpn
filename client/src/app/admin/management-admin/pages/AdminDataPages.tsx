@@ -9,7 +9,7 @@ import { useDebounceSearch } from "@/hooks/useDebounce";
 import AdminListTable from "../components/AdminListTable";
 import useGetDataListAdmin from "../hooks/useGetDataListAdmin";
 
-const limit: number = 40;
+const limit: number = 50;
 
 const AdminDataPages = () => {
   const navigate = useNavigate();
@@ -25,16 +25,6 @@ const AdminDataPages = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
-      {/* <ConfirmationDialog
-        isOpen={isOpenExportDialog}
-        onOpenChange={setIsOpenExportDialog}
-        description="Apakah anda yakin ingin mengekspor data?"
-        icon={<Download size="30" className="text-primary" />}
-        onSubmit={() => {
-          window.location.href =
-            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-session";
-        }}
-      /> */}
       <TableActions
         title="Management Admin"
         description="Data ditampilkan sesuai dengan filter"
@@ -59,7 +49,7 @@ const AdminDataPages = () => {
         isLoading={isLoading}
         pagination={{
           pageSize: limit,
-          totalItems: data?.data?.meta.total_count,
+          totalItems: data?.data?.pagination?.total,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

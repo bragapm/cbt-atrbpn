@@ -140,6 +140,10 @@ export const protectedRoutes = [
         path: "admin/create",
         element: <CreateAdminAccount />,
       },
+      {
+        path: "admin/edit/:id",
+        element: <CreateAdminAccount />,
+      },
     ],
   },
 ];

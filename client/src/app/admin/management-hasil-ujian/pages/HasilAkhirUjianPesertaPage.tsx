@@ -9,6 +9,7 @@ import useGetUserTestQueries, {
   IUserTest,
 } from "../../management-peserta/hooks/useGetUserTestQueries";
 import { useParams } from "react-router-dom";
+import useGetSummarize from "../../management-peserta/hooks/useGetSummarize";
 
 export const HasilAkhirUjianPesertaPage: FC = () => {
   const params = useParams();
@@ -22,11 +23,12 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
     user_session_id: params.pesertaId,
   });
 
+  const { data: sumarize } = useGetSummarize({
+    id: params.pesertaId,
+  });
   if (!userTest) {
     return null;
   }
-
-  console.log(userTest);
 
   const columns: ColumnDef<IUserTest>[] = [
     // {
@@ -127,6 +129,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
+        dataSumary={sumarize?.data}
       />
     </div>
   );

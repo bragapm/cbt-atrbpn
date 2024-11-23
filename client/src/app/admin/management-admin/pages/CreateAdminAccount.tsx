@@ -8,13 +8,14 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SuccessDialog from "@/components/success-dialog";
 import ConfirmationDialog from "@/components/confirmation-dialog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import useCreateAdmin from "../hooks/useCreateAdmin";
+import useUpdateAdmin from "../hooks/useUpdateAdmin";
 
 const createAdminSchema = z.object({
   email: z.string().nonempty("Email harus diisi"),
@@ -33,36 +34,17 @@ type CreateAdminFormValue = {
 
 const CreateFormInner = ({
   openDialogConfirmation,
+  id,
 }: {
   openDialogConfirmation: () => void;
+  id?: string;
 }) => {
-  return (
-    <>
-      <div className="flex gap-3">
-        <FormInput name="email" placeholder="Masukan Email" label="Email" />
-        <FormInput
-          name="password"
-          placeholder="Masukan Password"
-          label="Password"
-        />
-      </div>
-      <div className="flex gap-3 items-start">
-        <FormInput name="first_name" placeholder="Masukan Nama" label="Nama" />
-        <FormInput name="roleName" placeholder="Masukan Role" label="Role" />
-      </div>
-
-      <div className="flex justify-end gap-3 pt-5">
-        <Button className=" w-40">Batal</Button>
-        <Button onClick={openDialogConfirmation} className="w-40">
-          Tambah Admin
-        </Button>
-      </div>
-    </>
-  );
+  return <></>;
 };
 
 export const CreateAdminAccount = () => {
   const navigation = useNavigate();
+  const { id } = useParams();
 
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
@@ -78,10 +60,7 @@ export const CreateAdminAccount = () => {
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
-  const users = null;
-
-  //   const { data: users } = useGetUserQuery({ code: idPeserta });
+  const { handleSubmit, reset } = methods;
 
   const { mutateAsync: createAdmin, isLoading } = useCreateAdmin({
     onSuccess: () => {
@@ -89,20 +68,50 @@ export const CreateAdminAccount = () => {
       setConfirmationDialog(false);
     },
     onError: (errorMessage) => {
-      if (!users) {
-        toast.error("ID peserta tidak ditemukan");
-        setConfirmationDialog(false);
-        return;
-      }
-
       toast.error(errorMessage);
       setConfirmationDialog(false);
     },
   });
 
+  const { mutateAsync: updateAdmin, isLoading: loadupdate } = useUpdateAdmin(
+    id,
+    {
+      onSuccess: () => {
+        setIsSuccess(true);
+        setConfirmationDialog(false);
+      },
+      onError: (errorMessage) => {
+        toast.error(errorMessage);
+        setConfirmationDialog(false);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (id) {
+      const data = JSON.parse(sessionStorage.getItem("dataAdmin"));
+      console.log(data);
+      const { email, first_name, role } = data;
+      const roleName = role;
+      reset({
+        email,
+        first_name,
+        roleName,
+      });
+    }
+  }, [id, reset]);
+
   const onSubmit = (data: any) => {
-    console.log(data);
-    createAdmin(data);
+    if (id) {
+      const obj = {
+        email: data.email,
+        password: data.password,
+        first_name: data.first_name,
+      };
+      updateAdmin(obj);
+    } else {
+      createAdmin(data);
+    }
   };
 
   return (
@@ -110,7 +119,7 @@ export const CreateAdminAccount = () => {
       <SuccessDialog
         isOpen={isSuccess}
         onOpenChange={setIsSuccess}
-        description="Akun Admin Ditambahkan"
+        description={`Akun Admin ${id ? "Berhasil Diedit" : "Ditambahkan"} `}
         onSubmit={() => {
           navigation("/admin");
         }}
@@ -119,25 +128,61 @@ export const CreateAdminAccount = () => {
         isLoading={isLoading}
         isOpen={confirmationDialog}
         onOpenChange={setConfirmationDialog}
-        description="Apakah Anda yakin ingin menambahkan Admin"
+        description={`Apakah Anda yakin ingin ${
+          id ? "Mengubah" : "menambahkan"
+        } Admin`}
         onSubmit={handleSubmit(onSubmit)}
       />
       <Breadcrumbs
         paths={[
           { label: "Daftar Admin", path: "/admin" },
-          { label: "Tambah Admin" },
+          { label: id ? "Edit Admin" : "Tambah Admin" },
         ]}
       />
       <div className="border rounded-md bg-white p-4 mt-6">
         <header>
-          <h1 className="text-lg">Tambah Admin</h1>
+          <h1 className="text-lg">{id ? "Edit" : "Tambah"} Admin</h1>
           <h2 className="text-sm">Data Administrator</h2>
         </header>
         <FormProvider {...methods}>
           <div className="mt-4 space-y-2">
-            <CreateFormInner
-              openDialogConfirmation={() => setConfirmationDialog(true)}
-            />
+            <div className="flex gap-3">
+              <FormInput
+                name="email"
+                placeholder="Masukan Email"
+                label="Email"
+              />
+              <FormInput
+                name="password"
+                placeholder="Masukan Password"
+                label="Password"
+              />
+            </div>
+            <div className="flex gap-3 items-start">
+              <FormInput
+                name="first_name"
+                placeholder="Masukan Nama"
+                label="Nama"
+              />
+              {!id && (
+                <FormInput
+                  name="roleName"
+                  placeholder="Masukan Role"
+                  label="Role"
+                />
+              )}
+            </div>
+            <div className="flex justify-end gap-3 pt-5">
+              <Button onClick={() => navigation("/admin")} className="w-40">
+                Batal
+              </Button>
+              <Button
+                onClick={() => setConfirmationDialog(true)}
+                className="w-40"
+              >
+                {id ? "Edit" : "Tambah"} Admin
+              </Button>
+            </div>
           </div>
         </FormProvider>
       </div>

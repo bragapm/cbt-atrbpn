@@ -31,6 +31,7 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean;
   customSelectedFooter?: React.ReactNode;
   hidePagination?: boolean;
+  dataSumary?: any;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   pagination,
   customSelectedFooter,
   hidePagination,
+  dataSumary,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -105,6 +107,20 @@ export function DataTable<TData, TValue>({
                     className="h-24 text-center"
                   >
                     No results.
+                  </TableCell>
+                </TableRow>
+              )}
+
+              {dataSumary && (
+                <TableRow>
+                  <TableCell colSpan={3} className="h-20">
+                    Summarize
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dataSumary?.score}
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dataSumary?.maxScore}
                   </TableCell>
                 </TableRow>
               )}
