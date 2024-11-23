@@ -42,12 +42,24 @@ const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
     queryFn: () => {
       const response = service.sendGetRequest<
         IBaseResponse<IUserSessionTest[]>
-      >(`/videotron/get-session-results/` +queries?.sessionId, {
+      >(`/items/user_session_test`, {
         fields: ["*.*"],
         limit,
         offset: (page - 1) * limit,
         meta: "*",
-        });
+        filter: {
+          session:
+            queries?.sessionId === null
+              ? { _null: true }
+              : { _eq: queries?.sessionId },
+          ...(queries?.search && {
+            info_peserta: {
+              nama_peserta: { _contains: queries?.search },
+            },
+          }),
+        },
+        sort: "info_peserta.nama_peserta",
+      });
       return response;
     },
   });

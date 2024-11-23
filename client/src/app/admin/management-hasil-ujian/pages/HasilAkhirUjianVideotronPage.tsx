@@ -1,9 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import React, { FC, useMemo, useState } from "react";
-import useGetUserSessionTestQueries, {
-  IUserSessionTest,
-} from "../../management-peserta/hooks/useGetUserSessionTestQueries";
+import { FC, useMemo, useState } from "react";
 import { VideotronTable } from "../components/VideotronTable";
 import {
   Select,
@@ -13,11 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useGetSessionTestQueries from "../../management-peserta/hooks/useGetSessionTestQueries";
+import useGetVideotron from "../hooks/useGetVideotron";
 
 export const HasilAkhirUjianVideotron: FC = () => {
   const [sessionIdSelected, setSessionIdSelected] = useState("1");
 
-  const { data: userSessionTest } = useGetUserSessionTestQueries({
+  const { data: userSessionTest } = useGetVideotron({
     page: 1,
     limit: 100,
     sessionId: sessionIdSelected,
@@ -42,7 +40,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
     return null;
   }
 
-  const columns: ColumnDef<IUserSessionTest>[] = [
+  const columns: ColumnDef<any>[] = [
     {
       id: "select",
       header: ({ table }) => (
