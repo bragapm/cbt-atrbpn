@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Dialog, DialogContent, DialogFooter } from "./ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 type DeleteDialogConfirmProps = {
   isOpen: boolean;
@@ -24,6 +25,7 @@ const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col gap-6 justify-center items-center">
+        <DialogTitle></DialogTitle>
         <Card className="bg-white p-8 w-fit">
           {icon ? icon : <Check className="text-primary w-12 h-12" />}
         </Card>

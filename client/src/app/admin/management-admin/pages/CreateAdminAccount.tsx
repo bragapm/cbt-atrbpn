@@ -23,14 +23,19 @@ const createAdminSchema = z.object({
   roleName: z.string().nonempty("Role harus diisi"),
 });
 
+type CreateAdminFormValue = {
+  email: string;
+  password: string;
+  nomorKontak: string;
+  first_name: string;
+  roleName: string;
+};
+
 const CreateFormInner = ({
   openDialogConfirmation,
 }: {
   openDialogConfirmation: () => void;
 }) => {
-  const { formState } = useFormContext();
-  const { isValid } = formState;
-
   return (
     <>
       <div className="flex gap-3">
@@ -42,16 +47,13 @@ const CreateFormInner = ({
         />
       </div>
       <div className="flex gap-3 items-start">
-        <FormInput name="firstname" placeholder="Masukan Nama" label="Nama" />
+        <FormInput name="first_name" placeholder="Masukan Nama" label="Nama" />
+        <FormInput name="roleName" placeholder="Masukan Role" label="Role" />
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
-        <Button
-          onClick={openDialogConfirmation}
-          disabled={!isValid}
-          className="w-40"
-        >
+        <Button onClick={openDialogConfirmation} className="w-40">
           Tambah Admin
         </Button>
       </div>
@@ -65,7 +67,7 @@ export const CreateAdminAccount = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 
-  const methods = useForm<any>({
+  const methods = useForm<CreateAdminFormValue>({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
       email: "",
@@ -99,18 +101,8 @@ export const CreateAdminAccount = () => {
   });
 
   const onSubmit = (data: any) => {
-    if (users.data.data?.[0]) {
-      const user = users.data.data[0];
-      //   createAdmin({
-      //     // user: user?.user_id?.id,
-      //     session: data.sesiUjian,
-      //     info_peserta: String(user?.id),
-      //   });
-    } else {
-      toast.error("ID peserta tidak ditemukan");
-      setConfirmationDialog(false);
-      return;
-    }
+    console.log(data);
+    createAdmin(data);
   };
 
   return (
@@ -118,16 +110,16 @@ export const CreateAdminAccount = () => {
       <SuccessDialog
         isOpen={isSuccess}
         onOpenChange={setIsSuccess}
-        description="Peserta CBT Ditambahkan"
+        description="Akun Admin Ditambahkan"
         onSubmit={() => {
-          navigation("/peserta-cbt");
+          navigation("/admin");
         }}
       />
       <ConfirmationDialog
         isLoading={isLoading}
         isOpen={confirmationDialog}
         onOpenChange={setConfirmationDialog}
-        description="Apakah Anda yakin ingin menambahkan Peserta CBT"
+        description="Apakah Anda yakin ingin menambahkan Admin"
         onSubmit={handleSubmit(onSubmit)}
       />
       <Breadcrumbs
