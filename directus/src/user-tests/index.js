@@ -147,7 +147,7 @@ export default (router, { services, database }) => {
 
         // Update or create the answer record
         const now = new Date();
-        const correct_score= category.bobot_benar;
+        const correct_score = category.bobot_benar;
         if (!existingAnswer.length) {
           // Create new answer record
           await userTestService.createOne({
