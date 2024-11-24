@@ -18,7 +18,9 @@ export const setAccessToken = (token: string): void => {
 // Function to delete (remove) the access token from sessionStorage
 export const deleteAccessToken = (): void => {
   if (typeof window !== "undefined") {
-    window.location.href = "/";
+    if(sessionStorage.getItem(ACCESS_TOKEN_KEY)){
+      window.location.href = "/";
+    }
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
   }
 };
