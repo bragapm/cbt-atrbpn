@@ -8,6 +8,14 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
+import SelectForm from "@/components/select-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useEffect, useMemo, useState } from "react";
 import SuccessDialog from "@/components/success-dialog";
 import ConfirmationDialog from "@/components/confirmation-dialog";
@@ -32,15 +40,16 @@ type CreateAdminFormValue = {
   roleName: string;
 };
 
-const CreateFormInner = ({
-  openDialogConfirmation,
-  id,
-}: {
-  openDialogConfirmation: () => void;
-  id?: string;
-}) => {
-  return <></>;
-};
+const booleanData = [
+  {
+    value: "admin",
+    label: "Administrator",
+  },
+  {
+    value: "verifikator",
+    label: "Verifikator",
+  },
+];
 
 export const CreateAdminAccount = () => {
   const navigation = useNavigate();
@@ -164,12 +173,29 @@ export const CreateAdminAccount = () => {
                 placeholder="Masukan Nama"
                 label="Nama"
               />
+
               {!id && (
-                <FormInput
+                <FormField
                   name="roleName"
-                  placeholder="Masukan Role"
-                  label="Role"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <SelectForm
+                          data={booleanData}
+                          title="Role"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
+                // <FormInput
+                //   name="roleName"
+                //   placeholder="Masukan Role"
+                //   label="Role"
+                // />
               )}
             </div>
             <div className="flex justify-end gap-3 pt-5">
