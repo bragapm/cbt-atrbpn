@@ -42,14 +42,16 @@ const QuestionDetail: FC<IQuestion> = ({
             className="border rounded-md border-primary p-1 hover:bg-primary/20"
             onClick={handlePrevQuestion}
           >
-            <ChevronLeft color="#2A6083" size={20} />
+            {/* <ChevronLeft color="#2A6083" size={20} /> */}
+            Sebelumnya
           </button>
           <button
             disabled={loading}
             onClick={handleNextQuestion}
             className="border rounded-md border-primary p-1 hover:bg-primary/20"
           >
-            <ChevronRight color="#2A6083" size={20} />
+            Selanjutnya
+            {/* <ChevronRight color="#2A6083" size={20} /> */}
           </button>
         </div>
       </div>
