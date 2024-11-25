@@ -47,6 +47,7 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
   const [id, setId] = React.useState<string | number>("");
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
+  const role = sessionStorage.getItem("role");
 
   const [selectedCategory, setSelectedCategory] = useState<{
     label: string;
@@ -197,23 +198,29 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex space-x-2">
-          <Trash
-            className="cursor-pointer text-gray-400 w-4 h-4"
-            onClick={() => {
-              setIsOpenDeleteConfirm(true);
-              setId(row.original.id);
-            }}
-          />
+          {role === "Administrator" && (
+            <Trash
+              className="cursor-pointer text-gray-400 w-4 h-4"
+              onClick={() => {
+                setIsOpenDeleteConfirm(true);
+                setId(row.original.id);
+              }}
+            />
+          )}
+
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white p-2">
-              <DropdownMenuItem
-                onClick={() => navigate(`/bank-soal/edit/${row.original.id}`)}
-              >
-                Edit
-              </DropdownMenuItem>
+              {role === "Administrator" && (
+                <DropdownMenuItem
+                  onClick={() => navigate(`/bank-soal/edit/${row.original.id}`)}
+                >
+                  Edit
+                </DropdownMenuItem>
+              )}
+
               <DropdownMenuItem
                 onClick={() =>
                   navigate(`/bank-soal/preview/${row.original.id}`)

@@ -38,7 +38,6 @@ export const DataHasilAkhirJawabanPesertaTable = () => {
     page,
     search: debouncedSearch,
   });
-  console.log(questionMetric);
 
   // if (!questionMetric) {
   //   return null;

@@ -2,6 +2,7 @@ import useGetCurrentUser from "@/hooks/useGetCurrentUser";
 import Profile from "./profile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAccessToken } from "@/midlewares/token";
+import { useEffect } from "react";
 
 const Navbar: React.FC<{ variant: "auth" | "admin" }> = ({ variant }) => {
   const accessToken = getAccessToken();

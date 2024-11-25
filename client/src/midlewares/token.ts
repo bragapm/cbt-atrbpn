@@ -22,5 +22,6 @@ export const deleteAccessToken = (): void => {
       window.location.href = "/";
     }
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    sessionStorage.clear()
   }
 };

@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/data-table";
 import DeleteDialogConfirm from "@/components/delete-dialog-confirm";
 import SuccessDialog from "@/components/success-dialog";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { File, MoreVertical, Trash } from "lucide-react";
 import React, { useState } from "react";
@@ -28,7 +28,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   const debouncedSearch = useDebounceSearch({ value: search });
 
   const [id, setId] = React.useState<string | number>("");
-
+  const role = sessionStorage.getItem("role");
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeletePesertaMutation({
       onSuccess: () => {
@@ -40,13 +40,9 @@ export const DataHasilAkhirUjianPesertaTable = () => {
 
   const { data: userSessionTest } = useGetUserSessionTestQueries({
     page,
-    limit: 10,
+    limit: 20,
     search: debouncedSearch,
   });
-
-  // if (!userSessionTest) {
-  //   return null;
-  // }
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     // {
@@ -79,19 +75,24 @@ export const DataHasilAkhirUjianPesertaTable = () => {
     {
       accessorKey: "score",
       header: "Skor",
+      cell: ({ row }) => {
+        return row.original.score || "-";
+      },
     },
     {
       id: "actions",
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex space-x-2">
-          <Trash
-            className="cursor-pointer text-gray-400 w-4 h-4"
-            onClick={() => {
-              setIsOpenDeleteConfirm(true);
-              setId(row.original.id);
-            }}
-          />
+          {role === "Administrator" && (
+            <Trash
+              className="cursor-pointer text-gray-400 w-4 h-4"
+              onClick={() => {
+                setIsOpenDeleteConfirm(true);
+                setId(row.original.id);
+              }}
+            />
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
@@ -116,7 +117,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   ];
 
   return (
-    <>
+    <div>
       <SuccessDialog
         isOpen={isShowSuccessDialog}
         onOpenChange={setIsShowSuccessDialog}
@@ -131,7 +132,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         }}
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end pb-2">
         <TableSearch value={search} onChange={setSearch} />
       </div>
       <DataTable
@@ -147,6 +148,6 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         iconButtonAction={<File className="w-5 h-5" />}
         buttonAction={() => window.open("/hasil-ujian/videotron")}
       />
-    </>
+    </div>
   );
 };

@@ -12,7 +12,7 @@ export type IUser = {
   language: string | null;
   tfa_secret: string | null;
   status: "active" | "inactive" | "suspended";
-  role: string | null;
+  role: any | null;
   token: string | null;
   last_access: string;
   last_page: string | null;

@@ -19,7 +19,7 @@ const BankSoalPages = () => {
   const debouncedSearch = useDebounceSearch({ value: search });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedMateri, setSelectedMateri] = useState<string | null>(null);
-
+  const role = sessionStorage.getItem("role");
   const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,
@@ -54,23 +54,27 @@ const BankSoalPages = () => {
               Export Soal
             </Button>
 
-            <Button
-              variant="actions"
-              size="actions"
-              startContent={<Cloud />}
-              onClick={() => navigate("/bank-soal/import")}
-            >
-              Import Soal
-            </Button>
+            {role === "Administrator" && (
+              <>
+                <Button
+                  variant="actions"
+                  size="actions"
+                  startContent={<Cloud />}
+                  onClick={() => navigate("/bank-soal/import")}
+                >
+                  Import Soal
+                </Button>
 
-            <Button
-              variant="actions"
-              size="actions"
-              startContent={<Plus />}
-              onClick={() => navigate("/bank-soal/create")}
-            >
-              Tambah Soal
-            </Button>
+                <Button
+                  variant="actions"
+                  size="actions"
+                  startContent={<Plus />}
+                  onClick={() => navigate("/bank-soal/create")}
+                >
+                  Tambah Soal
+                </Button>
+              </>
+            )}
           </div>
         }
       />

@@ -1,3 +1,5 @@
+import useGetCurrentUser from "@/hooks/useGetCurrentUser";
+import { getAccessToken } from "@/midlewares/token";
 import {
   FileCheck,
   FileText,
@@ -8,7 +10,7 @@ import {
   Users,
   Folder,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 interface SidebarItem {
@@ -16,6 +18,7 @@ interface SidebarItem {
   label: string;
   href: string;
   activepath?: string;
+  isHide?: boolean;
 }
 
 interface SidebarSection {
@@ -49,7 +52,10 @@ function SidebarComponent({ title, subtitle, sections }: SidebarProps) {
             </h2>
             <ul>
               {section.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="mb-1">
+                <li
+                  key={itemIndex}
+                  className={`${item?.isHide && "hidden"} mb-1`}
+                >
                   <Link
                     to={item.href}
                     className={`flex items-center px-2 py-4 text-sm rounded-md ${
@@ -73,6 +79,16 @@ function SidebarComponent({ title, subtitle, sections }: SidebarProps) {
 
 // Example usage as a separate component
 export function Sidebar() {
+  const accessToken = getAccessToken();
+
+  const { data: currentUser, isLoading } = useGetCurrentUser({
+    enabled: !!accessToken,
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("role", currentUser?.data?.role?.name);
+  }, [currentUser]);
+
   const sidebarData: SidebarProps = {
     title: "Dashboard",
     subtitle: "Admin",
@@ -98,18 +114,21 @@ export function Sidebar() {
             label: "Management Ujian",
             href: "/ujian",
             activepath: "ujian",
+            isHide: currentUser?.data?.role?.name !== "Administrator",
           },
           {
             icon: <Monitor size={18} />,
             label: "Pendistribusian Soal",
             href: "/pendistribusian-soal",
             activepath: "pendistribusian-soal",
+            isHide: currentUser?.data?.role?.name !== "Administrator",
           },
           {
             icon: <Folder size={18} />,
             label: "Kategori Soal",
             href: "/kategori-soal",
             activepath: "kategori-soal",
+            isHide: currentUser?.data?.role?.name !== "Administrator",
           },
         ],
       },
@@ -132,11 +151,15 @@ export function Sidebar() {
             icon: <Users size={18} />,
             label: "Management Admin",
             href: "/admin",
+            isHide: currentUser?.data?.role?.name !== "Administrator",
+            activepath: "admin",
           },
           {
             icon: <Info size={18} />,
             label: "Management Tata Tertib",
             href: "/tatib",
+            isHide: currentUser?.data?.role?.name !== "Administrator",
+            activepath: "tatib",
           },
         ],
       },

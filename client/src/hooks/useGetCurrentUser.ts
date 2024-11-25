@@ -16,7 +16,7 @@ const useGetCurrentUser = ({ enabled }: IUseGetCurrentUser) => {
     queryFn: async () => {
       const { data } = await directusApiService.sendGetRequest<
         IBaseResponse<IUser>
-      >("/users/me");
+      >("/users/me?fields=*.*");
 
       return data;
     },
