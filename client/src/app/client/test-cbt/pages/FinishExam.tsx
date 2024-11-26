@@ -2,26 +2,26 @@ import { useEffect, useState, FC } from "react";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import useFinish from "../hooks/useFinish";
-// import { useNavigate } from "react-router-dom";
 import MemoLoader from "@/components/ui/Loader";
 import useLogout from "../hooks/useLogout";
+import useFeedback from "../hooks/useFeedback";
 
 const FinishExam: FC = () => {
-  // const sesiId = localStorage.getItem("session_id");
-  const { isLoading: load, error: err, postData } = useLogout();
+  const sesiId = localStorage.getItem("session_id");
+  const { isLoading: load, error: err, postData: clearData } = useLogout();
+  const { data, loadingFeedback, error, sendFeedback } = useFeedback();
+
   const [feedback, setFeedback] = useState("");
   const [count, setCount] = useState(10);
   const formattedTime = new Date(count * 1000).toISOString().slice(11, 19);
-  // const { data, loadingFinish, error, finishExam } = useFinish();
   const [submitFeedback, setSubmiteedback] = useState(false);
   const finishData = JSON.parse(localStorage.getItem("finishData"));
   const handleSendFeedBack = () => {
-    // const obj = {
-    //   user_session_id: Number(sesiId),
-    //   feedback: feedback,
-    // };
-    // finishExam(obj);
+    const obj = {
+      user_session_id: Number(sesiId),
+      feedback: feedback,
+    };
+    sendFeedback(obj);
     setSubmiteedback(true);
   };
 
@@ -34,7 +34,7 @@ const FinishExam: FC = () => {
             return prevCount - 1;
           } else {
             clearInterval(intervalId);
-            handleClearAllData();
+            clearData();
             return 0;
           }
         });
@@ -43,16 +43,10 @@ const FinishExam: FC = () => {
     return () => clearInterval(intervalId);
   }, [submitFeedback, count]);
 
-  const handleClearAllData = () => {
-    // localStorage.clear();
-    // navigate("/exam/login");
-    postData();
-  };
-
   return (
     <div className={`w-full h-full flex justify-end items-center`}>
       <Card className="w-[642px] p-4 bg-secondary h-full">
-        {submitFeedback === false ? (
+        {data === false ? (
           <div className="w-full h-full flex gap-5 flex-col bg-secondary justify-center text-[#484A4A]">
             <div className="w-full flex justify-center">
               <div className="flex rounded-lg bg-white p-5 items-center ">
@@ -90,13 +84,13 @@ const FinishExam: FC = () => {
               variant="default"
               className="h-14 w-fit mx-auto px-10 rounded-xl"
               onClick={handleSendFeedBack}
+              disabled={feedback.length === 0}
             >
-              {/* {loadingFinish ? (
+              {loadingFeedback ? (
                 <MemoLoader width={35} height={35} color={"white"} />
               ) : (
-                ""
-              )} */}
-              Kirim Feedback
+                "Kirim Feedback"
+              )}
             </Button>
           </div>
         ) : (
@@ -131,7 +125,7 @@ const FinishExam: FC = () => {
               variant="default"
               className="h-14 mx-20 rounded-xl"
               onClick={() => {
-                handleClearAllData();
+                clearData();
               }}
             >
               Keluar

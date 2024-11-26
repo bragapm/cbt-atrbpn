@@ -10,9 +10,10 @@ interface PostDataProps {
 const useFeedback = () => {
   const [error, setError] = useState<string | null>(null);
   const [data,setData] = useState(false)
-  const [loadingFinish, setIsLoading] = useState(false);
+  const [loadingFeedback, setIsLoading] = useState(false);
   const auth = localStorage.getItem("user_token")
-  const {isLoading:load,error:err,postData} = useLogout()
+
+  const {isLoading,error:err,postData} = useLogout()
 
   const sendFeedback = async (data: PostDataProps) => {
     setIsLoading(true);
@@ -29,23 +30,23 @@ const useFeedback = () => {
           },
         }
       );
-      setData(true)
     } catch (error: any) {
       setError(error.message);
       if(error.status == 403){
-        if( error?.response?.data?.message === "Invalid device. Login from another device is not allowed.") {
+        if( error?.response?.data?.message === "Device tidak valid. Login dari device tidak diperbolehkan.") {
           alert(error?.response?.data?.message)
           postData()
         }
       }
     } finally {
+        setData(true)
       setIsLoading(false);
     }
   };
 
   return {
     data,
-    loadingFinish,
+    loadingFeedback,
     error,
     sendFeedback,
   };

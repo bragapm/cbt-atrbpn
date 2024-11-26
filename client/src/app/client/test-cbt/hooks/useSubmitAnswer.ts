@@ -33,7 +33,7 @@ const useSubmitAnswer = () => {
     } catch (error: any) {
       setError(error.message);
       if(error.status == 403){
-        if( error?.response?.data?.message === "Invalid device. Login from another device is not allowed.") {
+        if( error?.response?.data?.message === "Device tidak valid. Login dari device tidak diperbolehkan.") {
           alert(error?.response?.data?.message)
           postData()
         }

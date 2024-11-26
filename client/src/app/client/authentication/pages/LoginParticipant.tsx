@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { z } from "zod";
 
 import useAuth, { formAuthUser, IAuthUserRequest } from "../hooks/useAuth";
@@ -45,7 +45,6 @@ const LoginParticipant: FC = () => {
 
   const { mutate, isLoading } = useAuth({
     onSuccess: () => {
-      localStorage.setItem("couponCode", kupon);
       setLogin(true);
       getSession();
     },
@@ -63,6 +62,11 @@ const LoginParticipant: FC = () => {
     };
     mutate(data);
   }
+  useEffect(() => {
+    if (login) {
+      localStorage.setItem("couponCode", kupon);
+    }
+  }, [login]);
 
   return (
     <div

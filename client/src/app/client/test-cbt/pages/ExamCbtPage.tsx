@@ -77,7 +77,7 @@ const ExamCbtPage = () => {
 
   return (
     <div className="grid grid-cols-4 gap-2 h-[85vh]">
-      <div className="col-span-3 grid gap-2 h-full">
+      <div className="col-span-3 flex flex-col gap-2 h-full">
         <QuestionDetail
           loading={isLoading}
           question={data?.question}

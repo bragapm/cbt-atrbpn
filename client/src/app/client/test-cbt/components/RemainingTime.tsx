@@ -23,7 +23,7 @@ const RemainingTime: FC<IRemaining> = ({ dataObj }) => {
   const handleEndExam = () => {
     const obj = {
       user_session_id: Number(sesiId),
-      feedback: "-",
+      // feedback: "-",
     };
     finishExam(obj);
   };

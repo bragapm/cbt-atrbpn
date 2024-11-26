@@ -34,7 +34,7 @@ export const useGetSoal = () => {
       }
       setData(result?.data);
     } catch (err: any) {
-      if (err.message === "Invalid device. Login from another device is not allowed.") {
+      if (err.message === "Device tidak valid. Login dari device tidak diperbolehkan.") {
         alert(err.message)
         postData()
       } else {

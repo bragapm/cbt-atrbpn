@@ -33,7 +33,7 @@ export const useGetSessionUser = () => {
         localStorage.setItem("session_id",result?.data[0]["session-id"])
       }
     } catch (err: any) {
-      if (err.message === "Invalid device. Login from another device is not allowed.") {
+      if (err.message === "Device tidak valid. Login dari device tidak diperbolehkan.") {
             alert(err.message)
             postData()
           } else {

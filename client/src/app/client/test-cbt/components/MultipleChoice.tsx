@@ -23,7 +23,7 @@ const MultipleChoice: FC<IMultiChoice> = ({
   const listalpabet = ["A", "B", "C", "D", "E"];
 
   return (
-    <div className="w-full bg-white border rounded-2xl p-3 flex flex-col gap-2 flex-1">
+    <div className="w-full bg-white border rounded-2xl p-3 flex flex-col gap-2 flex-1 h-full overflow-auto">
       <p className="text-primary font-medium">Pilih Jawaban Anda</p>
       <div className="grid gap-2 flex-1">
         {loading ? (
