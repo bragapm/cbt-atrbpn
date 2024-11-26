@@ -1,7 +1,7 @@
 export default function registerEndpoint(router, { database, exceptions, logger }) {
     router.get('/get-session-results/:id', async (req, res) => {
       const { id } = req.params;
-  
+
       // Validate 
       if (!id) {
         return res.status(400).json({
@@ -9,13 +9,14 @@ export default function registerEndpoint(router, { database, exceptions, logger 
           message: 'Session ID is required.',
         });
       }
-  
+
       try {
         const results = await database.raw(`
           SELECT 
               c.code AS id_peserta,
               c.nama_peserta,
-              ust.score
+              ust.score,
+              ust.end_attempt_at
           FROM 
               user_session_test ust
           JOIN 
@@ -23,22 +24,27 @@ export default function registerEndpoint(router, { database, exceptions, logger 
           WHERE 
               ust."session" = ?
           ORDER BY 
-              ust.score DESC NULLS LAST
+              c.nama_peserta
         `, [id]);
-  
+
         const rows = results?.[0] || results?.rows || results;
-  
+
         if (!rows || rows.length === 0) {
           return res.status(404).json({
             status: 'error',
             message: 'No session results found.',
           });
         }
-  
+
+        const processedRows = rows.map(row => ({
+          id_peserta: row.id_peserta,
+          nama_peserta: row.nama_peserta,
+          score: row.end_attempt_at ? row.score : '-'
+        }));
 
         res.status(200).json({
           status: 'success',
-          data: rows,
+          data: processedRows,
         });
       } catch (error) {
         logger.error(`Error fetching session results for ID ${id}:`, error);
@@ -48,5 +54,4 @@ export default function registerEndpoint(router, { database, exceptions, logger 
         });
       }
     });
-  }
-  
+}
