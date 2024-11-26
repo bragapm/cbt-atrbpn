@@ -29,7 +29,7 @@ const useGetDetailManajemenUjian = (id: string | number | undefined) => {
         },
       };
 
-      console.log({ response });
+      // console.log({ response });
       return response?.data;
     },
     enabled: !!id,

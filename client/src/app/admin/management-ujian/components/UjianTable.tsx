@@ -83,13 +83,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       accessorKey: "mulailogin",
       header: "Mulai Login",
       cell: ({ row }) => {
-        const login = row.original?.login_start;
-        if (login) {
-          const date = new Date(login);
-          const formattedDate = format(date, "dd/MM/yyyy");
-          return formattedDate;
-        }
-        return "-";
+        return row.original?.login_start || "-";
       },
     },
     {
