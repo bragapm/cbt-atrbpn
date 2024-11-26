@@ -73,6 +73,13 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       header: "Nama Peserta",
     },
     {
+      accessorKey: "feedback",
+      header: "Feedback",
+      cell: ({ row }) => {
+        return row.original.feedback || "-";
+      },
+    },
+    {
       accessorKey: "score",
       header: "Skor",
       cell: ({ row }) => {

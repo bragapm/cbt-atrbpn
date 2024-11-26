@@ -25,6 +25,7 @@ export type IUserSessionTest = {
     wrong_answer: number;
     not_answer: number;
   };
+  feedback?:string
 };
 
 type IUserSessionTestArgs = {
