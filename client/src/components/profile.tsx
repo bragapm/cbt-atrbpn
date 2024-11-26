@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RESOLVE_ROLE } from "@/constants/ROLE";
 import useLogoutUser from "@/hooks/useLogoutUser";
-import { getAccessToken } from "@/midlewares/token";
 import { IUser } from "@/types/collection/user.type";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 type IProfile = {
   data: IUser;
@@ -19,18 +18,16 @@ type IProfile = {
 
 const Profile: React.FC<IProfile> = ({ data }) => {
   const { mutate: logoutUser } = useLogoutUser();
-  const user = localStorage.getItem("username");
+
   const loc = useLocation();
   const isPageUser = loc.pathname.includes("/exam");
-  const navigate = useNavigate();
-  const accessToken = getAccessToken();
+
+  const user =
+    localStorage.getItem("couponCode") ||
+    "" + " | " + localStorage.getItem("username") ||
+    "";
 
   const { isLoading, error, postData } = useLogout();
-  const handleLogoutUser = () => {
-    // localStorage.clear();
-    // navigate("/exam/login");
-    postData();
-  };
 
   const getFirstName = () => {
     return data?.first_name[0];
@@ -65,7 +62,7 @@ const Profile: React.FC<IProfile> = ({ data }) => {
             <DropdownMenuItem
               onClick={() => {
                 if (isPageUser) {
-                  handleLogoutUser();
+                  postData();
                 } else {
                   logoutUser();
                 }

@@ -25,6 +25,7 @@ const LoginParticipant: FC = () => {
   const [checked, setChecked] = useState(false);
   const [login, setLogin] = useState(false);
   const navigate = useNavigate();
+  const [kupon, setkupon] = useState("");
 
   const getDetailedDeviceInfo = () => {
     const navigator = window.navigator;
@@ -44,6 +45,7 @@ const LoginParticipant: FC = () => {
 
   const { mutate, isLoading } = useAuth({
     onSuccess: () => {
+      localStorage.setItem("couponCode", kupon);
       setLogin(true);
       getSession();
     },
@@ -54,7 +56,7 @@ const LoginParticipant: FC = () => {
 
   function onSubmit(values: IAuthUserRequest) {
     localStorage.setItem("deviceInfo", getDetailedDeviceInfo());
-    localStorage.setItem("couponCode", values.coupon_code);
+    setkupon(values.coupon_code);
     const data = {
       coupon_code: values.coupon_code,
       device: getDetailedDeviceInfo(),
