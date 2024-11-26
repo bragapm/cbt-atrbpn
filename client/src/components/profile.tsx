@@ -21,11 +21,9 @@ const Profile: React.FC<IProfile> = ({ data }) => {
 
   const loc = useLocation();
   const isPageUser = loc.pathname.includes("/exam");
-
-  const user =
-    localStorage.getItem("couponCode") +
-    " | " +
-    localStorage.getItem("username");
+  const kupon = localStorage.getItem("couponCode") || "";
+  const name = localStorage.getItem("username") || "";
+  const user = kupon + " | " + name;
 
   const { isLoading, error, postData } = useLogout();
 
@@ -46,7 +44,7 @@ const Profile: React.FC<IProfile> = ({ data }) => {
               <p className="text-sm font-light">{getRoleName()}</p>
               <p className="text-sm">
                 {isPageUser
-                  ? user || ""
+                  ? user
                   : data
                   ? data.first_name + " " + data.last_name
                   : ""}
