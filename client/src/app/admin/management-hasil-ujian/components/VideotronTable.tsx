@@ -21,12 +21,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface VideotronTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  speed: string;
   isLoading?: boolean;
 }
 
 export function VideotronTable<TData, TValue>({
   columns,
   data,
+  speed,
   isLoading,
 }: VideotronTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
@@ -40,23 +42,20 @@ export function VideotronTable<TData, TValue>({
         const container = containerRef.current;
         const maxScrollTop = container.scrollHeight - container.clientHeight;
         const currentScrollTop = container.scrollTop;
-
         if (isScrollingDown) {
           container.scrollTop = currentScrollTop + 2;
           if (currentScrollTop >= maxScrollTop) {
             setIsScrollingDown(false);
           }
         } else {
-          container.scrollTop = currentScrollTop - 2;
-          if (currentScrollTop <= 0) {
-            setIsScrollingDown(true);
-          }
+          container.scrollTop = 0;
+          setIsScrollingDown(true);
         }
       }
-    }, 40);
+    }, Number(speed));
 
     return () => clearInterval(scrollInterval);
-  }, [isScrollingDown]);
+  }, [isScrollingDown, speed]);
 
   const table = useReactTable({
     data,
@@ -82,12 +81,14 @@ export function VideotronTable<TData, TValue>({
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      <p className="text-base">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </p>
                     </TableHead>
                   ))}
                 </TableRow>
@@ -102,10 +103,12 @@ export function VideotronTable<TData, TValue>({
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="w-auto max-w-52 ">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        <p className="text-base font-normal">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </p>
                       </TableCell>
                     ))}
                   </TableRow>

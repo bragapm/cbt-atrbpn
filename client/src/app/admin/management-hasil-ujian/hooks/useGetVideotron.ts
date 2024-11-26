@@ -20,7 +20,8 @@ const useGetVideotron = (queries?: IUserSessionTestArgs) => {
       >(`/videotron/get-session-results/`+queries.sessionId, {
         limit,
         offset: (page - 1) * limit,
-        meta: "*"
+        meta: "*",
+        sort:"order"
      });
       return response;
     },
