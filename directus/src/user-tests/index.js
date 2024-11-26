@@ -30,7 +30,7 @@ export default (router, { services, database }) => {
       const problem = await questionsService.readOne(problemID);
 
       if (!problem) {
-        throw new Error("Problems not found");
+        throw new Error("Soal tidak ditemukan");
       }
 
       const kategori = await kategoriService.readOne(problem.kategori_id);
@@ -85,7 +85,7 @@ export default (router, { services, database }) => {
     } catch (err) {
       res.status(500).json({
         status: "error",
-        message: err?.message,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   });
@@ -101,8 +101,7 @@ export default (router, { services, database }) => {
       if (!problem_id || !answer_id || !userSessionId) {
         return res.status(400).json({
           status: "error",
-          message:
-            "Invalid payload: Missing problem_id, answer_id, or user_session_id.",
+          message: "Terjadi Kesalahan, silahkan coba lagi",
         });
       }
 
@@ -128,11 +127,11 @@ export default (router, { services, database }) => {
 
         // Retrieve problem details to get the category ID
         const problem = await questionsService.readOne(problem_id);
-        if (!problem) throw new Error("Problem not found");
+        if (!problem) throw new Error("Soal tidak ditemukan");
 
         // Retrieve category to get weights for correct, incorrect, and unanswered
         const category = await categoryService.readOne(problem.kategori_id);
-        if (!category) throw new Error("Category not found");
+        if (!category) throw new Error("Kategori tidak ditemukan");
 
         // Check if the selected answer is correct
         const answerOption =
@@ -193,7 +192,7 @@ export default (router, { services, database }) => {
       } catch (err) {
         res.status(500).json({
           status: "error",
-          message: err.message,
+          message: "Terjadi Kesalahan, silahkan coba lagi",
         });
       }
     }

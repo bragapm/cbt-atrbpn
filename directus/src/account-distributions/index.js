@@ -37,7 +37,7 @@ export default (router, { services, exceptions, getSchema }) => {
       const directusUser = await usersService.createOne({
         email: user_email,
         password: user_password,
-        status: "active",
+        status: "Published",
       });
 
       const coupon = await findOrCreateCoupon(couponService, {
@@ -56,20 +56,20 @@ export default (router, { services, exceptions, getSchema }) => {
 
       await findOrCreateUserSessionTest(userSessionTestService, {
         session: session_id,
-        status: "active",
+        status: "Published",
         user: directusUser,
         problems,
         info_peserta: coupon,
       });
 
       // Send success response if all promises resolve successfully
-      res.json({ status: "success", message: "Create user successful" });
+      res.json({ status: "success" });
     } catch (error) {
       // Catch any errors from Promise.all or other parts of the code
       console.error("Error create users:", error);
       res.status(500).json({
         status: "error",
-        message: `Error create users: ${error.message}`,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   });
@@ -78,7 +78,7 @@ export default (router, { services, exceptions, getSchema }) => {
     if (!req.files || !req.files.file) {
       return res
         .status(400)
-        .json({ status: "error", message: "Excel file is required" });
+        .json({ status: "error", message: "File Excel harus diupload" });
     }
     let userCount = 0;
     let errors = [];
@@ -127,12 +127,6 @@ export default (router, { services, exceptions, getSchema }) => {
       // Process rows in batches
       for (let i = 0; i < rows.length; i += BATCH_SIZE) {
         const batch = rows.slice(i, Math.min(i + BATCH_SIZE, rows.length));
-        console.log(
-          `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1} (rows ${
-            i + 1
-          } to ${i + batch.length})`
-        );
-
         const batchPromises = batch.map((rowData) =>
           (async () => {
             try {
@@ -215,13 +209,13 @@ export default (router, { services, exceptions, getSchema }) => {
       }
 
       // Send success response if all promises resolve successfully
-      res.json({ status: "success", message: "Bulk import successful" });
+      res.json({ status: "success" });
     } catch (error) {
       // Catch any errors from Promise.all or other parts of the code
       console.error("Error uploading users:", error);
       res.status(500).json({
         status: "error",
-        message: `Error uploading users: ${error.message}`,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
         processed: userCount,
         total_rows: totalRows,
         errors,
