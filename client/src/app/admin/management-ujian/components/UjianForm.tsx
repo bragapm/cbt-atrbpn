@@ -32,6 +32,8 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
       form.setValue("name", detailData.name || "");
       form.setValue("start_time", new Date(detailData.start_time));
       form.setValue("end_time", new Date(detailData.end_time));
+      form.setValue("login_time", new Date(detailData.login_time));
+
       if (detailData.user) {
         form.setValue(
           "user",
@@ -60,6 +62,24 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
                       title="Nama Ujian"
                       value={field.value}
                       onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="login_time"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DateTimePicker
+                      title="Mulai Login"
+                      date={field.value}
+                      setDate={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -108,25 +128,27 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
           </div>
         </div>
 
-        <div className="w-full flex flex-col gap-2">
-          <FormField
-            control={form.control}
-            name="user"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <UjianTablePeserta
-                    sessionId={id}
-                    value={Array.isArray(field.value) ? field.value : []}
-                    onChange={(selectedValues) => {
-                      field.onChange(selectedValues);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <div className="w-full flex gap-3">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="user"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <UjianTablePeserta
+                      sessionId={id}
+                      value={Array.isArray(field.value) ? field.value : []}
+                      onChange={(selectedValues) => {
+                        field.onChange(selectedValues);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
       </div>
     </Form>

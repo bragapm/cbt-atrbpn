@@ -44,6 +44,7 @@ const UjianCreatePages: React.FC = () => {
       ...data,
       start_time: addHours(new Date(data.start_time), 7), // force to GMT + 7
       end_time: addHours(new Date(data.end_time), 7), // force to GMT + 7
+      login_time: addHours(new Date(data.login_time), 7),
     });
   };
 

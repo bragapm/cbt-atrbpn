@@ -10,6 +10,7 @@ export type IUjian = {
   PIN: number | null;
   user: IUserSessionTest[];
   session_id?:number
+  login_time?:Date
 };
 
 export type IUjianRequest = {
@@ -18,6 +19,7 @@ export type IUjianRequest = {
   start_time: Date;
   end_time: Date;
   user: string[];
+  login_time?:Date
 };
 
 export type IUserSessionTest = {

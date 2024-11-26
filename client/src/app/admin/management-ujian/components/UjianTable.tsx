@@ -80,6 +80,16 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       },
     },
     {
+      accessorKey: "mulailogin",
+      header: "Mulai Login",
+      cell: ({ row }) => {
+        // const login = row.original?.login_time;
+        // const date = new Date(login);
+        // const formattedDate = format(date, "dd/MM/yyyy");
+        return "-";
+      },
+    },
+    {
       accessorKey: "tanggalUjian",
       header: "Tanggal Ujian",
       cell: ({ row }) => {
@@ -116,7 +126,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <Trash
-            className="cursor-pointer text-gray-400 w-4 h-4"
+            className="cursor-pointer text-gray-400 w-4 h-4 hover:text-red-500"
             onClick={() => {
               setIsOpenDeleteConfirm(true);
               setId(row.original.session_id);
@@ -124,7 +134,7 @@ const UjianTable: React.FC<IUjianTable> = ({ data, isLoading, pagination }) => {
           />
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4 hover:text-primary" />
             </DropdownMenuTrigger>
             <UjianDropdown
               ujianData={row.original}

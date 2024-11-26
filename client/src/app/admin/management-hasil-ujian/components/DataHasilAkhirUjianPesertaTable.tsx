@@ -93,7 +93,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         <div className="flex space-x-2">
           {role === "Administrator" && (
             <Trash
-              className="cursor-pointer text-gray-400 w-4 h-4"
+              className="cursor-pointer text-gray-400 w-4 h-4 hover:text-red-500"
               onClick={() => {
                 setIsOpenDeleteConfirm(true);
                 setId(row.original.id);
@@ -102,7 +102,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4" />
+              <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4 hover:text-primary" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white p-2">
               <DropdownMenuItem
