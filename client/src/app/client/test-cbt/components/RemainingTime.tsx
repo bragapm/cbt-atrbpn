@@ -23,14 +23,9 @@ const RemainingTime: FC<IRemaining> = ({ dataObj }) => {
   const handleEndExam = () => {
     const obj = {
       user_session_id: Number(sesiId),
-      // feedback: "-",
     };
     finishExam(obj);
   };
-
-  // const handleEndExam = () => {
-  //   navigate("/exam/finish");
-  // };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
