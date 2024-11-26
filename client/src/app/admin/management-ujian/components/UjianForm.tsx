@@ -32,8 +32,9 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
       form.setValue("name", detailData.name || "");
       form.setValue("start_time", new Date(detailData.start_time));
       form.setValue("end_time", new Date(detailData.end_time));
-      form.setValue("login_time", new Date(detailData.login_time));
-
+      if (detailData?.login_start) {
+        form.setValue("login_start", new Date(detailData?.login_start));
+      }
       if (detailData.user) {
         form.setValue(
           "user",
@@ -72,7 +73,7 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
           <div className="w-full">
             <FormField
               control={form.control}
-              name="login_time"
+              name="login_start"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
