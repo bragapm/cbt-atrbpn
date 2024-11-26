@@ -43,7 +43,10 @@ export default (router, { services, database }) => {
       res.json({ status: "success", data: formattedSessions });
     } catch (error) {
       console.log(error);
-      res.json({ status: "error", error: error?.message });
+      res.json({
+        status: "error",
+        message: "Terjadi Kesalahan, silahkan coba lagi",
+      });
     }
   });
 
@@ -77,7 +80,7 @@ export default (router, { services, database }) => {
       if (userSession.length === 0) {
         return res.status(404).json({
           status: "error",
-          message: "Session test not found or unauthorized access.",
+          message: "Sesi ujian tidak ditemukan",
         });
       }
 
@@ -86,7 +89,7 @@ export default (router, { services, database }) => {
       if (session.session.PIN !== pin) {
         return res.status(403).json({
           status: "error",
-          message: "Incorrect Pin",
+          message: "PIN salah",
         });
       }
 
@@ -122,8 +125,7 @@ export default (router, { services, database }) => {
       if (nowFormatted < sessionStartTime || nowFormatted > sessionEndTime) {
         return res.status(500).json({
           status: "error",
-          message:
-            "Session cannot be started outside of the allowed time range.",
+          message: "Sesi ujian belum dimulai",
         });
       }
 
@@ -160,13 +162,13 @@ export default (router, { services, database }) => {
       console.error(error);
       res.status(500).json({
         status: "error",
-        message: new Error(error).message,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   });
 
   router.post("/finish", autValidation, async (req, res) => {
-    const { user_session_id, feedback } = req.body; // Assumes user_session_id is provided in the request body
+    const { user_session_id } = req.body; // Assumes user_session_id is provided in the request body
 
     const user = req.user;
     try {
@@ -177,7 +179,7 @@ export default (router, { services, database }) => {
       const userSessionService = new ItemsService("user_session_test", {
         schema: req.schema,
       });
-      userSessionService;
+
       const couponsService = new ItemsService("coupon", {
         schema: req.schema,
       });
@@ -231,7 +233,6 @@ export default (router, { services, database }) => {
           wrong_answers: incorrectAnswers,
           not_answers: unanswered,
         }),
-        feedback: feedback,
       });
 
       // Prepare the response
@@ -247,7 +248,31 @@ export default (router, { services, database }) => {
 
       res.json(response);
     } catch (err) {
-      res.status(500).json({ status: "error", message: err.message });
+      res.status(500).json({
+        status: "error",
+        message: "Terjadi Kesalahan, silahkan coba lagi",
+      });
+    }
+  });
+
+  router.post("/feedback", autValidation, async (req, res) => {
+    const { user_session_id, feedback } = req.body; // Assumes user_session_id is provided in the request body
+    try {
+      const userSessionService = new ItemsService("user_session_test", {
+        schema: req.schema,
+      });
+
+      await userSessionService.updateOne(user_session_id, {
+        updated_at: new Date(),
+        feedback: feedback,
+      });
+
+      res.json({ status: "success" });
+    } catch (err) {
+      res.status(500).json({
+        status: "error",
+        message: "Terjadi Kesalahan, silahkan coba lagi",
+      });
     }
   });
 };

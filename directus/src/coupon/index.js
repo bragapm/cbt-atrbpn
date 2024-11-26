@@ -18,7 +18,7 @@ export default (router, { services, exceptions, getSchema }) => {
       const newUser = await usersService.createOne({
         email: user_email,
         password: user_password,
-        status: "active",
+        status: "Published",
       });
 
       // Buat item kupon baru
@@ -61,7 +61,7 @@ export default (router, { services, exceptions, getSchema }) => {
       console.error(error);
       res.status(500).json({
         status: "error",
-        error: new Error(error).message,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
       // next(new Error(`Error creating user or coupon: ${error.message}`));
     }
@@ -86,7 +86,7 @@ export default (router, { services, exceptions, getSchema }) => {
         // Jika kupon tidak ditemukan, kembalikan error
         return res.status(404).json({
           status: "error",
-          message: "Coupon code not found.",
+          message: "ID tidak ditemukan",
         });
       }
 
@@ -100,13 +100,18 @@ export default (router, { services, exceptions, getSchema }) => {
       const userSession = await userSessionService.readByQuery({
         filter: { user: couponData.user_id },
         limit: 1,
-        fields: ["session.id", "session.start_time", "session.end_time"],
+        fields: [
+          "session.id",
+          "session.start_time",
+          "session.end_time",
+          "session.login_start",
+        ],
       });
 
       if (userSession.length === 0) {
         return res.status(403).json({
           status: "error",
-          message: "No active test session found for this user.",
+          message: "Sesi ujian tidak ditemukan",
         });
       }
 
@@ -116,7 +121,7 @@ export default (router, { services, exceptions, getSchema }) => {
       const now = new Date();
       const timezone = "Asia/Jakarta";
       const startTime = new Date(
-        new Date(sessionData.start_time).getTime() - 7 * 60 * 60 * 1000
+        new Date(sessionData.login_start).getTime() - 7 * 60 * 60 * 1000
       );
       const endTime = new Date(
         new Date(sessionData.end_time).getTime() - 7 * 60 * 60 * 1000
@@ -144,7 +149,7 @@ export default (router, { services, exceptions, getSchema }) => {
       ) {
         return res.status(403).json({
           status: "error",
-          message: "Test session is not active at this time.",
+          message: "Sesi ujian belum dimulai, silahkan coba saat sesi dimulai",
         });
       }
 
@@ -156,7 +161,7 @@ export default (router, { services, exceptions, getSchema }) => {
       if (!user) {
         return res.status(403).json({
           status: "error",
-          message: "User is not authorized or inactive.",
+          message: "User Tidak ditemukan",
         });
       }
 
@@ -194,7 +199,7 @@ export default (router, { services, exceptions, getSchema }) => {
       console.error(error);
       res.status(500).json({
         status: "error",
-        message: new Error(error).message,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   });
@@ -218,7 +223,7 @@ export default (router, { services, exceptions, getSchema }) => {
         // Jika kupon tidak ditemukan, kembalikan error
         return res.status(404).json({
           status: "error",
-          message: "Coupon code not found.",
+          message: "ID tidak ditemukan",
         });
       }
 
@@ -236,7 +241,7 @@ export default (router, { services, exceptions, getSchema }) => {
       } catch (logoutError) {
         return res.status(401).json({
           status: "error",
-          message: "Invalid token or logout failed.",
+          message: "Terjadi Kesalahan, silahkan coba lagi",
         });
       }
 
@@ -259,7 +264,7 @@ export default (router, { services, exceptions, getSchema }) => {
       console.error(error);
       res.status(500).json({
         status: "error",
-        message: new Error(error).message,
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   });

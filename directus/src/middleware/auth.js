@@ -5,8 +5,6 @@ export const authMiddleware = (database) => {
       const authHeader = req.headers.authorization;
       const device = req.headers["device"];
 
-      console.log({ device });
-
       // Validasi keberadaan token dan device
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({
@@ -18,7 +16,7 @@ export const authMiddleware = (database) => {
       if (!device) {
         return res.status(400).json({
           status: "error",
-          message: "Device information is required",
+          message: "Header device harus diisi",
         });
       }
 
@@ -28,7 +26,7 @@ export const authMiddleware = (database) => {
       if (!userId) {
         return res.status(403).json({
           status: "error",
-          message: "User is not authorized",
+          message: "User tidak terotorisasi",
         });
       }
 
@@ -41,14 +39,14 @@ export const authMiddleware = (database) => {
       if (!userRecord) {
         return res.status(404).json({
           status: "error",
-          message: "User not found",
+          message: "User tidak ditemukan",
         });
       }
 
       if (userRecord.device && userRecord.device !== device) {
         return res.status(403).json({
           status: "error",
-          message: "Invalid device. Login from another device is not allowed.",
+          message: "Device tidak valid. Login dari device tidak diperbolehkan.",
         });
       }
 
@@ -59,7 +57,7 @@ export const authMiddleware = (database) => {
       console.error("Authentication error:", error.message);
       res.status(500).json({
         status: "error",
-        message: "Internal server error during authentication",
+        message: "Terjadi Kesalahan, silahkan coba lagi",
       });
     }
   };
