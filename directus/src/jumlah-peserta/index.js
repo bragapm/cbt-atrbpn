@@ -7,13 +7,14 @@ export default function registerEndpoint(router, { database, logger }) {
             const offset = (page - 1) * limit;
 
             const query = `
-            SELECT 
+             SELECT 
                 st.id AS session_id,
                 st.name AS "nama",
                 DATE(st.start_time) AS "tanggal_ujian",
                 st.start_time::TIME AS "mulai_ujian",
                 st.end_time::TIME AS "selesai_ujian",
-                COUNT(ust.session) AS "jumlah_peserta"
+                COUNT(ust.session) AS "jumlah_peserta",
+                st.login_start::TIME AS "login_start"
             FROM 
                 session_test st
             LEFT JOIN 
@@ -21,7 +22,7 @@ export default function registerEndpoint(router, { database, logger }) {
             ON 
                 st.id = ust.session 
             GROUP BY 
-                st.id, st.name, st.start_time, st.end_time 
+                st.id, st.name, st.start_time, st.end_time, st.login_start 
             ORDER BY 
                 st.id ASC
             LIMIT ? OFFSET ?;
