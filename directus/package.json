@@ -138,6 +138,11 @@
         "type": "endpoint",
         "name": "videotron",
         "source": "src/videotron/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "jawaban-peserta",
+        "source": "src/jawaban-peserta/index.js"
       }
     ],
     "host": "10.8.2"
