@@ -5,11 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { FC } from "react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import useGetUserTestQueries, {
-  IUserTest,
-} from "../../management-peserta/hooks/useGetUserTestQueries";
 import { useParams } from "react-router-dom";
 import useGetSummarize from "../../management-peserta/hooks/useGetSummarize";
+import useGetJawabanPeserta, {
+  IJawabPeserta,
+} from "../../management-peserta/hooks/useGetJawabanPeserta";
 
 export const HasilAkhirUjianPesertaPage: FC = () => {
   const params = useParams();
@@ -17,20 +17,21 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
-  const { data: userTest } = useGetUserTestQueries({
-    page,
-    limit: 500,
+  const { data: userTest } = useGetJawabanPeserta({
     user_session_id: params.pesertaId,
   });
 
   const { data: sumarize } = useGetSummarize({
     id: params.pesertaId,
   });
+
   if (!userTest) {
     return null;
   }
 
-  const columns: ColumnDef<IUserTest>[] = [
+  console.log(userTest);
+
+  const columns: ColumnDef<IJawabPeserta>[] = [
     // {
     //   id: "select",
     //   header: ({ table }) => (
@@ -51,35 +52,36 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
     //   enableHiding: false,
     // },
     {
-      accessorKey: "problem.question",
+      accessorKey: "soal_pertanyaan",
       header: "Soal Pertanyaan",
     },
     {
-      accessorKey: "answer.is_correct",
+      accessorKey: "jawaban",
       header: "Jawaban",
       cell: ({ row }) => {
-        const jawaban = row?.original?.answer.is_correct
-          ? "Benar"
-          : row?.original?.answer.is_correct === false
-          ? "Salah"
-          : "Tidak Menjawab";
+        const jawaban =
+          row?.original?.jawaban === 1
+            ? "Benar"
+            : row?.original?.jawaban === -1
+            ? "Salah"
+            : "Tidak Menjawab";
         return jawaban;
       },
     },
     {
-      accessorKey: "problem.kategori_id.nama_kategori",
+      accessorKey: "kategori",
       header: "Kategori Soal",
     },
     {
-      accessorKey: "score",
+      accessorKey: "skor",
       header: "Skor",
     },
     {
-      accessorKey: "correct_score",
+      accessorKey: "nilai_jawaban_benar",
       header: "Nilai Jawaban Benar",
     },
     {
-      accessorKey: "problem.materi_id.materi",
+      accessorKey: "materi",
       header: "Materi Soal",
     },
   ];
@@ -97,11 +99,11 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
             label: "Detail Hasil Ujian",
             path: "/hasil-ujian/hasil-akhir-ujian/detail",
           },
-          {
-            label:
-              userTest?.data?.data[0]?.user_session_id?.info_peserta
-                ?.nama_peserta,
-          },
+          // {
+          //   label:
+          //     userTest?.data?.data[0]?.user_session_id?.info_peserta
+          //       ?.nama_peserta,
+          // },
         ]}
       />
       <SuccessDialog
