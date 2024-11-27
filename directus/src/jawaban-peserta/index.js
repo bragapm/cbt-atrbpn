@@ -31,13 +31,13 @@ export default function registerEndpoint(router, { database, logger }) {
             WHERE ans.problem IS NULL
           )
           SELECT 
-            qb.id AS problem,
-            qb.question,
-            ks.nama_kategori,
-            ms.materi,
-            COALESCE(ans.score, 0::NUMERIC) AS score,
-            COALESCE(ans.correct_score, 0::NUMERIC) AS correct_score,
-            COALESCE(ans.score_category, 0::INTEGER) AS score_category
+            qb.id AS "id",
+            qb.question AS "soal_pertanyaan",
+            COALESCE(ans.score_category, 0::INTEGER) AS "Jawaban",
+            ks.nama_kategori AS "Kategori",
+            COALESCE(ans.score, 0::NUMERIC) AS "Skor",
+            COALESCE(ans.correct_score, 0::NUMERIC) AS "nilai_jawaban_benar",
+            ms.materi as materi
           FROM assigned_problems ap
           LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem
           LEFT JOIN questions_bank qb ON ap.problem_id = qb.id
