@@ -36,9 +36,9 @@ export default function registerEndpoint(router, { database, logger }) {
         SELECT 
             qb.id AS "id",
             qb.question AS "soal_pertanyaan",
-            COALESCE(ans.score_category, 0::INTEGER) AS "Jawaban",
-            ks.nama_kategori AS "Kategori",
-            COALESCE(ans.score, 0::NUMERIC) AS "Skor",
+            COALESCE(ans.score_category, 0::INTEGER) AS "jawaban",
+            ks.nama_kategori AS "kategori",
+            COALESCE(ans.score, 0::NUMERIC) AS "skor",
             COALESCE(ks.bobot_benar, 0::NUMERIC) AS "nilai_jawaban_benar",
             ms.materi AS "materi"
         FROM assigned_problems ap
@@ -57,7 +57,7 @@ export default function registerEndpoint(router, { database, logger }) {
         data: rows,
         count: count, 
         });
-        
+
       } catch (error) {
         logger.error('Error fetching user answers:', error);
         res.status(500).json({
