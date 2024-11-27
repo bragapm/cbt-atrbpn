@@ -83,7 +83,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       accessorKey: "score",
       header: "Skor",
       cell: ({ row }) => {
-        return row.original.score || "-";
+        return row.original.score_alias ?? row.original.score ?? "-"; 
       },
     },
     {
