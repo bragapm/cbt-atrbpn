@@ -57,7 +57,8 @@ export default function registerEndpoint(router, { database, logger }) {
         logger.error('Error fetching user answers:', error);
         res.status(500).json({
           success: false,
-          error: 'An error occurred while processing your request.',
+          error: error,
+          message: error.message,
         });
       }
     });
