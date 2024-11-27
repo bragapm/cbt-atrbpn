@@ -194,7 +194,7 @@ export default (router, { services, database }) => {
       // Fetch all answers for the user session
       const userAnswers = await userTestService.readByQuery({
         filter: { user_session_id: user_session_id },
-        fields: ["score_category", "score", "correct_score"],
+        fields: ["score_category", "score", "score_alias", "correct_score"],
       });
 
       if (!userAnswers.length) {
@@ -239,7 +239,7 @@ export default (router, { services, database }) => {
       const response = {
         status: "success",
         data: {
-          totalScore,
+          totalScore: userAnswers[0]?.score_alias !== null ? userAnswers[0].score_alias : totalScore,
           maxScore,
           fullname: couponData.nama_peserta,
           code: couponData.code,

@@ -16,6 +16,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
               c.code AS id_peserta,
               c.nama_peserta,
               ust.score,
+              ust.score_alias,
               ust.end_attempt_at
           FROM 
               user_session_test ust
@@ -39,7 +40,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
         const processedRows = rows.map(row => ({
           id_peserta: row.id_peserta,
           nama_peserta: row.nama_peserta,
-          score: row.end_attempt_at ? row.score : '-'
+          score: row.score_alias !== null ? row.score_alias : row.score, 
         }));
 
         res.status(200).json({
