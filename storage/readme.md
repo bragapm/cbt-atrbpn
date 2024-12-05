@@ -9,3 +9,17 @@ Setup & run minio mc
 Run file migration
 
     mc cp --recursive myaws/webgeocreate/atrbpn-cbt myminio
+
+## DB Migration
+
+Connect to pg container
+
+    sudo docker exec -it <container_id> /bin/bash
+
+Backup
+
+    pg_dump postgresql://<username>:<password>@<host>:<port>/<database> --no-owner --no-privileges --verbose -f <output_file>.sql
+
+Restore
+
+    psql -U <username> -d <password> -f <output_file>.sql
