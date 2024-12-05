@@ -47,7 +47,7 @@ services:
       - STORAGE_S3_ENDPOINT
       - STORAGE_S3_REGION
       - STORAGE_S3_ROOT
-      - STORAGE_S3_FORCE_PATH_STYLE=false
+      - STORAGE_S3_FORCE_PATH_STYLE=true
       # telemetry
       - TELEMETRY=false
       # websocket
