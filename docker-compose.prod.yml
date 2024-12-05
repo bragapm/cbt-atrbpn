@@ -59,6 +59,8 @@ services:
       - WEBSOCKETS_REST_AUTH=handshake
       - WEBSOCKETS_REST_AUTH_TIMEOUT=30
       - WEBSOCKETS_GRAPHQL_ENABLED=false
+    deploy:
+      replicas: ${DIRECTUS_REPLICAS:-1}
     restart: unless-stopped
 
   nginx:
