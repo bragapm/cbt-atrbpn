@@ -10,11 +10,15 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const ImportPesertaFormInner = ({ openConfirmModal }) => {
+  const navigation = useNavigate();
+
   return (
     <>
       <FormInputFile name="filePeserta" description="Supported File" />
       <div className="flex justify-end gap-3 pt-5">
-        <Button className=" w-40">Batal</Button>
+        <Button className="w-40" onClick={() => navigation("/peserta-cbt")}>
+          Batal
+        </Button>
         <Button onClick={openConfirmModal} className="w-40">
           Tambah Peserta
         </Button>

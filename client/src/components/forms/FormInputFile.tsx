@@ -20,7 +20,7 @@ export const FormInputFile: FC<FormInputFileProps> = ({
     watch,
   } = useFormContext();
 
-  const file = watch("filePeserta");
+  const file = watch(name);
   return (
     <>
       <div className="w-full border border-gray-400 py-1 px-3 rounded-xl flex items-center h-12 relative">
