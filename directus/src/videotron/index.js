@@ -36,7 +36,7 @@ export default function registerEndpoint(router, { database, exceptions, logger 
             message: 'No session results found.',
           });
         }
-
+        //console.log(rows);
         const processedRows = rows.map(row => ({
           id_peserta: row.id_peserta,
           nama_peserta: row.nama_peserta,
