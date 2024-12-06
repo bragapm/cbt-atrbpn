@@ -102,7 +102,7 @@ const BankSoalImportPage: React.FC = () => {
             <div className="flex gap-1 items-center">
               <InfoCircledIcon className="text-gray-500" />
               <p className="text-xs text-gray-500">
-                Supported File or Maximum Size Here lorem Ipsum dolor sit Amet
+                Supported File or Maximum Size
               </p>
             </div>
           </CardContent>

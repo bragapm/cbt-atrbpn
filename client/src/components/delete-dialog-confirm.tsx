@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Dialog, DialogContent, DialogFooter } from "./ui/dialog";
+import MemoLoader from "./ui/Loader";
 
 type DeleteDialogConfirmProps = {
   isOpen: boolean;
@@ -44,7 +45,11 @@ const DeleteDialogConfirm: React.FC<DeleteDialogConfirmProps> = ({
               onClick={onSubmit}
               isLoading={isLoading}
             >
-              Hapus
+              {isLoading ? (
+                <MemoLoader width={30} height={30} color={"#2A6083"} />
+              ) : (
+                "Hapus"
+              )}
             </Button>
           </div>
         </DialogFooter>

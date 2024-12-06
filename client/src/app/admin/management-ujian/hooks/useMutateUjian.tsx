@@ -28,7 +28,9 @@ const useMutateUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
 
       // Extract the session ID from the response
       const sessionId = response.data.data.id;
-
+      if (!data.user) {
+        return response;
+      }
       // Prepare requests for each user in `data.user`
       const userRequests = data.user.map((userId) => {
         const modifiedData = {
@@ -45,7 +47,6 @@ const useMutateUjian = ({ onSuccess, onError }: IUseMutateUjian) => {
 
       // Execute all user requests concurrently
       await Promise.all(userRequests);
-
       return response;
     },
 

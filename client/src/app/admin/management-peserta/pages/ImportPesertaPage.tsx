@@ -12,10 +12,7 @@ import { useState } from "react";
 const ImportPesertaFormInner = ({ openConfirmModal }) => {
   return (
     <>
-      <FormInputFile
-        name="filePeserta"
-        description="Supported File or Maximum Size Here lorem ipsum dolor sit Amet"
-      />
+      <FormInputFile name="filePeserta" description="Supported File" />
       <div className="flex justify-end gap-3 pt-5">
         <Button className=" w-40">Batal</Button>
         <Button onClick={openConfirmModal} className="w-40">

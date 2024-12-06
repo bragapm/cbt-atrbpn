@@ -1,7 +1,7 @@
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import { UploadCloud } from "lucide-react";
 import { FC } from "react";
 import { useFormContext, Controller } from "react-hook-form";
+import { CloudUpload } from "lucide-react";
 
 export type FormInputFileProps = {
   name: string;
@@ -17,8 +17,10 @@ export const FormInputFile: FC<FormInputFileProps> = ({
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext();
 
+  const file = watch("filePeserta");
   return (
     <>
       <div className="w-full border border-gray-400 py-1 px-3 rounded-xl flex items-center h-12 relative">
@@ -50,9 +52,14 @@ export const FormInputFile: FC<FormInputFileProps> = ({
             </div>
           )}
         />
-        <div className="flex justify-between w-full">
-          <div className="text-sm">Add File</div>
-          <UploadCloud />
+        <div className="flex justify-between w-full items-center">
+          <div className="flex flex-col items-start text-sm">
+            <span className="text-gray-500 font-semibold">Add File</span>
+            <p className="text-primary">
+              {file?.name ? file?.name : "File Upload"}
+            </p>
+          </div>
+          <CloudUpload className="ml-2 text-primary" />
         </div>
       </div>
       {description && (

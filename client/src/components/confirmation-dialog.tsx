@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Dialog, DialogContent, DialogFooter } from "./ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import MemoLoader from "./ui/Loader";
 
 type DeleteDialogConfirmProps = {
   isOpen: boolean;
@@ -41,7 +42,11 @@ const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
               className="w-full h-12"
               onClick={onSubmit}
             >
-              Ya
+              {isLoading ? (
+                <MemoLoader width={30} height={30} color={"#2A6083"} />
+              ) : (
+                "Ya"
+              )}
             </Button>
           </div>
         </DialogFooter>
