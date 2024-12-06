@@ -34,11 +34,12 @@ type IUserSessionTestArgs = {
   page: number;
   sessionId?: string | null;
   search?: string;
+  sort?:boolean
 };
 
 const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
   const service = new DirectusInterceptor();
-  const { limit, page } = queries;
+  const { limit, page,sort } = queries;
   return useQuery({
     queryKey: ["user-sessions-test", queries],
     queryFn: () => {
@@ -60,7 +61,7 @@ const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
             },
           }),
         },
-        sort: "info_peserta.nama_peserta",
+        sort:`${sort?"-":""}info_peserta.nama_peserta`,
       });
       return response;
     },

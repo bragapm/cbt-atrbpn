@@ -4,7 +4,7 @@ import SuccessDialog from "@/components/success-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical, Trash } from "lucide-react";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +14,7 @@ import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { IUserSessionTest } from "../hooks/useGetUserSessionTestQueries";
 import useDeletePesertaMutation from "../hooks/useDeletePesertaMutation";
+import TableHeaderSorting from "@/components/table-header-sorting";
 
 type PesertaCBTTableProps = {
   userSessionTest?: IUserSessionTest[];
@@ -21,6 +22,7 @@ type PesertaCBTTableProps = {
   totalData: number;
   currentPage: number;
   onChangePage: (page: number) => void;
+  onSort?: (value: boolean | null) => void;
 };
 
 const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
@@ -29,13 +31,17 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
   totalData,
   currentPage,
   onChangePage,
+  onSort,
 }) => {
   const navigate = useNavigate();
 
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const [id, setId] = React.useState<string | number>("");
-
+  const [selectPeserta, setSelectPeserta] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeletePesertaMutation({
       onSuccess: () => {
@@ -46,32 +52,28 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
     });
 
   const columns: ColumnDef<IUserSessionTest>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={table.getIsAllPageRowsSelected()}
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
     {
       accessorKey: "info_peserta.code",
       header: "ID Peserta",
     },
     {
       accessorKey: "info_peserta.nama_peserta",
-      header: "Nama Peserta",
+      header: () => {
+        return (
+          <TableHeaderSorting
+            title="Nama Peserta"
+            dropdownData={[
+              { value: "false", label: "Nama Ascending" },
+              { value: "true", label: "Nama Descending" },
+            ]}
+            selectedDropdownValue={selectPeserta}
+            onSelectedDropdownValue={(selected) => {
+              setSelectPeserta(selected);
+              onSort(selected.value === "true" ? true : false);
+            }}
+          />
+        );
+      },
     },
     {
       accessorKey: "session.name",

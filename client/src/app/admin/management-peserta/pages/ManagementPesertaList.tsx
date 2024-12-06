@@ -16,6 +16,7 @@ export const ManagementPesertaList = () => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
   const debouncedSearch = useDebounceSearch({ value: search });
+  const [sortName, setSortName] = useState<boolean | null>(false);
 
   const navigate = useNavigate();
 
@@ -23,16 +24,14 @@ export const ManagementPesertaList = () => {
     limit: PAGE_LIMIT,
     page,
     search: debouncedSearch,
+    sort: sortName,
   });
 
   const handleDownloadPeserta = () => {
     useExportUserSessionTest();
   };
 
-  // if (!pesertaCbt) {
-  //   return null;
-  // }
-
+  console.log(sortName);
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions
@@ -78,6 +77,7 @@ export const ManagementPesertaList = () => {
         pageLimit={PAGE_LIMIT}
         totalData={pesertaCbt?.data?.meta?.total_count}
         onChangePage={(val) => setPage(val)}
+        onSort={setSortName}
       />
     </div>
   );
