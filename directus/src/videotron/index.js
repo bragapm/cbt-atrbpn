@@ -40,8 +40,8 @@ export default function registerEndpoint(router, { database, exceptions, logger 
         const processedRows = rows.map(row => ({
           id_peserta: row.id_peserta,
           nama_peserta: row.nama_peserta,
-          score: row.score_alias !== null ? row.score_alias : row.score, 
-        }));
+          score: row.end_attempt_at ? (row.score_alias !== null ? row.score_alias : row.score) : '-',
+        }));        
 
         res.status(200).json({
           status: 'success',
