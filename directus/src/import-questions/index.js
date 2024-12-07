@@ -35,7 +35,10 @@ export default (router, { services, exceptions, getSchema }) => {
                 const questionText = row.getCell(headers['question']).value;
                 if (!questionText) break;  // Stop processing
                 const materiName = row.getCell(headers['material']).value;
+                console.log("searching for materi name", materiName);
                 const kategoriName = row.getCell(headers['category']).value;
+                console.log("searching for kategoriName", kategoriName);
+
                 const materiRecord = await materiService.readByQuery({
                     filter: { materi: { _icontains: materiName } },
                     limit: 1
@@ -44,7 +47,9 @@ export default (router, { services, exceptions, getSchema }) => {
                     filter: { nama_kategori: { _icontains: kategoriName } },
                     limit: 1
                 });
-
+                
+                console.log("found materi",materiRecord[0].id);
+                console.log("found kategori",kategoriRecord[0].id);
 
                 if (materiRecord.length === 0) {
                     return res.status(400).send({ message: `Materi "${materiName}" not found in database.` });
