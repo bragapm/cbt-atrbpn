@@ -4,8 +4,7 @@ export default function registerEndpoint(router, { database, logger }) {
             // users
             const totalUsersResult = await database.raw(`
                 SELECT COUNT(*) AS total_registered_users
-                FROM directus_users du 
-                WHERE du.role = '8e1fae70-492c-4579-8ccd-82f6dc39a770';
+                FROM coupon c; 
             `);
             const totalRegisteredUsers = totalUsersResult.rows || 0;
 
