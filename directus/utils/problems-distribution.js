@@ -6,7 +6,8 @@ export const findOrCreateCoupon = async (couponService, couponData) => {
     filter: { code: { _eq: couponData.code } },
     limit: 1,
   });
-
+  console.log(existingCoupons);
+  
   if (existingCoupons && existingCoupons.length > 0) {
     // If found, return the existing coupon id
     //return existingCoupons[0].id;
