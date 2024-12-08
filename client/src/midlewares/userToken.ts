@@ -4,13 +4,13 @@ export const getUserToken = (): string | null => {
     }
     return null;
   };
-  // Function to create (set) the access token in sessionStorage
+  // Function to create (set) the access token in localstorage
   export const setUserToken = (token: string): void => {
     if (typeof window !== "undefined") {
       localStorage.setItem("user_token", token);
     }
   };
-  // Function to delete (remove) the access token from sessionStorage
+  // Function to delete (remove) the access token from localstorage
   export const deleteUserToken = (): void => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("user_token");

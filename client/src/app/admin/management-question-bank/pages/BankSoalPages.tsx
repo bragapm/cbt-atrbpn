@@ -19,7 +19,7 @@ const BankSoalPages = () => {
   const debouncedSearch = useDebounceSearch({ value: search });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedMateri, setSelectedMateri] = useState<string | null>(null);
-  const role = sessionStorage.getItem("role");
+  const role = localStorage.getItem("role");
   const { data, isLoading, refetch } = useGetManagementBankSoal({
     page: page,
     limit: limit,

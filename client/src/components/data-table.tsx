@@ -132,6 +132,7 @@ export function DataTable<TData, TValue>({
             } flex justify-center w-full items-center`}
           >
             <p className="text-xs w-full">
+              Total {pagination?.totalItems || "-"} Data
               {/* {customSelectedFooter
                 ? customSelectedFooter
                 : table.getFilteredSelectedRowModel().rows.length}{" "}

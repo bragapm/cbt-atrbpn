@@ -28,7 +28,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   const debouncedSearch = useDebounceSearch({ value: search });
 
   const [id, setId] = React.useState<string | number>("");
-  const role = sessionStorage.getItem("role");
+  const role = localStorage.getItem("role");
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeletePesertaMutation({
       onSuccess: () => {
@@ -83,7 +83,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       accessorKey: "score",
       header: "Skor",
       cell: ({ row }) => {
-        return row.original.score_alias ?? row.original.score ?? "-"; 
+        return row.original.score_alias ?? row.original.score ?? "-";
       },
     },
     {

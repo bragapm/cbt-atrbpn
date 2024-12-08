@@ -68,7 +68,7 @@ const UjianPages = () => {
         isLoading={isLoading}
         pagination={{
           pageSize: limit,
-          totalItems: data?.meta.total_count,
+          totalItems: data?.meta?.totalCount,
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}

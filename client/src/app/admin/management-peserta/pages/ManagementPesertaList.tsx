@@ -31,7 +31,6 @@ export const ManagementPesertaList = () => {
     useExportUserSessionTest();
   };
 
-  console.log(sortName);
   return (
     <div className="w-full h-full flex flex-col gap-3">
       <TableActions

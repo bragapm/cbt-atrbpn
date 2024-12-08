@@ -55,7 +55,7 @@ const AdminListTable: React.FC<IAdminTable> = ({
             <DropdownMenuContent className="bg-white p-2">
               <DropdownMenuItem
                 onClick={() => {
-                  sessionStorage.setItem(
+                  localStorage.setItem(
                     "dataAdmin",
                     JSON.stringify(row.original)
                   );

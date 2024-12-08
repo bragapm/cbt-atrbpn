@@ -6,4 +6,5 @@ export type IBaseResponse<T> = {
 export type IBaseMetaResponse = {
   total_count: number;
   filter_count: number;
+  totalCount?:number;
 };

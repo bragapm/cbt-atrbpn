@@ -86,7 +86,7 @@ export function Sidebar() {
   });
 
   useEffect(() => {
-    sessionStorage.setItem("role", currentUser?.data?.role?.name);
+    localStorage.setItem("role", currentUser?.data?.role?.name);
   }, [currentUser]);
 
   const sidebarData: SidebarProps = {

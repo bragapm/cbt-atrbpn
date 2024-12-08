@@ -61,9 +61,9 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       search,
     });
 
-  if (!dataUser) {
-    return null;
-  }
+  // if (!dataUser) {
+  //   return null;
+  // }
 
   const handleSearchChange = (searchTerm: string) => {
     setSearch(searchTerm);

@@ -98,7 +98,7 @@ export const CreateAdminAccount = () => {
 
   useEffect(() => {
     if (id) {
-      const data = JSON.parse(sessionStorage.getItem("dataAdmin"));
+      const data = JSON.parse(localStorage.getItem("dataAdmin"));
       console.log(data);
       const { email, first_name, role } = data;
       const roleName = role;

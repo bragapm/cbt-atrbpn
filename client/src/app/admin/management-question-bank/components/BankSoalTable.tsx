@@ -47,7 +47,7 @@ const BankSoalTable: React.FC<IBankSoalTable> = ({
   const [id, setId] = React.useState<string | number>("");
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
   const navigate = useNavigate();
-  const role = sessionStorage.getItem("role");
+  const role = localStorage.getItem("role");
 
   const [selectedCategory, setSelectedCategory] = useState<{
     label: string;

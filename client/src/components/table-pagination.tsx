@@ -54,13 +54,13 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
     pages.push(
       <PaginationItem key={1}>
         <PaginationLink
-          href="#"
+          // href="#"
           isActive={currentPage === 1}
           onClick={() => onPageChange(1)}
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
 
     // Show ellipsis if currentPage is greater than pageLimit
@@ -76,13 +76,13 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
       pages.push(
         <PaginationItem key={i}>
           <PaginationLink
-            href="#"
+            // href=""
             isActive={currentPage === i}
             onClick={() => onPageChange(i)}
           >
             {i}
           </PaginationLink>
-        </PaginationItem>,
+        </PaginationItem>
       );
     }
 
@@ -96,13 +96,13 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
       pages.push(
         <PaginationItem key={totalPages}>
           <PaginationLink
-            href="#"
+            // href="#"
             isActive={currentPage === totalPages}
             onClick={() => onPageChange(totalPages)}
           >
             {totalPages}
           </PaginationLink>
-        </PaginationItem>,
+        </PaginationItem>
       );
     }
 
@@ -114,14 +114,20 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
       <PaginationContent>
         {/* First Page Button */}
         <PaginationItem>
-          <PaginationLink href="#" onClick={handleFirstPage}>
+          <PaginationLink
+            //  href="#"
+            onClick={handleFirstPage}
+          >
             <ChevronFirst className="h-4 w-4" />
           </PaginationLink>
         </PaginationItem>
 
         {/* Previous Button */}
         <PaginationItem>
-          <PaginationPrevious href="#" onClick={handlePrevious} />
+          <PaginationPrevious
+            //  href="#"
+            onClick={handlePrevious}
+          />
         </PaginationItem>
 
         {/* Page Numbers with Ellipsis Logic */}
@@ -129,12 +135,18 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
 
         {/* Next Button */}
         <PaginationItem>
-          <PaginationNext href="#" onClick={handleNext} />
+          <PaginationNext
+            //  href="#"
+            onClick={handleNext}
+          />
         </PaginationItem>
 
         {/* Last Page Button */}
         <PaginationItem>
-          <PaginationLink href="#" onClick={handleLastPage}>
+          <PaginationLink
+            // href="#"
+            onClick={handleLastPage}
+          >
             <ChevronLast className="h-4 w-4" />
           </PaginationLink>
         </PaginationItem>
