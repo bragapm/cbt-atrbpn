@@ -31,6 +31,7 @@ export const findOrCreateUserSessionTest = async (
   userSessionData
 ) => {
   // Check if a user session test with the same session and user already exists
+  console.log(userSessionData.info_peserta);
   const existingSessions = await userSessionTestService.readByQuery({
     filter: {
       info_peserta: { _eq: userSessionData.info_peserta },
