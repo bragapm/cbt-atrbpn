@@ -17,6 +17,7 @@ export const ManagementPesertaList = () => {
   const [search, setSearch] = useState<string>("");
   const debouncedSearch = useDebounceSearch({ value: search });
   const [sortName, setSortName] = useState<boolean | null>(false);
+  const [sesiId, setSesiId] = useState<string>(undefined);
 
   const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ export const ManagementPesertaList = () => {
     page,
     search: debouncedSearch,
     sort: sortName,
+    sessionId: sesiId,
   });
 
   const handleDownloadPeserta = () => {
@@ -77,6 +79,7 @@ export const ManagementPesertaList = () => {
         totalData={pesertaCbt?.data?.meta?.total_count}
         onChangePage={(val) => setPage(val)}
         onSort={setSortName}
+        onSesi={setSesiId}
       />
     </div>
   );

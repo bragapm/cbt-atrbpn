@@ -12,6 +12,7 @@ export type IUjian = {
   session_id?:number
   login_time?: Date
   login_start?: Date
+  nama?:string
 };
 
 export type IUjianRequest = {

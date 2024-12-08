@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { IUserSessionTest } from "../hooks/useGetUserSessionTestQueries";
 import useDeletePesertaMutation from "../hooks/useDeletePesertaMutation";
 import TableHeaderSorting from "@/components/table-header-sorting";
+import useGetManagementUjian from "../../management-ujian/hooks/useGetManagementUjian";
 
 type PesertaCBTTableProps = {
   userSessionTest?: IUserSessionTest[];
@@ -23,6 +24,7 @@ type PesertaCBTTableProps = {
   currentPage: number;
   onChangePage: (page: number) => void;
   onSort?: (value: boolean | null) => void;
+  onSesi?: (value: string) => void;
 };
 
 const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
@@ -32,6 +34,7 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
   currentPage,
   onChangePage,
   onSort,
+  onSesi,
 }) => {
   const navigate = useNavigate();
 
@@ -42,6 +45,15 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
     label: string;
     value: string;
   } | null>(null);
+  const [selectSesi, setSelectSesi] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
+  const { data: datUjian, isLoading } = useGetManagementUjian({
+    page: 1,
+    limit: 100,
+  });
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeletePesertaMutation({
       onSuccess: () => {
@@ -50,6 +62,8 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
         setId("");
       },
     });
+
+  console.log(datUjian);
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
@@ -77,7 +91,26 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
     },
     {
       accessorKey: "session.name",
-      header: "Sesi Ujian",
+      header: () => {
+        return (
+          <TableHeaderSorting
+            title="Sesi Ujian"
+            dropdownData={
+              isLoading
+                ? [{ label: "Loading...", value: "" }]
+                : datUjian?.data?.map((item) => ({
+                    value: String(item.session_id),
+                    label: item.nama,
+                  }))
+            }
+            selectedDropdownValue={selectSesi}
+            onSelectedDropdownValue={(selected) => {
+              setSelectSesi(selected);
+              onSesi(selected.value);
+            }}
+          />
+        );
+      },
     },
     {
       accessorKey: "info_peserta.nomor_kontak",
