@@ -6,8 +6,9 @@ export default function registerEndpoint(router, { database, logger }) {
             
             const offset = (page - 1) * limit;
 
-            const query = `
-             SELECT 
+            
+        const query = `
+            SELECT 
                 st.id AS session_id,
                 st.name AS "nama",
                 DATE(st.start_time) AS "tanggal_ujian",
@@ -28,10 +29,22 @@ export default function registerEndpoint(router, { database, logger }) {
             LIMIT ? OFFSET ?;
         `;
         
-        
+            // total number of rows
+            const countQuery = `
+                SELECT 
+                    COUNT(*) AS total 
+                FROM 
+                    session_test st
+            `;
 
-            const result = await database.raw(query, [limit, offset]);
+            
+            const [result, countResult] = await Promise.all([
+                database.raw(query, [limit, offset]),
+                database.raw(countQuery)
+            ]);
+
             const rows = result.rows || [];
+            const totalCount = countResult.rows[0]?.total || 0;
 
             res.json({
                 success: true,
@@ -39,6 +52,8 @@ export default function registerEndpoint(router, { database, logger }) {
                 meta: {
                     page: Number(page),
                     limit: Number(limit),
+                    totalCount: Number(totalCount), // total count
+                    totalPages: Math.ceil(totalCount / limit), //  total pages
                 },
             });
         } catch (error) {
