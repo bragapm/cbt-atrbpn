@@ -91,7 +91,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex space-x-2">
-          {role === "Administrator" && (
+          {/* {role === "Administrator" && (
             <Trash
               className="cursor-pointer text-gray-400 w-4 h-4 hover:text-red-500"
               onClick={() => {
@@ -99,7 +99,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
                 setId(row.original.id);
               }}
             />
-          )}
+          )} */}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className="cursor-pointer text-gray-400 w-4 h-4 hover:text-primary" />
