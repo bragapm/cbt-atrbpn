@@ -24,7 +24,7 @@ const BankSoalImportPage: React.FC = () => {
   const [confirmationDialog, setConfirmationDialog] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const { mutate: importBankSoal } = useImportBankSoal({
+  const { mutate: importBankSoal, isLoading } = useImportBankSoal({
     onSuccess: () => {
       setIsSuccess(true);
       setConfirmationDialog(false);
@@ -54,6 +54,7 @@ const BankSoalImportPage: React.FC = () => {
           }}
         />
         <ConfirmationDialog
+          isLoading={isLoading}
           isOpen={confirmationDialog}
           onOpenChange={setConfirmationDialog}
           description="Apakah Anda yakin ingin menyimpan data ini?"
