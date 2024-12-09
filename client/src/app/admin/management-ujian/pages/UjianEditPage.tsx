@@ -84,14 +84,14 @@ const UjianEditPage: React.FC = () => {
           >
             Batal
           </Button>
-          <Button
+          {/* <Button
             variant="actions"
             size="actions"
             className="w-44"
             onClick={() => setConfirmationDialog(true)}
           >
             Edit Sesi Ujian
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>
