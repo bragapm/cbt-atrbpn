@@ -6,7 +6,6 @@ export const findOrCreateCoupon = async (couponService, couponData) => {
     filter: { code: { _eq: couponData.code } },
     limit: 1,
   });
-
   if (existingCoupons && existingCoupons.length > 0) {
     // If found, return the existing coupon id
     return existingCoupons[0].id;
@@ -32,15 +31,16 @@ export const findOrCreateUserSessionTest = async (
   userSessionData
 ) => {
   // Check if a user session test with the same session and user already exists
+  console.log(userSessionData.info_peserta);
   const existingSessions = await userSessionTestService.readByQuery({
     filter: {
-      session: { _eq: userSessionData.session },
-      user: { _eq: userSessionData.user },
+      info_peserta: { _eq: userSessionData.info_peserta },
     },
     limit: 1,
   });
 
   if (existingSessions && existingSessions.length > 0) {
+    console.log("coupon already exists");
     return existingSessions[0];
   }
 
