@@ -56,19 +56,17 @@ const Profile: React.FC<IProfile> = ({ data }) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {!isPageUser && (
-            <DropdownMenuItem
-              onClick={() => {
-                if (isPageUser) {
-                  postData();
-                } else {
-                  logoutUser();
-                }
-              }}
-            >
-              Logout
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem
+            onClick={() => {
+              if (isPageUser) {
+                postData();
+              } else {
+                logoutUser();
+              }
+            }}
+          >
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
