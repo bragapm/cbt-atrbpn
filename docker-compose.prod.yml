@@ -32,6 +32,7 @@ services:
       # rate limiting
       - RATE_LIMITER_ENABLED=true
       - RATE_LIMITER_STORE=redis
+      - RATE_LIMITER_POINTS
       # cache
       - CACHE_ENABLED=true
       - CACHE_STORE=redis
