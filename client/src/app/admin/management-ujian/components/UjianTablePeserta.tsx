@@ -85,9 +85,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   // TODO: UNCOMMENT THIS IF USERS RETRIVE ARRAY
   const handleCheckAll = (bool: boolean) => {
     if (bool) {
-      setStudentVal(
-        dataUser?.data?.data?.map((item) => item?.info_peserta?.code)
-      );
+      setStudentVal(dataUser?.data?.data?.map((item) => item?.id));
     } else {
       setStudentVal([]);
     }
@@ -116,18 +114,18 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
       id: "select",
-      header:
-        isDetail || isEdit
-          ? ""
-          : () => (
-              <Checkbox
-                checked={getCheckAll()}
-                onCheckedChange={(value) => {
-                  handleCheckAll(!!value);
-                }}
-                aria-label="Select all"
-              />
-            ),
+      // header:
+      //   isDetail || isEdit
+      //     ? ""
+      //     : () => (
+      //         <Checkbox
+      //           checked={getCheckAll()}
+      //           onCheckedChange={(value) => {
+      //             handleCheckAll(!!value);
+      //           }}
+      //           aria-label="Select all"
+      //         />
+      //       ),
       cell:
         isDetail || isEdit
           ? ""
