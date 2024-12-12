@@ -22,6 +22,7 @@ const UjianDropdown: React.FC<IUjianPopupProps> = ({
     <>
       <DropdownMenuContent className="bg-white p-2">
         <>
+        {/* ini detail untuk esit sesi */}
           <UjianTablePeserta isDetail sessionId={sessionId} />
           <DropdownMenuItem
             onClick={() => navigate(`/ujian/edit/${ujianData.session_id}`)}

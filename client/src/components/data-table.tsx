@@ -133,10 +133,6 @@ export function DataTable<TData, TValue>({
           >
             <p className="text-xs w-full">
               Total {pagination?.totalItems || "-"} Data
-              {/* {customSelectedFooter
-                ? customSelectedFooter
-                : table.getFilteredSelectedRowModel().rows.length}{" "}
-              of {table.getFilteredRowModel().rows.length} Rows Selected */}
             </p>
             <PaginationTable
               pageSize={pagination.pageSize}

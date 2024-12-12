@@ -24,6 +24,7 @@ type IUjianTablePeserta = {
   value?: string[];
   sessionId?: string | number;
   onChange?: (value: string[]) => void;
+  isEdit?: boolean;
 };
 
 const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
@@ -31,13 +32,14 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   sessionId,
   value,
   onChange,
+  isEdit,
 }) => {
   const limit: number = 10;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [modalPIN, setModalPIN] = useState(false);
-  const [studentVal, setStudentVal] = useState<string[]>([]);
+  const [studentVal, setStudentVal] = useState<any[]>([]);
   const queryClient = useQueryClient();
   const {
     mutate: mutatePinUjian,
@@ -61,16 +63,12 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       search,
     });
 
-  // if (!dataUser) {
-  //   return null;
-  // }
-
   const handleSearchChange = (searchTerm: string) => {
     setSearch(searchTerm);
     setPage(1);
   };
 
-  const handleCheckValue = (val: string, bool: boolean) => {
+  const handleCheckValue = (val: any, bool: boolean) => {
     setStudentVal((prev) => {
       if (bool) {
         return [...prev, val];
@@ -80,7 +78,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
     });
   };
 
-  const getCheckValue = (val: string) => {
+  const getCheckValue = (val: any) => {
     return studentVal.includes(val);
   };
 
@@ -118,24 +116,30 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
       id: "select",
-      header: () => (
-        <Checkbox
-          checked={getCheckAll()}
-          onCheckedChange={(value) => {
-            handleCheckAll(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={getCheckValue(row.original?.info_peserta?.code)}
-          onCheckedChange={(value) => {
-            handleCheckValue(row.original?.info_peserta?.code, !!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
+      header:
+        isDetail || isEdit
+          ? ""
+          : () => (
+              <Checkbox
+                checked={getCheckAll()}
+                onCheckedChange={(value) => {
+                  handleCheckAll(!!value);
+                }}
+                aria-label="Select all"
+              />
+            ),
+      cell:
+        isDetail || isEdit
+          ? ""
+          : ({ row }) => (
+              <Checkbox
+                checked={getCheckValue(row.original?.id)}
+                onCheckedChange={(value) => {
+                  handleCheckValue(row.original?.id, !!value);
+                }}
+                aria-label="Select row"
+              />
+            ),
       enableSorting: false,
       enableHiding: false,
     },
@@ -205,7 +209,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
           <div className="p-2 w-full h-full">
             <DataTable
               customSelectedFooter={studentVal?.length}
-              buttonAction={handleSubmit}
+              buttonAction={isEdit ? null : handleSubmit}
               iconButtonAction={isDetail ? <Lock /> : <></>}
               labelButtonAction={
                 isDetail

@@ -35,6 +35,6 @@ export type IUserSessionTest = {
 
 export type IUserSessionTestRequest = {
   id?: number | string;
-  session: number | string;
-  user: string;
+  session?: number | string;
+  user?: string;
 };

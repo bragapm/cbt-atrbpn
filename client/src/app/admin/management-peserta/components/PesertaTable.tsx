@@ -63,8 +63,6 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
       },
     });
 
-  console.log(datUjian);
-
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
       accessorKey: "info_peserta.code",
@@ -110,6 +108,9 @@ const PesertaCBTTable: FC<PesertaCBTTableProps> = ({
             }}
           />
         );
+      },
+      cell: ({ row }) => {
+        return row.original.session?.name || "-";
       },
     },
     {

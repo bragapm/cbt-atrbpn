@@ -137,6 +137,7 @@ const UjianForm: React.FC<{ isEdit?: boolean }> = ({ isEdit = false }) => {
                 <FormItem>
                   <FormControl>
                     <UjianTablePeserta
+                      isEdit={isEdit}
                       sessionId={id}
                       value={Array.isArray(field.value) ? field.value : []}
                       onChange={(selectedValues) => {
