@@ -23,12 +23,12 @@ const Dashboardpage: React.FC = () => {
     {
       icon: "/images/ic-computer.svg",
       name: "Ujian Sedang Berlangsung",
-      value: data?.data?.finishedTests[0]?.finished_tests,
+      value: data?.data?.ongoingTests[0]?.ongoing_tests,
     },
     {
       icon: "/images/ic-check.svg",
       name: "Ujian Selesai",
-      value: data?.data?.ongoingTests[0]?.ongoing_tests,
+      value: data?.data?.finishedTests[0]?.finished_tests,
     },
   ];
   return (
