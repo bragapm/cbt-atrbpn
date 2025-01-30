@@ -1,4 +1,7 @@
 export type IBaseResponse<T> = {
+  score: any;
+  max_score: any;
+  map(arg0: (item: any) => any): unknown;
   data: T;
   meta: IBaseMetaResponse;
 };

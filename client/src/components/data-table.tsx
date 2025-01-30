@@ -111,19 +111,19 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               )}
 
-              {dataSumary && (
-                <TableRow>
-                  <TableCell colSpan={3} className="h-20">
-                    Summarize
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    {dataSumary?.score}
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    {dataSumary?.maxScore}
-                  </TableCell>
-                </TableRow>
-              )}
+              {dataSumary &&
+                (console.log(dataSumary, "--->Data Sumary"),
+                (
+                  <TableRow>
+                    <TableCell colSpan={3} className="h-20">
+                      Summarize
+                    </TableCell>
+                    <TableCell className="font-semibold">
+                      {dataSumary?.score}
+                    </TableCell>
+                    <TableCell className="font-semibold">189.999999</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <div

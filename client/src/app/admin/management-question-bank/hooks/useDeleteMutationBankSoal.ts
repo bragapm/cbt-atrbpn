@@ -25,7 +25,7 @@ const useDeleteMutationBankSoal = ({
 
       if (Array.isArray(choices.data) && choices.data.length > 0) {
         await Promise.all(
-          choices.data.map(async (choice) => {
+          (choices.data as IQuestionChoice[]).map(async (choice) => {
             await service.sendDeleteRequest(
               `/items/question_options/${choice.id}`
             );

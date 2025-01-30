@@ -21,6 +21,7 @@ export type IUserSessionTest = {
   id: number;
   score: number;
   score_alias: number;
+  score_format: string;
   score_summary: {
     correct_answer: number;
     wrong_answer: number;

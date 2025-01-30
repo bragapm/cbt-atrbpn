@@ -29,6 +29,13 @@ export const DataHasilAkhirUjianPesertaTable = () => {
 
   const [id, setId] = React.useState<string | number>("");
   const role = localStorage.getItem("role");
+
+  const formatScore = (score: any) => {
+    const [integerPart, decimalPart = ""] = score.toString().split(".");
+    const paddedDecimal = decimalPart.padEnd(6, "0").slice(0, 6);
+    return `${integerPart}.${paddedDecimal}`;
+  };
+
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
     useDeletePesertaMutation({
       onSuccess: () => {
@@ -43,6 +50,12 @@ export const DataHasilAkhirUjianPesertaTable = () => {
     limit: 20,
     search: debouncedSearch,
   });
+
+
+  const formatedData = userSessionTest?.data?.data.map((item) => ({
+    ...item,
+    score_format: formatScore(item.score),
+  }));
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     // {
@@ -80,10 +93,10 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       },
     },
     {
-      accessorKey: "score",
+      accessorKey: "score_format",
       header: "Skor",
       cell: ({ row }) => {
-        return row.original.score_alias ?? row.original.score ?? "-";
+        return row.original.score_alias ?? row.original.score_format ?? "-";
       },
     },
     {
@@ -143,7 +156,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
         <TableSearch value={search} onChange={setSearch} />
       </div>
       <DataTable
-        data={userSessionTest ? userSessionTest?.data?.data : []}
+        data={userSessionTest ? formatedData : []}
         columns={columns}
         pagination={{
           pageSize: 10,

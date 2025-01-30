@@ -17,14 +17,28 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
+  const formatScore = (score: any) => {
+    const [integerPart, decimalPart = ""] = score.toString().split(".");
+    const paddedDecimal = decimalPart.padEnd(6, "0").slice(0, 6);
+    return `${integerPart}.${paddedDecimal}`;
+  };
+
   const { data: userTest } = useGetJawabanPeserta({
     user_session_id: params.pesertaId,
   });
 
-  const { data: sumarize } = useGetSummarize({
+  let { data: sumarize } = useGetSummarize({
     id: params.pesertaId,
   });
 
+  let sumaryDataFormated: { max_score: any; score: string };
+
+  if (sumarize?.data) {
+    sumaryDataFormated = {
+      max_score: sumarize?.data.max_score,
+      score: formatScore(sumarize?.data.score),
+    };
+  }
   if (!userTest) {
     return null;
   }
@@ -131,7 +145,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
           onPageChange: (page) => setPage(page),
           currentPage: page,
         }}
-        dataSumary={sumarize?.data}
+        dataSumary={sumaryDataFormated}
       />
     </div>
   );
