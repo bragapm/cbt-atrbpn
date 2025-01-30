@@ -14,18 +14,19 @@ const options = {
 const maxWidth = 800;
 
 interface IPDFView {
-  file: any;
+  file: string | File | ArrayBuffer; // More specific type for file prop
 }
+
 const PDFViewers: FC<IPDFView> = ({ file }) => {
   const [numPages, setNumPages] = useState<number>();
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
 
-  const onDocumentLoadSuccess = ({
-    numPages: nextNumPages,
-  }: PDFDocumentProxy) => {
-    setNumPages(nextNumPages);
+  // Correct type definition for onDocumentLoadSuccess
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
   };
+
   return (
     <div className="max-w-[100%-2em] mx-auto" ref={setContainerRef}>
       <Document
