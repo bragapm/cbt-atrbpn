@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
                     <TableCell className="font-semibold">
                       {dataSumary?.score}
                     </TableCell>
-                    <TableCell className="font-semibold">189.999999</TableCell>
+                    <TableCell className="font-semibold">189.999990</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
