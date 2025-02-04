@@ -38,8 +38,8 @@ export default function registerEndpoint(router, { database, logger }) {
             qb.question AS "soal_pertanyaan",
             COALESCE(ans.score_category, 0::INTEGER) AS "jawaban",
             ks.nama_kategori AS "kategori",
-            TO_CHAR(COALESCE(ans.score, 0::NUMERIC),'9999999.999999') AS "skor",
-            TO_CHAR(COALESCE(ks.bobot_benar, 0::NUMERIC),'9999999.999999') AS "nilai_jawaban_benar",
+            TO_CHAR(COALESCE(ans.score, 0::NUMERIC),'0.000000') AS "skor",
+            TO_CHAR(COALESCE(ks.bobot_benar, 0::NUMERIC),'0.000000') AS "nilai_jawaban_benar",
             ms.materi AS "materi"
         FROM assigned_problems ap
         LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem
