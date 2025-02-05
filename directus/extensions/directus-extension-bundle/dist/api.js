@@ -1630,12 +1630,10 @@ const Ze = (e) => async (t, r, n) => {
     const i = t.headers.authorization,
       s = t.headers.device;
     if (!i || !i.startsWith("Bearer "))
-      return r
-        .status(401)
-        .json({
-          status: "error",
-          message: "Missing or invalid authorization token",
-        });
+      return r.status(401).json({
+        status: "error",
+        message: "Missing or invalid authorization token",
+      });
     if (!s)
       return r
         .status(400)
@@ -1651,21 +1649,17 @@ const Ze = (e) => async (t, r, n) => {
         .status(404)
         .json({ status: "error", message: "User tidak ditemukan" });
     if (a.device && a.device !== s)
-      return r
-        .status(403)
-        .json({
-          status: "error",
-          message: "Device tidak valid. Login dari device tidak diperbolehkan.",
-        });
+      return r.status(403).json({
+        status: "error",
+        message: "Device tidak valid. Login dari device tidak diperbolehkan.",
+      });
     (t.user = o), n();
   } catch (e) {
     console.error("Authentication error:", e.message),
-      r
-        .status(500)
-        .json({
-          status: "error",
-          message: "Terjadi Kesalahan, silahkan coba lagi",
-        });
+      r.status(500).json({
+        status: "error",
+        message: "Terjadi Kesalahan, silahkan coba lagi",
+      });
   }
 };
 const Ke = (e, t, r) =>
@@ -57003,12 +56997,10 @@ const Uq = [
             });
           } catch (e) {
             console.error(e),
-              t
-                .status(500)
-                .json({
-                  status: "error",
-                  message: "Terjadi Kesalahan, silahkan coba lagi",
-                });
+              t.status(500).json({
+                status: "error",
+                message: "Terjadi Kesalahan, silahkan coba lagi",
+              });
           }
         }),
           e.post("/login", async (e, t) => {
@@ -57033,12 +57025,10 @@ const Uq = [
                   ],
                 });
               if (0 === f.length)
-                return t
-                  .status(403)
-                  .json({
-                    status: "error",
-                    message: "Sesi ujian tidak ditemukan",
-                  });
+                return t.status(403).json({
+                  status: "error",
+                  message: "Sesi ujian tidak ditemukan",
+                });
               const d = f[0].session,
                 p = new Date(),
                 m = "Asia/Jakarta",
@@ -57048,13 +57038,11 @@ const Uq = [
                 _ = Ge(g, m, "yyyy-MM-dd HH:mm:ssXXX"),
                 b = Ge(y, m, "yyyy-MM-dd HH:mm:ssXXX");
               if (v < _ || v > b)
-                return t
-                  .status(403)
-                  .json({
-                    status: "error",
-                    message:
-                      "Sesi ujian belum dimulai, silahkan coba saat sesi dimulai",
-                  });
+                return t.status(403).json({
+                  status: "error",
+                  message:
+                    "Sesi ujian belum dimulai, silahkan coba saat sesi dimulai",
+                });
               const w = new i({ schema: await n() }),
                 x = await w.readOne(u.user_id);
               if (!x)
@@ -57085,12 +57073,10 @@ const Uq = [
                 });
             } catch (e) {
               console.error(e),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
             }
           }),
           e.post("/logout", async (e, t) => {
@@ -57107,12 +57093,10 @@ const Uq = [
               try {
                 await u.logout(i);
               } catch (e) {
-                return t
-                  .status(401)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                return t.status(401).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
               }
               const h = new Date();
               await a.updateOne(c.id, { last_logout_at: h, updated_at: h }),
@@ -57122,12 +57106,10 @@ const Uq = [
                 });
             } catch (e) {
               console.error(e),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
             }
           });
       },
@@ -57190,12 +57172,10 @@ const Uq = [
                   ],
                 });
               if (0 === a.length)
-                return t
-                  .status(404)
-                  .json({
-                    status: "error",
-                    message: "Sesi ujian tidak ditemukan",
-                  });
+                return t.status(404).json({
+                  status: "error",
+                  message: "Sesi ujian tidak ditemukan",
+                });
               const l = a[0];
               if (l.session.PIN !== i)
                 return t
@@ -57209,12 +57189,10 @@ const Uq = [
                 p = Ge(h, c, "yyyy-MM-dd HH:mm:ssXXX"),
                 m = Ge(f, c, "yyyy-MM-dd HH:mm:ssXXX");
               if (d < h || d > f)
-                return t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Sesi ujian belum dimulai",
-                  });
+                return t.status(500).json({
+                  status: "error",
+                  message: "Sesi ujian belum dimulai",
+                });
               if (null !== l.start_attempt_at)
                 return t.json({
                   status: "success",
@@ -57239,12 +57217,10 @@ const Uq = [
                 });
             } catch (e) {
               console.error(e),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
             }
           }),
           e.post("/finish", i, async (e, t) => {
@@ -57266,12 +57242,10 @@ const Uq = [
                   fields: ["score_alias"],
                 });
               if (!c.length)
-                return t
-                  .status(404)
-                  .json({
-                    status: "error",
-                    message: "No answers found for this session",
-                  });
+                return t.status(404).json({
+                  status: "error",
+                  message: "No answers found for this session",
+                });
               let h = 0,
                 f = 0,
                 d = 0,
@@ -57392,12 +57366,10 @@ const Uq = [
               { problem_id: n, answer_id: s } = e.body,
               o = e.user;
             if (!n || !s || !r)
-              return t
-                .status(400)
-                .json({
-                  status: "error",
-                  message: "Terjadi Kesalahan, silahkan coba lagi",
-                });
+              return t.status(400).json({
+                status: "error",
+                message: "Terjadi Kesalahan, silahkan coba lagi",
+              });
             try {
               const a = new i("user_test", { schema: e.schema }),
                 l = new i("question_options", { schema: e.schema }),
@@ -57548,12 +57520,10 @@ const Uq = [
               });
             } catch (e) {
               console.error("Error uploading questions:", e.message),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
             }
           });
       },
@@ -57570,11 +57540,9 @@ const Uq = [
             await Bq(i, r, "user_info", n);
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -57591,11 +57559,9 @@ const Uq = [
             await Bq(i, r, "distribusi_soal", n);
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -57612,11 +57578,9 @@ const Uq = [
             await Bq(i, r, "pertanyaan", n);
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -57635,11 +57599,9 @@ const Uq = [
             await Bq(i, r, "hasil_peserta", n);
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -57730,11 +57692,9 @@ const Uq = [
             r.json({ data: n });
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -57800,22 +57760,18 @@ const Uq = [
                 t.json({ status: "success" });
             } catch (e) {
               console.error("Error create users:", e),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                });
             }
           }),
           e.post("/bulk", async (e, t) => {
             if (!e.files || !e.files.file)
-              return t
-                .status(400)
-                .json({
-                  status: "error",
-                  message: "File Excel harus diupload",
-                });
+              return t.status(400).json({
+                status: "error",
+                message: "File Excel harus diupload",
+              });
             let r = 0,
               o = [];
             const a = e.files.file,
@@ -57903,15 +57859,13 @@ const Uq = [
                 t.json({ status: "success" });
             } catch (e) {
               console.error("Error uploading users:", e),
-                t
-                  .status(500)
-                  .json({
-                    status: "error",
-                    message: "Terjadi Kesalahan, silahkan coba lagi",
-                    processed: r,
-                    total_rows: totalRows,
-                    errors: o,
-                  });
+                t.status(500).json({
+                  status: "error",
+                  message: "Terjadi Kesalahan, silahkan coba lagi",
+                  processed: r,
+                  total_rows: totalRows,
+                  errors: o,
+                });
             }
           });
       },
@@ -57932,12 +57886,10 @@ const Uq = [
             n.json({ todayTests: r, thisWeekTests: s });
           } catch (e) {
             r.error("Error fetching ongoing tests metrics:", e),
-              n
-                .status(500)
-                .json({
-                  error:
-                    "An error occurred while fetching ongoing tests metrics.",
-                });
+              n.status(500).json({
+                error:
+                  "An error occurred while fetching ongoing tests metrics.",
+              });
           }
         }),
           e.get("/count", async (e, n) => {
@@ -57953,12 +57905,9 @@ const Uq = [
               n.json({ completedTests: r, nonCompletedTests: s });
             } catch (e) {
               r.error("Error fetching test status counts:", e),
-                n
-                  .status(500)
-                  .json({
-                    error:
-                      "An error occurred while fetching test status counts.",
-                  });
+                n.status(500).json({
+                  error: "An error occurred while fetching test status counts.",
+                });
             }
           });
       },
@@ -57980,12 +57929,10 @@ const Uq = [
             n.json({ averageScoreByDate: r });
           } catch (e) {
             r.error("Error fetching average scores by date:", e),
-              n
-                .status(500)
-                .json({
-                  error:
-                    "An error occurred while fetching average scores by date.",
-                });
+              n.status(500).json({
+                error:
+                  "An error occurred while fetching average scores by date.",
+              });
           }
         }),
           e.get("/by-session", async (e, n) => {
@@ -58011,12 +57958,10 @@ const Uq = [
               });
             } catch (e) {
               r.error("Error fetching average scores by session:", e),
-                n
-                  .status(500)
-                  .json({
-                    error:
-                      "An error occurred while fetching average scores by session.",
-                  });
+                n.status(500).json({
+                  error:
+                    "An error occurred while fetching average scores by session.",
+                });
             }
           }),
           e.get("/all", async (e, n) => {
@@ -58030,12 +57975,10 @@ const Uq = [
               n.json({ averageScore: r });
             } catch (e) {
               r.error("Error fetching average scores by date:", e),
-                n
-                  .status(500)
-                  .json({
-                    error:
-                      "An error occurred while fetching average scores by date.",
-                  });
+                n.status(500).json({
+                  error:
+                    "An error occurred while fetching average scores by date.",
+                });
             }
           });
       },
@@ -58052,11 +57995,9 @@ const Uq = [
             await Bq(i, r, "session_info", n);
           } catch (e) {
             n.error("Error occurred:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -58089,12 +58030,9 @@ const Uq = [
               });
           } catch (e) {
             r.error("Error generating or saving unique PIN:", e),
-              i
-                .status(500)
-                .json({
-                  error:
-                    "An error occurred while generating and saving the PIN.",
-                });
+              i.status(500).json({
+                error: "An error occurred while generating and saving the PIN.",
+              });
           }
         });
       },
@@ -58248,12 +58186,10 @@ const Uq = [
             });
           } catch (e) {
             r.error("Error fetching user session test counts:", e),
-              n
-                .status(500)
-                .json({
-                  success: !1,
-                  error: "An error occurred while processing your request.",
-                });
+              n.status(500).json({
+                success: !1,
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -58283,11 +58219,9 @@ const Uq = [
             r.json({ maxScore: u, score: a });
           } catch (e) {
             n.error("Error calculating max score:", e),
-              r
-                .status(500)
-                .json({
-                  error: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                error: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -58300,42 +58234,34 @@ const Uq = [
         e.post("/", async (e, t) => {
           const { email: i, password: s, first_name: o, roleName: a } = e.body;
           if ((console.log(e.body), !(i && s && o && a)))
-            return t
-              .status(400)
-              .json({
-                status: "error",
-                message: "Email, password, first_name, and role are required.",
-              });
+            return t.status(400).json({
+              status: "error",
+              message: "Email, password, first_name, and role are required.",
+            });
           try {
             const l = e.accountability?.role;
             if (l !== n)
-              return t
-                .status(403)
-                .json({
-                  status: "error",
-                  message: "Only admins can perform this action.",
-                });
+              return t.status(403).json({
+                status: "error",
+                message: "Only admins can perform this action.",
+              });
             let c;
             if ("admin" === a) c = n;
             else {
               if ("verifikator" !== a)
-                return t
-                  .status(400)
-                  .json({
-                    status: "error",
-                    message: `Invalid role: "${a}". Only "admin" and "verifikator" are allowed.`,
-                  });
+                return t.status(400).json({
+                  status: "error",
+                  message: `Invalid role: "${a}". Only "admin" and "verifikator" are allowed.`,
+                });
               c = "f2acda8a-8eba-4a4f-a374-7f85e8d9e02b";
             }
             const u = new r("directus_users", { schema: e.schema }),
               h = await u.readByQuery({ filter: { first_name: o }, limit: 1 });
             if (h && h.length > 0)
-              return t
-                .status(400)
-                .json({
-                  status: "error",
-                  message: "First name is already taken.",
-                });
+              return t.status(400).json({
+                status: "error",
+                message: "First name is already taken.",
+              });
             const f = await u.createOne({
               email: i,
               password: s,
@@ -58388,22 +58314,18 @@ const Uq = [
                 .status(400)
                 .json({ status: "error", message: "User ID is required." });
             if (!s && !o && !a)
-              return t
-                .status(400)
-                .json({
-                  status: "error",
-                  message:
-                    "At least one field (email, first_name, password) is required to update.",
-                });
+              return t.status(400).json({
+                status: "error",
+                message:
+                  "At least one field (email, first_name, password) is required to update.",
+              });
             try {
               const l = e.accountability?.role;
               if (l !== n)
-                return t
-                  .status(403)
-                  .json({
-                    status: "error",
-                    message: "Only admins can perform this action.",
-                  });
+                return t.status(403).json({
+                  status: "error",
+                  message: "Only admins can perform this action.",
+                });
               const c = new r("directus_users", { schema: e.schema }),
                 u = {};
               s && (u.email = s),
@@ -58433,12 +58355,10 @@ const Uq = [
               ),
               n = e?.[0] || e?.rows || e;
             if (!n || 0 === n.length)
-              return r
-                .status(404)
-                .json({
-                  status: "error",
-                  message: "No session results found.",
-                });
+              return r.status(404).json({
+                status: "error",
+                message: "No session results found.",
+              });
             const s = n.map((e) => ({
               id_peserta: e.id_peserta,
               nama_peserta: e.nama_peserta,
@@ -58451,12 +58371,10 @@ const Uq = [
             r.status(200).json({ status: "success", data: s });
           } catch (e) {
             n.error(`Error fetching session results for ID ${i}:`, e),
-              r
-                .status(500)
-                .json({
-                  status: "error",
-                  message: "An error occurred while processing your request.",
-                });
+              r.status(500).json({
+                status: "error",
+                message: "An error occurred while processing your request.",
+              });
           }
         });
       },
@@ -58468,32 +58386,28 @@ const Uq = [
           try {
             const { user_session_id: r } = e.query;
             if (!r)
-              return n
-                .status(400)
-                .json({
-                  success: !1,
-                  error: "Missing required parameter: user_session_id",
-                  debug: { query_params: e.query },
-                });
+              return n.status(400).json({
+                success: !1,
+                error: "Missing required parameter: user_session_id",
+                debug: { query_params: e.query },
+              });
             const i =
-                '\n        WITH assigned_problems AS (\n            SELECT json_array_elements_text(problems)::INTEGER AS problem_id\n            FROM user_session_test\n            WHERE id = ?\n        ),\n        answered_problems AS (\n            SELECT problem, \n                    score::NUMERIC, \n                    score_category::INTEGER\n            FROM user_test\n            WHERE user_session_id = ?\n        ),\n        unanswered_problems AS (\n            SELECT ap.problem_id\n            FROM assigned_problems ap\n            LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem\n            WHERE ans.problem IS NULL\n            )\n        SELECT \n            qb.id AS "id",\n            qb.question AS "soal_pertanyaan",\n            COALESCE(ans.score_category, 0::INTEGER) AS "jawaban",\n            ks.nama_kategori AS "kategori",\n            TO_CHAR(COALESCE(ans.score, 0::NUMERIC),\'0.000000\') AS "skor",\n            TO_CHAR(COALESCE(ks.bobot_benar, 0::NUMERIC),\'0.000000\') AS "nilai_jawaban_benar",\n            ms.materi AS "materi"\n        FROM assigned_problems ap\n        LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem\n        LEFT JOIN questions_bank qb ON ap.problem_id = qb.id\n        LEFT JOIN kategori_soal ks ON qb.kategori_id = ks.id\n        LEFT JOIN materi_soal ms ON qb.materi_id = ms.id;\n    ',
+                '\n        WITH assigned_problems AS (\n            SELECT json_array_elements_text(problems)::INTEGER AS problem_id\n            FROM user_session_test\n            WHERE id = ?\n        ),\n        answered_problems AS (\n            SELECT problem, \n                    score::NUMERIC, \n                    score_category::INTEGER\n            FROM user_test\n            WHERE user_session_id = ?\n        ),\n        unanswered_problems AS (\n            SELECT ap.problem_id\n            FROM assigned_problems ap\n            LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem\n            WHERE ans.problem IS NULL\n            )\n        SELECT \n            qb.id AS "id",\n            qb.question AS "soal_pertanyaan",\n            COALESCE(ans.score_category, 0::INTEGER) AS "jawaban",\n            ks.nama_kategori AS "kategori",\n            TO_CHAR(COALESCE(ans.score::NUMERIC, 0::NUMERIC),\'0.000000\') AS "skor",\n            TO_CHAR(COALESCE(ks.bobot_benar::NUMERIC, 0::NUMERIC),\'0.000000\') AS "nilai_jawaban_benar",\n            ms.materi AS "materi"\n        FROM assigned_problems ap\n        LEFT JOIN answered_problems ans ON ap.problem_id = ans.problem\n        LEFT JOIN questions_bank qb ON ap.problem_id = qb.id\n        LEFT JOIN kategori_soal ks ON qb.kategori_id = ks.id\n        LEFT JOIN materi_soal ms ON qb.materi_id = ms.id;\n    ',
               s = (await t.raw(i, [r, r])).rows || [],
               o = s.length;
             n.json({ success: !0, data: s, count: o });
           } catch (e) {
             r.error("Error fetching user answers:", e),
-              n
-                .status(500)
-                .json({
-                  success: !1,
-                  error: "An error occurred while processing your request.",
-                  message: e.message,
-                  debug: {
-                    query: query,
-                    bindings: [user_session_id, user_session_id],
-                    raw_error: e,
-                  },
-                });
+              n.status(500).json({
+                success: !1,
+                error: "An error occurred while processing your request.",
+                message: e.message,
+                debug: {
+                  query: query,
+                  bindings: [user_session_id, user_session_id],
+                  raw_error: e,
+                },
+              });
           }
         });
       },
