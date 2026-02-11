@@ -30,10 +30,14 @@ export const DataHasilAkhirUjianPesertaTable = () => {
   const [id, setId] = React.useState<string | number>("");
   const role = localStorage.getItem("role");
 
-  const formatScore = (score: any) => {
+  const formatScore = (score?: number | string | null) => {
+    if (score === null || score === undefined || score === "") {
+      return "-";
+    }
     const [integerPart, decimalPart = ""] = score.toString().split(".");
-    const paddedDecimal = decimalPart.padEnd(6, "0").slice(0, 6);
-    return `${integerPart}.${paddedDecimal}`;
+    return decimalPart
+      ? `${integerPart}.${decimalPart.slice(0, 2)}`
+      : integerPart;
   };
 
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
@@ -50,7 +54,6 @@ export const DataHasilAkhirUjianPesertaTable = () => {
     limit: 20,
     search: debouncedSearch,
   });
-
 
   const formatedData = userSessionTest?.data?.data.map((item) => ({
     ...item,
@@ -121,7 +124,7 @@ export const DataHasilAkhirUjianPesertaTable = () => {
               <DropdownMenuItem
                 onClick={() =>
                   navigate(
-                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.id}`
+                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.id}`,
                   )
                 }
               >
