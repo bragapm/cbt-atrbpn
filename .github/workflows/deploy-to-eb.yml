@@ -39,6 +39,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Install and build directus
+        run: |
+          pnpm i --frozen-lockfile --prod
+          pnpm build
+        working-directory: directus
+
       - name: Install and build client
         env:
           VITE_DIRECTUS_PUBLIC_URL: https://bragatest.braga.co.id/panel

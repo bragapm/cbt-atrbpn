@@ -12,7 +12,7 @@ services:
     #image: directus/directus:10.8.2
     build:
       context: ./directus
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     depends_on:
       - cache
     environment:
