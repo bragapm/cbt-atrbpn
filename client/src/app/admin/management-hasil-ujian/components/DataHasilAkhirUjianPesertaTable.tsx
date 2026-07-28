@@ -35,9 +35,8 @@ export const DataHasilAkhirUjianPesertaTable = () => {
       return "-";
     }
     const [integerPart, decimalPart = ""] = score.toString().split(".");
-    return decimalPart
-      ? `${integerPart}.${decimalPart.slice(0, 2)}`
-      : integerPart;
+    const paddedDecimal = decimalPart.padEnd(6, "0").slice(0, 6);
+    return `${integerPart}.${paddedDecimal}`;
   };
 
   const { mutate: deleteMutation, isLoading: isLoadingDelete } =
