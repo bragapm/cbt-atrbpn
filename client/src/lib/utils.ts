@@ -10,3 +10,19 @@ export const getDirectusUrl = (filename_disk: string) => {
 
   return directusUrl + "/assets/" + filename_disk;
 };
+
+export const exportEndpoints = {
+  pertanyaan: "/export-pertanyaan",
+  session: "/export-session",
+  distribusi: "/export-distribusi",
+  kategoriSoal: "/export-kategori-soal",
+  hasilAkhirUjian: "/export-hasil-akhir-ujian",
+  hasilAkhirJawaban: "/export-hasil-akhir-jawaban",
+} as const;
+
+export type ExportEndpoint =
+  (typeof exportEndpoints)[keyof typeof exportEndpoints];
+
+export const downloadExport = (endpoint: ExportEndpoint) => {
+  window.location.href = import.meta.env.VITE_DIRECTUS_PUBLIC_URL + endpoint;
+};
