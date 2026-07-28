@@ -8,6 +8,7 @@ import UjianTable from "../components/UjianTable";
 import useGetManagementUjian from "../hooks/useGetManagementUjian";
 import TableSearch from "@/components/table-search";
 import { useDebounceSearch } from "@/hooks/useDebounce";
+import { downloadExport, exportEndpoints } from "@/lib/utils";
 
 const limit: number = 50;
 
@@ -31,10 +32,8 @@ const UjianPages = () => {
         onOpenChange={setIsOpenExportDialog}
         description="Apakah anda yakin ingin mengekspor data?"
         icon={<Download size="30" className="text-primary" />}
-        onSubmit={() => {
-          window.location.href =
-            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-session";
-        }}
+        onSubmit={() => downloadExport(exportEndpoints.session)}
+        closeOnSubmit
       />
       <TableActions
         title="Sesi Ujian"

@@ -3,6 +3,7 @@ import TableActions from "@/components/table-actions";
 import TableSearch from "@/components/table-search";
 import { Button } from "@/components/ui/button";
 import { useDebounceSearch } from "@/hooks/useDebounce";
+import { downloadExport, exportEndpoints } from "@/lib/utils";
 import { Cloud, Download, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,10 +36,8 @@ const BankSoalPages = () => {
         onOpenChange={setIsOpenExportDialog}
         description="Apakah anda yakin ingin mengekspor data?"
         icon={<Download size="30" className="text-primary" />}
-        onSubmit={() => {
-          window.location.href =
-            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-pertanyaan";
-        }}
+        onSubmit={() => downloadExport(exportEndpoints.pertanyaan)}
+        closeOnSubmit
       />
       <TableActions
         title="Daftar Soal"

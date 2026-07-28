@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import TableSearch from "@/components/table-search";
 import { useDebounceSearch } from "@/hooks/useDebounce";
+import { downloadExport, exportEndpoints } from "@/lib/utils";
 
 const limit: number = 20;
 
@@ -31,10 +32,8 @@ const DistribusiSoalPage = () => {
         onOpenChange={setIsOpenExportDialog}
         description="Apakah anda yakin ingin mengekspor data?"
         icon={<Download size="30" className="text-primary" />}
-        onSubmit={() => {
-          window.location.href =
-            import.meta.env.VITE_DIRECTUS_PUBLIC_URL + "/export-distribusi";
-        }}
+        onSubmit={() => downloadExport(exportEndpoints.distribusi)}
+        closeOnSubmit
       />
       <TableActions
         title="Management Pendistribusian Soal"

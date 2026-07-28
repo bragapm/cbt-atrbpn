@@ -1,4 +1,9 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "@/components/confirmation-dialog";
+import { downloadExport, exportEndpoints } from "@/lib/utils";
+import { Download, Upload } from "lucide-react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DataHasilAkhirJawabanPesertaTable } from "../components/DataHasilAkhirJawabanPesertaTable";
 
@@ -16,9 +21,18 @@ export const hasilUjianTab = [
 export const HasilAkhirJawabanPage = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
 
   return (
     <div className="w-full h-full flex flex-col gap-3 pt-1">
+      <ConfirmationDialog
+        isOpen={isOpenExportDialog}
+        onOpenChange={setIsOpenExportDialog}
+        description="Apakah anda yakin ingin mengekspor data?"
+        icon={<Download size="30" className="text-primary" />}
+        onSubmit={() => downloadExport(exportEndpoints.hasilAkhirJawaban)}
+        closeOnSubmit
+      />
       <Breadcrumbs
         paths={[
           { label: "Management Hasil Ujian" },
@@ -39,6 +53,14 @@ export const HasilAkhirJawabanPage = () => {
             </p>
           ))}
         </div>
+        <Button
+          variant="actions"
+          size="actions"
+          startContent={<Upload />}
+          onClick={() => setIsOpenExportDialog(true)}
+        >
+          Export Hasil Akhir Jawaban
+        </Button>
       </div>
       <DataHasilAkhirJawabanPesertaTable />
     </div>
