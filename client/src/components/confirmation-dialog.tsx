@@ -13,6 +13,12 @@ type DeleteDialogConfirmProps = {
   isLoading?: boolean;
   onSubmit?: () => void;
   icon?: React.ReactNode;
+  /**
+   * Tutup dialog begitu tombol "Ya" ditekan. Hanya untuk aksi sinkron
+   * (mis. export). Aksi async yang memakai `isLoading` harus tetap
+   * menutup sendiri setelah mutation selesai, supaya loader tampil.
+   */
+  closeOnSubmit?: boolean;
 };
 
 const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
@@ -22,7 +28,13 @@ const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
   isLoading,
   onSubmit,
   icon,
+  closeOnSubmit,
 }) => {
+  const handleSubmit = () => {
+    onSubmit?.();
+    if (closeOnSubmit) onOpenChange(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col gap-6 justify-center items-center">
@@ -40,7 +52,7 @@ const ConfirmationDialog: React.FC<DeleteDialogConfirmProps> = ({
             <Button
               isLoading={isLoading}
               className="w-full h-12"
-              onClick={onSubmit}
+              onClick={handleSubmit}
             >
               {isLoading ? (
                 <MemoLoader width={30} height={30} color={"#2A6083"} />
