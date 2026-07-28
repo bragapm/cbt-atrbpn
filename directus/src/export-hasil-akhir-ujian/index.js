@@ -8,7 +8,7 @@ export default function registerEndpoint(
       const { rows } = await database.raw(`
 		SELECT
 			c.code, c.nama_peserta, st."name" AS nama_sesi,
-			ust.score, ust.feedback
+			COALESCE(ust.score_alias, ust.score) AS score, ust.feedback
 		FROM user_session_test ust
 		LEFT JOIN coupon c ON ust.info_peserta = c.id
 		LEFT JOIN session_test st ON ust."session" = st.id
