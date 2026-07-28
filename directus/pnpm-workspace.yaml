@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - argon2
+  - esbuild
+  - isolated-vm
+  - sharp
+  - sqlite3
+  - vue-demi
