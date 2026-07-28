@@ -143,6 +143,21 @@
         "type": "endpoint",
         "name": "jawaban-peserta",
         "source": "src/jawaban-peserta/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-kategori-soal",
+        "source": "src/export-kategori-soal/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-hasil-akhir-ujian",
+        "source": "src/export-hasil-akhir-ujian/index.js"
+      },
+      {
+        "type": "endpoint",
+        "name": "export-hasil-akhir-jawaban",
+        "source": "src/export-hasil-akhir-jawaban/index.js"
       }
     ],
     "host": "10.8.2"
@@ -165,6 +180,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "directus": "10.8.2"
+    "directus": "10.8.2",
+    "@directus/extensions-sdk": "12.1.0"
   }
 }
