@@ -2,7 +2,7 @@ services:
   directus:
     build:
       context: ./directus
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     environment:
       - LOG_LEVEL=debug
       # accounnt

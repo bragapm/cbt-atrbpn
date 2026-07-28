@@ -1,0 +1,26 @@
+# =========================
+# Stage 1: Build Extension
+# =========================
+FROM node:20-alpine AS builder
+
+WORKDIR /ext
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN corepack enable
+RUN corepack prepare pnpm@10.13.1 --activate
+RUN corepack pnpm install
+
+COPY . .
+RUN corepack pnpm build
+
+# =========================
+# Stage 2: Directus Runtime
+# =========================
+FROM directus/directus:10.8.2
+
+WORKDIR /directus
+
+# Copy built extensions from builder
+COPY --from=builder /ext/extensions /directus/extensions
+COPY ./utils ./utils
