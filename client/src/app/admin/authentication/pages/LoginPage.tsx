@@ -26,7 +26,7 @@ const HeaderLogin = () => {
         Dashboard Admin <br /> CBT PPAT
       </h1>
       <p className="text-center text-sm w-full">
-        Computer Based Test Petugas Pembuat Akta Tanah
+        Computer Based Test Pejabat Pembuat Akta Tanah
       </p>
     </div>
   );
