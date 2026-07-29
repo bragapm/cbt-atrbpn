@@ -21,9 +21,9 @@ import useGetUserSessionTestQueries, {
 
 type IUjianTablePeserta = {
   isDetail?: boolean;
-  value?: string[];
+  value?: (string | number)[];
   sessionId?: string | number;
-  onChange?: (value: string[]) => void;
+  onChange?: (value: (string | number)[]) => void;
   isEdit?: boolean;
 };
 
@@ -61,6 +61,9 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       limit,
       sessionId: sessionId ? String(sessionId) : null,
       search,
+      // Editing needs the unassigned pool too, otherwise the dialog only lists
+      // peserta that are already in this sesi and nothing can be added.
+      includeUnassigned: isEdit,
     });
 
   const handleSearchChange = (searchTerm: string) => {
@@ -126,18 +129,25 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
       //           aria-label="Select all"
       //         />
       //       ),
-      cell:
-        isDetail || isEdit
-          ? ""
-          : ({ row }) => (
+      cell: isDetail
+        ? ""
+        : ({ row }) => {
+            // While editing, peserta already assigned to this sesi stay locked:
+            // they can only be added, never removed, so existing exam data for
+            // them can't be orphaned.
+            const isAlreadyAssigned = isEdit && !!row.original?.session;
+
+            return (
               <Checkbox
-                checked={getCheckValue(row.original?.id)}
+                checked={isAlreadyAssigned || getCheckValue(row.original?.id)}
+                disabled={isAlreadyAssigned}
                 onCheckedChange={(value) => {
                   handleCheckValue(row.original?.id, !!value);
                 }}
                 aria-label="Select row"
               />
-            ),
+            );
+          },
       enableSorting: false,
       enableHiding: false,
     },
@@ -207,7 +217,7 @@ const UjianTablePeserta: React.FC<IUjianTablePeserta> = ({
           <div className="p-2 w-full h-full">
             <DataTable
               customSelectedFooter={studentVal?.length}
-              buttonAction={isEdit ? null : handleSubmit}
+              buttonAction={handleSubmit}
               iconButtonAction={isDetail ? <Lock /> : <></>}
               labelButtonAction={
                 isDetail
