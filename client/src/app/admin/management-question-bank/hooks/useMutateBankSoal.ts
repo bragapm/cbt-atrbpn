@@ -18,24 +18,34 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
   return useMutation({
     mutationFn: async (data: IBankSoalRequest) => {
-      // Step 1: Upload the main image for the question
-      const file = data.image as File;
-      const fileResponse = await DirectusUpload({
-        file,
-        folderKey: FOLDER_KEY.question_image,
-      });
+      // Step 1: Optionally upload the main image for the question
+      let imageFileName: string | null = null;
 
-      const { choice, ...rest } = data;
+      if (data.image instanceof File) {
+        const fileResponse = await DirectusUpload({
+          file: data.image,
+          folderKey: FOLDER_KEY.question_image,
+        });
+        imageFileName = fileResponse.filename_disk;
+      }
 
-      // Prepare question data with the uploaded image URL
+      const { choice, random_question, random_options, ...rest } = data;
+
+      // Prepare question data, setting image only if uploaded.
+      // "Soal Acak" is stored in `is_required`: a question that is required is
+      // always included by the distribution logic, so acak means NOT required.
+      // `random_question` is kept in sync because the export report reads it.
       const questionValue = {
         ...rest,
-        image: fileResponse.filename_disk,
+        image: imageFileName,
+        random_question,
+        is_required: random_question === "false",
+        random_options: random_options === "true",
       };
 
       // Step 2: Post the question data to /items/questions_bank
       const response = await service.sendPostRequest<
-        IBankSoalRequest,
+        typeof questionValue,
         IBaseResponse<IBankSoal>
       >("/items/questions_bank", questionValue);
 
@@ -43,18 +53,24 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
       // Step 3: Upload images for each choice option and prepare data for options
       const choiceValue = choice?.map(async (item, index) => {
-        const uploadedOption = item.option_image
-          ? await DirectusUpload({
-              file: item.option_image as File,
-              folderKey: FOLDER_KEY.question_option_image,
-            })
-          : null;
+        let optionImageId: string | null = null;
+
+        if (item.option_image instanceof File) {
+          const uploadedOption = await DirectusUpload({
+            file: item.option_image,
+            folderKey: FOLDER_KEY.question_option_image,
+          });
+          optionImageId = uploadedOption.id;
+        } else if (typeof item.option_image === "string" && item.option_image) {
+          // Already an existing Directus file id, reuse it as is
+          optionImageId = item.option_image;
+        }
 
         return {
           ...item,
           order: index + 1,
           question_id: questionId,
-          option_image: uploadedOption ? uploadedOption.id : null,
+          option_image: optionImageId,
         };
       });
 

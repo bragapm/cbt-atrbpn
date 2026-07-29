@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IQuestionChoice } from "@/types/collection/question-choice.type";
+import { getDirectusUrl } from "@/lib/utils";
 import React from "react";
 
 type IBankSoalChoices = {
@@ -41,7 +42,16 @@ const BankSoalChoices: React.FC<IBankSoalChoices> = ({ data }) => {
                   {getOrderOption(option.order)}
                 </div>
               </div>
-              <p className="text-xs">{option.option_text}</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-xs">{option.option_text}</p>
+                {option.option_image && (
+                  <img
+                    src={getDirectusUrl(option.option_image)}
+                    alt={option.option_text ?? "Gambar pilihan jawaban"}
+                    className="max-w-full h-auto max-h-40 w-auto rounded-md border"
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>
