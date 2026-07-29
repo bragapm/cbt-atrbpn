@@ -20,7 +20,7 @@ export type IUjianRequest = {
   name: string;
   start_time: Date;
   end_time: Date;
-  user: string[];
+  user: (string | number)[];
   login_time?: Date
   login_start?: Date
 };

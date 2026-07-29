@@ -19,57 +19,67 @@ const useMutateBankSoal = ({ onSuccess, onError }: IUseMutateBankSoal) => {
 
   return useMutation({
     mutationFn: async (data: IBankSoalRequest) => {
-      console.log({ data });
       let imageFileName: string | null = null;
 
       // Step 1: Optionally upload the main image for the question
-      if (data.image) {
-        const file = data.image as File;
+      if (data.image instanceof File) {
         const fileResponse = await DirectusUpload({
-          file,
+          file: data.image,
           folderKey: FOLDER_KEY.question_image,
         });
         imageFileName = fileResponse.filename_disk;
       }
 
-      const { choice, ...rest } = data;
+      const { choice, random_question, random_options, ...rest } = data;
 
-      // Prepare question data, setting image only if uploaded
-      const questionValue = {
+      // Prepare question data. Only send `image` when a new file was uploaded,
+      // so editing without touching the upload field keeps the existing image.
+      // "Soal Acak" is stored in `is_required` (see the create hook) — the form
+      // reads it back from that column, so it has to be written there too.
+      const questionValue: Record<string, unknown> = {
         ...rest,
-        image: imageFileName,
+        random_question,
+        is_required: random_question === "false",
+        random_options: random_options === "true",
       };
+
+      if (imageFileName) {
+        questionValue.image = imageFileName;
+      }
 
       // Step 2: Put the question data to /items/questions_bank
       const response = await service.sendPatchRequest<
-        IBankSoalRequest,
+        typeof questionValue,
         IBaseResponse<IBankSoal> | undefined
-      >(`/items/questions_bank/${questionValue.id}`, questionValue);
+      >(`/items/questions_bank/${data.id}`, questionValue);
 
       // Step 3: Get all question choices
       const questionChoicesResponse = await service.sendGetRequest<
         IBaseResponse<IQuestionChoice[]>
-      >(`/items/question_options?filter[question_id][_eq]=${questionValue.id}`);
+      >(`/items/question_options?filter[question_id][_eq]=${data.id}`);
 
       const existingChoices = questionChoicesResponse.data?.data;
 
       // Step 4: Upload images for each choice option if they exist
       const choiceValue = choice?.map(async (item, index) => {
-        let uploadedOptionImageId = null;
+        let uploadedOptionImageId: string | null = null;
 
-        // Only upload if the option_image exists
-        if (item.option_image) {
+        // Only upload when the user picked a new file. An existing option image
+        // arrives as a Directus file id (string) and must be kept as is.
+        if (item.option_image instanceof File) {
           const uploadedOption = await DirectusUpload({
-            file: item.option_image as File,
+            file: item.option_image,
             folderKey: FOLDER_KEY.question_option_image,
           });
-          uploadedOptionImageId = uploadedOption.id; // Set the image ID if uploaded
+          uploadedOptionImageId = uploadedOption.id;
+        } else if (typeof item.option_image === "string" && item.option_image) {
+          uploadedOptionImageId = item.option_image;
         }
 
         return {
           ...item,
           order: item.order,
-          question_id: questionValue.id,
+          question_id: data.id,
           option_image: uploadedOptionImageId, // This will be null if not uploaded
           option_id: existingChoices?.[index]?.id, // Using the id from the response
         };
