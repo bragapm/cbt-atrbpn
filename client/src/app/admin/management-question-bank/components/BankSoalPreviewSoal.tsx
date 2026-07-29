@@ -5,7 +5,7 @@ import React from "react";
 import { IBankSoal } from "@/types/collection/bank-soal.type";
 import BadgeCategory from "@/components/badge-category";
 import useGetManagementBankSoal from "@/app/admin/management-question-bank/hooks/useGetManagementBankSoal";
-import { useNavigate, useNavigation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type IBankSoalPreviewSoal = {
   data: IBankSoal;
@@ -61,7 +61,9 @@ const BankSoalPreviewSoal: React.FC<IBankSoalPreviewSoal> = ({ data }) => {
     <Card className="w-full flex flex-col gap-2 ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="flex gap-2 items-center">
-          <BadgeCategory name={data.kategori_id.nama_kategori} />
+          {data.kategori_id?.nama_kategori && (
+            <BadgeCategory name={data.kategori_id.nama_kategori} />
+          )}
           <p className="text-sm font-medium text-primary">
             Soal No. {data.id || ""}
           </p>
@@ -77,7 +79,10 @@ const BankSoalPreviewSoal: React.FC<IBankSoalPreviewSoal> = ({ data }) => {
       </CardHeader>
       <CardContent>
         <Card className="p-4">
-          <div className="space-y-4 text-xs">{data.question || ""}</div>
+          <div
+            className="space-y-4 text-xs [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md"
+            dangerouslySetInnerHTML={{ __html: data.question || "" }}
+          />
         </Card>
       </CardContent>
     </Card>
