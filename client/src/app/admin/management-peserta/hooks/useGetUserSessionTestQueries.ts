@@ -36,6 +36,12 @@ type IUserSessionTestArgs = {
   sessionId?: string | null;
   search?: string;
   sort?:boolean
+  /**
+   * Also return peserta that are not assigned to any session yet, on top of the
+   * ones already in `sessionId`. Used when editing a sesi so the admin can pick
+   * additional peserta from the unassigned pool.
+   */
+  includeUnassigned?: boolean;
 };
 
 const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
@@ -52,10 +58,19 @@ const useGetUserSessionTestQueries = (queries?: IUserSessionTestArgs) => {
         offset: (page - 1) * limit,
         meta: "*",
         filter: {
-          session:
-            queries?.sessionId === null
-              ? { _null: true }
-              : { _eq: queries?.sessionId },
+          ...(queries?.includeUnassigned && queries?.sessionId
+            ? {
+                _or: [
+                  { session: { _null: true } },
+                  { session: { _eq: queries.sessionId } },
+                ],
+              }
+            : {
+                session:
+                  queries?.sessionId === null
+                    ? { _null: true }
+                    : { _eq: queries?.sessionId },
+              }),
           ...(queries?.search && {
             info_peserta: {
               nama_peserta: { _contains: queries?.search },

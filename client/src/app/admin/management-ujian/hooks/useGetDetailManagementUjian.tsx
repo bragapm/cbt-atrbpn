@@ -15,7 +15,9 @@ const useGetDetailManajemenUjian = (id: string | number | undefined) => {
         IBaseResponse<IUserSessionTest[]>
       >(`/items/user_session_test?filter[session][_eq]=${id}&limit=1000`);
 
-      const userIds = userSessionResponse.data.data.map((user) => user.user);
+      // Use the user_session_test row id, not the `user` field: that row id is
+      // what the peserta table checkboxes and the assign PATCH both work with.
+      const userIds = userSessionResponse.data.data.map((user) => user.id);
 
       const ujianResponse = await service.sendGetRequest<IBaseResponse<IUjian>>(
         `/items/session_test/${id}`,
