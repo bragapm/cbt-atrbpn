@@ -143,6 +143,10 @@ export default (router, { services, exceptions, getSchema }) => {
         "yyyy-MM-dd HH:mm:ssXXX"
       );
 
+      console.log(`now    : ${nowFormatted}`);
+      console.log(`start  : ${sessionStartTimeFormatted}`);
+      console.log(`end    : ${sessionEndTimeFormatted}`);
+
       if (
         nowFormatted < sessionStartTimeFormatted ||
         nowFormatted > sessionEndTimeFormatted
