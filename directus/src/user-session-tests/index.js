@@ -1,7 +1,7 @@
 import { authMiddleware } from "../middleware/auth";
 import { formatInTimeZone } from "date-fns-tz";
 
-export default (router, { services, database }) => {
+export default (router, { services, database, logger }) => {
   const { ItemsService } = services;
   const autValidation = authMiddleware(database);
   router.get("/", autValidation, async (req, res) => {
@@ -42,7 +42,7 @@ export default (router, { services, database }) => {
 
       res.json({ status: "success", data: formattedSessions });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       res.json({
         status: "error",
         message: "Terjadi Kesalahan, silahkan coba lagi",
@@ -159,7 +159,7 @@ export default (router, { services, database }) => {
         },
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       res.status(500).json({
         status: "error",
         message: "Terjadi Kesalahan, silahkan coba lagi",
@@ -201,8 +201,8 @@ export default (router, { services, database }) => {
       const userSession = await userSessionService.readByQuery({
         filter: { id: user_session_id },
         fields: ["score_alias"],
-      })
-      
+      });
+
       if (!userAnswers.length) {
         return res.status(404).json({
           status: "error",
@@ -221,8 +221,8 @@ export default (router, { services, database }) => {
         if (answer.score_category === 1) correctAnswers += 1;
         else if (answer.score_category === -1) incorrectAnswers += 1;
         else unanswered += 1;
-        totalScore += answer.score;
-        maxScore += parseFloat(answer.correct_score);
+        totalScore += parseFloat(answer.score) || 0;
+        maxScore += parseFloat(answer.correct_score) || 0;
       });
 
       totalScore = parseFloat(totalScore.toFixed(6));
@@ -245,7 +245,10 @@ export default (router, { services, database }) => {
       const response = {
         status: "success",
         data: {
-          totalScore: userSession[0]?.score_alias !== null ? userSession[0].score_alias : totalScore,
+          totalScore:
+            userSession[0]?.score_alias !== null
+              ? userSession[0].score_alias
+              : totalScore,
           maxScore,
           fullname: couponData.nama_peserta,
           code: couponData.code,
@@ -254,6 +257,7 @@ export default (router, { services, database }) => {
 
       res.json(response);
     } catch (err) {
+      logger.error(err);
       res.status(500).json({
         status: "error",
         message: "Terjadi Kesalahan, silahkan coba lagi",
