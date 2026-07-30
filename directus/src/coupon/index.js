@@ -150,13 +150,13 @@ export default (router, { services, exceptions, getSchema }) => {
       if (nowFormatted < sessionStartTimeFormatted) {
         return res.status(403).json({
           status: "error",
-          message: `Jam saat ini (${now}). Sesi ujian belum dimulai, sesi akan dibuka pada ${startTime}`,
+          message: `Jam saat ini (${nowFormatted}). Sesi ujian belum dimulai, sesi akan dibuka pada ${sessionStartTimeFormatted}`,
         });
       }
       if (nowFormatted > sessionEndTimeFormatted) {
         return res.status(403).json({
           status: "error",
-          message: `Jam saat ini (${now}). Sesi ujian telah berakhir pada ${endTime}`,
+          message: `Jam saat ini (${nowFormatted}). Sesi ujian telah berakhir pada ${sessionEndTimeFormatted}`,
         });
       }
 
