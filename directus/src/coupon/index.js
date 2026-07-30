@@ -118,14 +118,18 @@ export default (router, { services, exceptions, getSchema }) => {
       const sessionData = userSession[0].session;
 
       // Validasi apakah waktu sekarang berada dalam rentang sesi ujian
+      const parseAsWib = (dateStr) => {
+        if (!dateStr) return new Date();
+        // Jika tidak ada 'Z' atau '+07:00', tambahkan '+07:00' di ujungnya
+        const hasTimezone = dateStr.includes("Z") || dateStr.includes("+");
+        const safeDateStr = hasTimezone ? dateStr : `${dateStr}+07:00`;
+        return new Date(safeDateStr);
+      };
+
       const now = new Date();
       const timezone = "Asia/Jakarta";
-      const startTime = new Date(
-        new Date(sessionData.login_start).getTime() - 7 * 60 * 60 * 1000
-      );
-      const endTime = new Date(
-        new Date(sessionData.end_time).getTime() - 7 * 60 * 60 * 1000
-      );
+      const startTime = parseAsWib(sessionData.login_start);
+      const endTime = parseAsWib(sessionData.end_time);
 
       const nowFormatted = formatInTimeZone(
         now,
@@ -143,17 +147,16 @@ export default (router, { services, exceptions, getSchema }) => {
         "yyyy-MM-dd HH:mm:ssXXX"
       );
 
-      console.log(`now    : ${nowFormatted}`);
-      console.log(`start  : ${sessionStartTimeFormatted}`);
-      console.log(`end    : ${sessionEndTimeFormatted}`);
-
-      if (
-        nowFormatted < sessionStartTimeFormatted ||
-        nowFormatted > sessionEndTimeFormatted
-      ) {
+      if (nowFormatted < sessionStartTimeFormatted) {
         return res.status(403).json({
           status: "error",
-          message: "Sesi ujian belum dimulai, silahkan coba saat sesi dimulai",
+          message: `Jam saat ini (${now}). Sesi ujian belum dimulai, sesi akan dibuka pada ${startTime}`,
+        });
+      }
+      if (nowFormatted > sessionEndTimeFormatted) {
+        return res.status(403).json({
+          status: "error",
+          message: `Jam saat ini (${now}). Sesi ujian telah berakhir pada ${endTime}`,
         });
       }
 
