@@ -116,6 +116,12 @@ export default (router, { services, exceptions, getSchema }) => {
       }
 
       const sessionData = userSession[0].session;
+      if (!sessionData) {
+        return res.status(403).json({
+          status: "error",
+          message: "User belum terdaftar di sesi ujian",
+        });
+      }
 
       // Validasi apakah waktu sekarang berada dalam rentang sesi ujian
       const parseAsWib = (dateStr) => {
