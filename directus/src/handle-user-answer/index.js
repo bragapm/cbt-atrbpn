@@ -20,7 +20,9 @@ export default ({ filter }, { database, services, logger }) => {
         return payload;
       }
 
-      const userTestScore = questionOption.is_correct ? payload.score : 0;
+      const userTestScore = questionOption.is_correct
+        ? parseFloat(payload.score) || 0
+        : 0;
       const userSessionService = new ItemsService("user_session_test", {
         knex: database,
         accountability,
@@ -35,7 +37,7 @@ export default ({ filter }, { database, services, logger }) => {
         limit: 1,
       });
 
-      const currentScore = sessionData?.[0]?.score || 0;
+      const currentScore = parseFloat(sessionData?.[0]?.score) || 0;
       const updatedScore = currentScore + userTestScore;
 
       await userSessionService.updateOne(payload.user_session_id, {
@@ -68,7 +70,9 @@ export default ({ filter }, { database, services, logger }) => {
         return payload;
       }
 
-      const userTestScore = questionOption.is_correct ? payload.score : 0;
+      const userTestScore = questionOption.is_correct
+        ? parseFloat(payload.score) || 0
+        : 0;
       const userSessionService = new ItemsService("user_session_test", {
         knex: database,
         accountability,
@@ -83,7 +87,7 @@ export default ({ filter }, { database, services, logger }) => {
         limit: 1,
       });
 
-      const currentScore = sessionData?.[0]?.score || 0;
+      const currentScore = parseFloat(sessionData?.[0]?.score) || 0;
       const updatedScore = currentScore + userTestScore;
 
       await userSessionService.updateOne(payload.user_session_id, {
