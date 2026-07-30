@@ -11,17 +11,11 @@ export default (router, { services, database, logger }) => {
         schema: req.schema,
       });
 
-      const currentTime = new Date(new Date().getTime() - 7 * 60 * 60 * 1000); // Get the current time
-
-      // Fetch user test sessions where session.end_time > current time and end_attempt_at is null
+      // Fetch user test sessions
       const userSessions = await userSessionService.readByQuery({
         filter: {
           user: user, // Filter by current user
           deleted_at: { _null: true }, // Ensure deleted_at is null
-          end_attempt_at: { _null: true }, // end_attempt_at must be null
-          session: {
-            end_time: { _gt: currentTime },
-          }, // Relational filter on session.end_time
         },
         fields: [
           "id",
@@ -69,6 +63,7 @@ export default (router, { services, database, logger }) => {
         fields: [
           "id",
           "start_attempt_at",
+          "end_attempt_at",
           "session.start_time",
           "session.end_time",
           "session.PIN",
@@ -86,6 +81,14 @@ export default (router, { services, database, logger }) => {
 
       const session = userSession[0]; // There should be only one result
 
+      if (session.end_attempt_at !== null) {
+        return res.status(403).json({
+          status: "error",
+          message:
+            "Ujian anda sudah diakhiri. Harap hubungin Admin untuk melanjutkan",
+        });
+      }
+
       if (session.session.PIN !== pin) {
         return res.status(403).json({
           status: "error",
@@ -95,15 +98,19 @@ export default (router, { services, database, logger }) => {
 
       // Update start_attempt_at and updated_at
 
+      const parseAsWib = (dateStr) => {
+        if (!dateStr) return new Date();
+        // Jika tidak ada 'Z' atau '+07:00', tambahkan '+07:00' di ujungnya
+        const hasTimezone = dateStr.includes("Z") || dateStr.includes("+");
+        const safeDateStr = hasTimezone ? dateStr : `${dateStr}+07:00`;
+        return new Date(safeDateStr);
+      };
+
       const timezone = "Asia/Jakarta";
       const now = new Date();
 
-      const sessionStartTime = new Date(
-        new Date(session.session.start_time).getTime() - 7 * 60 * 60 * 1000
-      );
-      const sessionEndTime = new Date(
-        new Date(session.session.end_time).getTime() - 7 * 60 * 60 * 1000
-      );
+      const sessionStartTime = parseAsWib(session.session.start_time);
+      const sessionEndTime = parseAsWib(session.session.end_time);
 
       // Format the dates in Asia/Jakarta timezone
       const nowFormatted = formatInTimeZone(
@@ -122,10 +129,16 @@ export default (router, { services, database, logger }) => {
         "yyyy-MM-dd HH:mm:ssXXX"
       );
 
-      if (nowFormatted < sessionStartTime || nowFormatted > sessionEndTime) {
-        return res.status(500).json({
+      if (nowFormatted < sessionStartTimeFormatted) {
+        return res.status(403).json({
           status: "error",
-          message: "Sesi ujian belum dimulai",
+          message: `Jam saat ini (${nowFormatted}). Sesi ujian belum dimulai, sesi akan dibuka pada ${sessionStartTimeFormatted}`,
+        });
+      }
+      if (nowFormatted > sessionEndTimeFormatted) {
+        return res.status(403).json({
+          status: "error",
+          message: `Jam saat ini (${nowFormatted}). Sesi ujian telah berakhir pada ${sessionEndTimeFormatted}`,
         });
       }
 
