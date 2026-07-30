@@ -239,7 +239,7 @@ export default (router, { services, database, logger }) => {
       });
 
       totalScore = parseFloat(totalScore.toFixed(6));
-      maxScore = parseFloat(totalScore.toFixed(6));
+      maxScore = parseFloat(maxScore.toFixed(6));
 
       // Update `end_attempt_at` in `user_session_test`
       const endAttemptAt = new Date();
