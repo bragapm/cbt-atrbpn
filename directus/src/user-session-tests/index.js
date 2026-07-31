@@ -166,6 +166,7 @@ export default (router, { services, database, logger }) => {
         status: "success",
         data: {
           session_test_id: session.id,
+          now_time: nowFormatted,
           start_attempt_at: now,
           problems: session.problems,
           start_time: sessionStartTimeFormatted,
@@ -217,12 +218,15 @@ export default (router, { services, database, logger }) => {
         fields: ["score_alias"],
       });
 
-      if (!userAnswers.length) {
+      if (!userSession.length) {
         return res.status(404).json({
           status: "error",
-          message: "No answers found for this session",
+          message: "Sesi ujian tidak ditemukan",
         });
       }
+
+      // Peserta yang belum menjawab apa pun tetap harus bisa mengakhiri ujian
+      // supaya `end_attempt_at` terisi. Skornya dihitung apa adanya, yaitu 0.
 
       // Calculate score summary
       let correctAnswers = 0;
@@ -256,16 +260,20 @@ export default (router, { services, database, logger }) => {
       });
 
       // Prepare the response
+      const scoreAlias = userSession[0]?.score_alias;
+
       const response = {
         status: "success",
         data: {
+          // `score_alias` dipakai kalau memang diisi; `undefined` (kolom tidak
+          // ikut terbaca) diperlakukan sama dengan null, bukan dianggap ada.
           totalScore:
-            userSession[0]?.score_alias !== null
-              ? userSession[0].score_alias
+            scoreAlias !== null && scoreAlias !== undefined
+              ? scoreAlias
               : totalScore,
           maxScore,
-          fullname: couponData.nama_peserta,
-          code: couponData.code,
+          fullname: couponData?.nama_peserta ?? null,
+          code: couponData?.code ?? null,
         },
       };
 
