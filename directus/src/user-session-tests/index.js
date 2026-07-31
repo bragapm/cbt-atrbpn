@@ -147,6 +147,7 @@ export default (router, { services, database, logger }) => {
           status: "success",
           data: {
             session_test_id: session.id,
+            now_time: nowFormatted,
             start_attempt_at: session.start_attempt_at,
             start_time: sessionStartTimeFormatted,
             end_time: sessionEndTimeFormatted,
