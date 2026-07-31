@@ -42,7 +42,15 @@ const usePin = () => {
           },
         }
       );
-      localStorage.setItem("dataTest",JSON.stringify(response.data.data))
+      // `client_received_at` dipasangkan dengan `now_time` dari server supaya
+      // selisih jam server-device masih bisa dihitung setelah halaman di-reload.
+      localStorage.setItem(
+        "dataTest",
+        JSON.stringify({
+          ...response.data.data,
+          client_received_at: Date.now(),
+        })
+      );
       navigate("/exam");
     } catch (error: any) {
       setError(error?.response?.data?.message);

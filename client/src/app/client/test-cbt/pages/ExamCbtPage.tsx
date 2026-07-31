@@ -4,13 +4,18 @@ import MultipleChoice from "../components/MultipleChoice";
 import RemainingTime from "../components/RemainingTime";
 import useSubmitAnswer from "../hooks/useSubmitAnswer";
 import { useGetSoal } from "../hooks/useGetSoal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ExamCbtPage = () => {
   const { data, isLoading, error, getSoal } = useGetSoal();
   const { loadingAnswer, error: errorAnswer, submitAnswer } = useSubmitAnswer();
-  const dataCbt = JSON.parse(localStorage.getItem("dataTest"));
+  // Di-memo supaya tidak menghasilkan objek baru tiap render, yang membuat
+  // countdown di RemainingTime terus membuat ulang interval-nya.
+  const dataCbt = useMemo(() => {
+    const stored = localStorage.getItem("dataTest");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
   const listSoal = dataCbt?.problems;
   const navigate = useNavigate();
 
@@ -28,14 +33,6 @@ const ExamCbtPage = () => {
       setOneget(true);
     }
   }, [oneget]);
-
-  function addhour(isoString, hoursToAdd) {
-    const date = new Date(isoString);
-    date.setHours(date.getHours() + hoursToAdd);
-    return date.toISOString();
-  }
-
-  const remaintime = dataCbt ? addhour(dataCbt?.start_attempt_at, 2) : "";
 
   const handleNextQuestion = () => {
     const currentIndex = listSoal.findIndex((item) => item === selectSoal);
