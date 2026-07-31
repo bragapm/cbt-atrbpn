@@ -54,6 +54,7 @@ const EditPesertaFormInner = ({
           name="code"
           placeholder="Masukan ID Peserta"
           label="ID Peserta"
+          disabled
         />
         <FormInput
           name="nama_peserta"

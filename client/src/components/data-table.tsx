@@ -23,7 +23,7 @@ import { Skeleton } from "./ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | undefined;
   pagination: PaginationTableProps;
   labelButtonAction?: string;
   iconButtonAction?: ReactNode;
@@ -48,8 +48,12 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // react-table melempar error kalau data undefined, jadi selalu dinormalkan
+  // ke array kosong supaya tabel cuma menampilkan "No results".
+  const tableData = React.useMemo(() => data ?? [], [data]);
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
@@ -111,19 +115,19 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               )}
 
-              {dataSumary &&
-                (console.log(dataSumary, "--->Data Sumary"),
-                (
-                  <TableRow>
-                    <TableCell colSpan={3} className="h-20">
-                      Summarize
-                    </TableCell>
-                    <TableCell className="font-semibold">
-                      {dataSumary?.score}
-                    </TableCell>
-                    <TableCell className="font-semibold">189.999990</TableCell>
-                  </TableRow>
-                ))}
+              {dataSumary && (
+                <TableRow>
+                  <TableCell colSpan={3} className="h-20">
+                    Summarize
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dataSumary?.score ?? "-"}
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dataSumary?.max_score ?? "-"}
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
           <div

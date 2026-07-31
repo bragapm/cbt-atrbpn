@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import TableActions from "@/components/table-actions";
 import { Button } from "@/components/ui/button";
-import { Plus, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import PesertaCBTTable from "../components/PesertaTable";
 import { useNavigate } from "react-router-dom";
 import useGetUserSessionTestQueries from "../hooks/useGetUserSessionTestQueries";
@@ -58,14 +58,14 @@ export const ManagementPesertaList = () => {
               Import Data Peserta
             </Button>
 
-            <Button
+            {/* <Button
               onClick={() => navigate("/peserta-cbt/create")}
               variant="actions"
               size="actions"
               startContent={<Plus />}
             >
               Tambah Peserta
-            </Button>
+            </Button> */}
           </div>
         }
       />

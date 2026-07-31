@@ -35,14 +35,10 @@ export const HasilAkhirUjianDetailPage: FC = () => {
       },
     });
 
-  const { data: userSessionTest } = useGetUserSessionTestQueries({
+  const { data: userSessionTest, isLoading } = useGetUserSessionTestQueries({
     page,
     limit: 10,
   });
-
-  if (!userSessionTest) {
-    return null;
-  }
 
   const columns: ColumnDef<IUserSessionTest>[] = [
     {
@@ -67,6 +63,7 @@ export const HasilAkhirUjianDetailPage: FC = () => {
     {
       accessorKey: "info_peserta.nama_peserta",
       header: "Nama Peserta",
+      cell: ({ row }) => row.original?.info_peserta?.nama_peserta || "-",
     },
     {
       accessorKey: "score_summary.correct_answers",
@@ -101,7 +98,8 @@ export const HasilAkhirUjianDetailPage: FC = () => {
               <DropdownMenuItem
                 onClick={() =>
                   navigate(
-                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.info_peserta.user_id}`
+                    // Halaman detail memakai id user_session_test, bukan user_id.
+                    `/hasil-ujian/hasil-akhir-ujian/detail/${row.original.id}`
                   )
                 }
               >
@@ -145,6 +143,7 @@ export const HasilAkhirUjianDetailPage: FC = () => {
         description="Apakah anda yakin ingin menghapus peserta ini ?"
       />
       <DataTable
+        isLoading={isLoading}
         data={userSessionTest?.data?.data}
         columns={columns}
         pagination={{

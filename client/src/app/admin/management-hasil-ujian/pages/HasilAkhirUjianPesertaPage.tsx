@@ -17,33 +17,35 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
   const [isOpenDeleteConfirm, setIsOpenDeleteConfirm] = React.useState(false);
   const [isShowSuccessDialog, setIsShowSuccessDialog] = React.useState(false);
 
+  // Peserta yang belum mengerjakan ujian mengembalikan score/maxScore null,
+  // jadi nilai kosong dianggap 0 supaya halaman tidak ikut error.
   const formatScore = (score: any) => {
-    const [integerPart, decimalPart = ""] = score.toString().split(".");
+    const numericScore = Number(score ?? 0);
+    const safeScore = Number.isNaN(numericScore) ? 0 : numericScore;
+    const [integerPart, decimalPart = ""] = safeScore.toString().split(".");
     const paddedDecimal = decimalPart.padEnd(6, "0").slice(0, 6);
     return `${integerPart}.${paddedDecimal}`;
   };
 
-  const { data: userTest } = useGetJawabanPeserta({
+  const { data: userTest, isLoading } = useGetJawabanPeserta({
     user_session_id: params.pesertaId,
   });
 
-  let { data: sumarize } = useGetSummarize({
+  const { data: sumarize } = useGetSummarize({
     id: params.pesertaId,
   });
 
-  let sumaryDataFormated: { max_score: any; score: string };
+  // Endpoint /user-score/max-score mengirim `maxScore`, bukan `max_score`.
+  const summaryResponse = sumarize?.data as
+    | { maxScore?: number | string | null; score?: number | string | null }
+    | undefined;
 
-  if (sumarize?.data) {
-    sumaryDataFormated = {
-      max_score: sumarize?.data.max_score,
-      score: formatScore(sumarize?.data.score),
-    };
-  }
-  if (!userTest) {
-    return null;
-  }
-
-  console.log(userTest);
+  const sumaryDataFormated = summaryResponse
+    ? {
+        max_score: formatScore(summaryResponse.maxScore),
+        score: formatScore(summaryResponse.score),
+      }
+    : undefined;
 
   const columns: ColumnDef<IJawabPeserta>[] = [
     // {
@@ -137,6 +139,7 @@ export const HasilAkhirUjianPesertaPage: FC = () => {
       />
       <DataTable
         hidePagination
+        isLoading={isLoading}
         data={userTest?.data?.data}
         columns={columns}
         pagination={{
