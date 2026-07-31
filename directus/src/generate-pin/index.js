@@ -1,6 +1,9 @@
 //import crypto from 'crypto';
 
-export default function registerEndpoint(router, { database, logger }) {
+export default function registerEndpoint(
+  router,
+  { database, services, getSchema, logger }
+) {
   function generateNumericPin(length = 6) {
     return Math.floor(
       Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1)
@@ -23,6 +26,7 @@ export default function registerEndpoint(router, { database, logger }) {
     return PIN;
   }
 
+  const { ItemsService } = services;
   router.post("/", async (req, res) => {
     const { session_id } = req.body;
 
@@ -33,7 +37,11 @@ export default function registerEndpoint(router, { database, logger }) {
     try {
       const PIN = await generateUniquePin(6);
 
-      await database("session_test").where({ id: session_id }).update({ PIN });
+      const schema = await getSchema();
+      const sessionService = new ItemsService("session_test", { schema });
+      await sessionService.updateOne(session_id, {
+        PIN: PIN,
+      });
 
       // Respond with the generated PIN
       res.json({
@@ -41,12 +49,10 @@ export default function registerEndpoint(router, { database, logger }) {
         message: "Unique PIN generated and saved successfully",
       });
     } catch (error) {
-      logger.error("Error generating or saving unique PIN:", error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while generating and saving the PIN.",
-        });
+      logger.error("Error generating or saving unique PIN: " + error);
+      res.status(500).json({
+        error: "An error occurred while generating and saving the PIN.",
+      });
     }
   });
 }
