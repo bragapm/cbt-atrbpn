@@ -92,7 +92,8 @@ const BankSoalImportPage: React.FC = () => {
                           setFile(newFile);
                           field.onChange(newFile);
                         }}
-                        className="w-full h-full text-left flex justify-between px-4 "
+                        accept=".xlsx,.xls,.csv"
+                        className="w-full"
                       />
                     </FormControl>
                     <FormMessage />

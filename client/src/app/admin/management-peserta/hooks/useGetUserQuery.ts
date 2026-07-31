@@ -8,6 +8,8 @@ export type IUser = {
     id: string;
   };
   id: number;
+  nama_peserta?: string;
+  nomor_kontak?: string;
 };
 
 type IUserArgs = {

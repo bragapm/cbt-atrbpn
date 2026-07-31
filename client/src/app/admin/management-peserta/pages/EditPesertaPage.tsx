@@ -24,8 +24,10 @@ import { toast } from "react-toastify";
 
 const EditPesertaFormInner = ({
   openDialogConfirmation,
+  onCancel,
 }: {
   openDialogConfirmation: () => void;
+  onCancel: () => void;
 }) => {
   const { formState } = useFormContext();
 
@@ -73,8 +75,16 @@ const EditPesertaFormInner = ({
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
-        <Button className=" w-40">Batal</Button>
         <Button
+          type="button"
+          variant="outline"
+          className="w-40"
+          onClick={onCancel}
+        >
+          Batal
+        </Button>
+        <Button
+          type="button"
           onClick={openDialogConfirmation}
           disabled={!isValid}
           className="w-40"
@@ -149,27 +159,35 @@ export const EditPesertaPage = () => {
   const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
     users?.data?.data?.[0]?.id,
     {
-      onSuccess: () => {},
+      onError: (errorMessage) => {
+        toast.error(errorMessage);
+        setConfirmationDialog(false);
+      },
     }
   );
 
-  const onSubmit = (data: EditPesertaCBTFormValue) => {
-    if (users.data.data[0]) {
-      const user = users.data.data[0];
-      createUserSession({
+  const onSubmit = async (data: EditPesertaCBTFormValue) => {
+    const user = users?.data?.data?.[0];
+
+    if (!user) {
+      toast.error("ID peserta tidak ditemukan");
+      setConfirmationDialog(false);
+      return;
+    }
+
+    try {
+      await updateCoupon({
+        nama_peserta: data.nama_peserta,
+        nomor_kontak: data.nomor_kontak,
+      });
+
+      await createUserSession({
         user: user.user_id?.id,
         session: data.sesi_ujian,
         info_peserta: String(user?.id),
       });
-
-      updateCoupon({
-        nama_peserta: data.nama_peserta,
-        nomor_kontak: data.nomor_kontak,
-      });
-    } else {
-      toast.error("ID peserta tidak ditemukan");
-      setConfirmationDialog(false);
-      return;
+    } catch {
+      // Pesan errornya sudah ditampilkan lewat onError masing-masing mutation.
     }
   };
 
@@ -205,6 +223,7 @@ export const EditPesertaPage = () => {
           <div className="mt-4 space-y-2">
             <EditPesertaFormInner
               openDialogConfirmation={() => setConfirmationDialog(true)}
+              onCancel={() => navigation("/peserta-cbt")}
             />
           </div>
         </FormProvider>

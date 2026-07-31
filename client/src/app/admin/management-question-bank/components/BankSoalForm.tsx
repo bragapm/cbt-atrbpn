@@ -232,7 +232,9 @@ const BankSoalForm: React.FC = () => {
               <FormItem className="w-auto h-full">
                 <FormControl>
                   <UploadFile
-                    title="Unggah Gambar"
+                    title="Sisipkan Gambar"
+                    accept="image/*"
+                    allowRemove={false}
                     value={field.value}
                     onChange={(file) => {
                       field.onChange(file);

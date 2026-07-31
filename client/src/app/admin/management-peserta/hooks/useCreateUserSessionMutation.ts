@@ -1,6 +1,5 @@
 import { DirectusInterceptor } from "@/services/directus-interceptors";
-import { IBaseErrorResponse } from "@/types/errors";
-import { AxiosError } from "axios";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { useMutation, useQueryClient } from "react-query";
 import { CreateUserSessionTest } from "../types";
 
@@ -37,11 +36,8 @@ const useCreateUserSessionMutation = ({
       });
       onSuccess?.();
     },
-    onError: (error: AxiosError<IBaseErrorResponse>) => {
-      const errorMessage =
-        error.response.data?.errors?.[0]?.message ?? "Coba Sesaat Lagi";
-
-      onError?.(errorMessage);
+    onError: (error: unknown) => {
+      onError?.(getApiErrorMessage(error));
     },
   });
 };

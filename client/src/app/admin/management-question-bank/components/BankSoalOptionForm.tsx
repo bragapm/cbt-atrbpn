@@ -1,7 +1,6 @@
 import SelectForm from "@/components/select-form";
 import { Input } from "@/components/ui/input";
 import UploadFile from "@/components/upload-file";
-import { Upload } from "lucide-react";
 import React from "react";
 
 type IBankSoalOptionForm = {
@@ -43,13 +42,13 @@ const BankSoalOptionForm: React.FC<IBankSoalOptionForm> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
-        <div>
-          <UploadFile
-            title="Unggah Gambar"
-            value={fileValue}
-            onChange={onChangeFileValue}
-          />
-        </div>
+        <UploadFile
+          title="Gambar Jawaban"
+          accept="image/*"
+          value={fileValue}
+          onChange={onChangeFileValue}
+        />
+
         <SelectForm
           data={booleanData}
           title="Benar/Salah"

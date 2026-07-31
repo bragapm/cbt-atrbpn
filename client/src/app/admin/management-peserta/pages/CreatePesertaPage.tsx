@@ -20,11 +20,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createManagementPesertaSchema } from "../schemas/CreateManagementPesertaSchema";
 import useUpdateCouponMutation from "../hooks/useUpdateCouponMutation";
 import { toast } from "react-toastify";
+import { useDebounceSearch } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
+
+type PesertaStatus = "idle" | "checking" | "found" | "notfound";
 
 const CreatePesertaFormInner = ({
   openDialogConfirmation,
+  onCancel,
+  pesertaStatus,
+  pesertaName,
 }: {
   openDialogConfirmation: () => void;
+  onCancel: () => void;
+  pesertaStatus: PesertaStatus;
+  pesertaName?: string;
 }) => {
   const { formState } = useFormContext();
 
@@ -59,6 +69,21 @@ const CreatePesertaFormInner = ({
           label="Nama Peserta"
         />
       </div>
+
+      {pesertaStatus !== "idle" && (
+        <p
+          className={cn(
+            "text-xs",
+            pesertaStatus === "notfound" ? "text-destructive" : "text-gray-500"
+          )}
+        >
+          {pesertaStatus === "checking" && "Memeriksa ID peserta…"}
+          {pesertaStatus === "found" &&
+            `ID peserta terdaftar${pesertaName ? ` atas nama ${pesertaName}` : ""}`}
+          {pesertaStatus === "notfound" &&
+            "ID peserta belum terdaftar. Daftarkan dulu lewat menu Import Peserta."}
+        </p>
+      )}
       <div className="flex gap-3 items-start">
         <FormInput
           name="nomorKontak"
@@ -73,10 +98,18 @@ const CreatePesertaFormInner = ({
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
-        <Button className=" w-40">Batal</Button>
         <Button
+          type="button"
+          variant="outline"
+          className="w-40"
+          onClick={onCancel}
+        >
+          Batal
+        </Button>
+        <Button
+          type="button"
           onClick={openDialogConfirmation}
-          disabled={!isValid}
+          disabled={!isValid || pesertaStatus !== "found"}
           className="w-40"
         >
           Tambah Peserta
@@ -110,7 +143,22 @@ export const CreatePesertaPage = () => {
 
   const { handleSubmit } = methods;
 
-  const { data: users } = useGetUserQuery({ code: idPeserta });
+  // Tanpa debounce setiap ketikan menembak /items/coupon sekali.
+  const debouncedIdPeserta = useDebounceSearch({ value: idPeserta ?? "" });
+
+  const { data: users, isFetching: isCheckingPeserta } = useGetUserQuery({
+    code: debouncedIdPeserta,
+  });
+
+  const peserta = users?.data?.data?.[0];
+
+  const pesertaStatus: PesertaStatus = !idPeserta
+    ? "idle"
+    : isCheckingPeserta || debouncedIdPeserta !== idPeserta
+    ? "checking"
+    : peserta
+    ? "found"
+    : "notfound";
 
   const { mutateAsync: createUserSession, isLoading } =
     useCreateUserSessionMutation({
@@ -119,41 +167,50 @@ export const CreatePesertaPage = () => {
         setConfirmationDialog(false);
       },
       onError: (errorMessage) => {
-        if (!users) {
-          toast.error("ID peserta tidak ditemukan");
-          setConfirmationDialog(false);
-          return;
-        }
-
         toast.error(errorMessage);
         setConfirmationDialog(false);
       },
     });
 
-  const { mutateAsync: updateCoupon } = useUpdateCouponMutation(
-    users?.data?.data[0]?.id,
-    {
-      onSuccess: () => {},
+  const { mutateAsync: updateCoupon } = useUpdateCouponMutation(peserta?.id, {
+    onError: (errorMessage) => {
+      toast.error(errorMessage);
+      setConfirmationDialog(false);
+    },
+  });
+
+  const onSubmit = async (data: CreatePesertaCBTFormValue) => {
+    if (isCheckingPeserta) {
+      toast.info("ID peserta sedang diperiksa, coba lagi sebentar");
+      setConfirmationDialog(false);
+      return;
     }
-  );
 
-  const onSubmit = (data: CreatePesertaCBTFormValue) => {
-    if (users.data.data?.[0]) {
-      const user = users.data.data[0];
-      createUserSession({
-        user: user?.user_id?.id,
-        session: data.sesiUjian,
-        info_peserta: String(user?.id),
-      });
-
-      updateCoupon({
-        nama_peserta: data.namaPeserta,
-        nomor_kontak: data.nomorKontak,
-      });
-    } else {
+    if (!peserta) {
       toast.error("ID peserta tidak ditemukan");
       setConfirmationDialog(false);
       return;
+    }
+
+    if (!peserta.user_id?.id) {
+      toast.error("ID peserta belum terhubung ke akun pengguna");
+      setConfirmationDialog(false);
+      return;
+    }
+
+    try {
+      await updateCoupon({
+        nama_peserta: data.namaPeserta,
+        nomor_kontak: data.nomorKontak,
+      });
+
+      await createUserSession({
+        user: peserta.user_id.id,
+        session: data.sesiUjian,
+        info_peserta: String(peserta.id),
+      });
+    } catch {
+      // Pesan errornya sudah ditampilkan lewat onError masing-masing mutation.
     }
   };
 
@@ -189,6 +246,9 @@ export const CreatePesertaPage = () => {
           <div className="mt-4 space-y-2">
             <CreatePesertaFormInner
               openDialogConfirmation={() => setConfirmationDialog(true)}
+              onCancel={() => navigation("/peserta-cbt")}
+              pesertaStatus={pesertaStatus}
+              pesertaName={peserta?.nama_peserta}
             />
           </div>
         </FormProvider>
