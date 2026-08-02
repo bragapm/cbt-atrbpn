@@ -102,7 +102,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
                 <SelectTrigger className=" px-3 w-[200px]">
                   <SelectValue placeholder="Pilih Sesi Ujian" />
                 </SelectTrigger>
-                <SelectContent className=" overflow-y-scroll">
+                <SelectContent>
                   {speed.map((option, idx) => (
                     <SelectItem key={idx} value={String(option.value)}>
                       {option.label}
@@ -117,7 +117,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
                 <SelectTrigger className=" px-3 w-[200px]">
                   <SelectValue placeholder="Pilih Sesi Ujian" />
                 </SelectTrigger>
-                <SelectContent className="overflow-y-scroll">
+                <SelectContent>
                   {sessionTestOption.map((option, idx) => (
                     <SelectItem key={idx} value={option.value}>
                       {option.label}
