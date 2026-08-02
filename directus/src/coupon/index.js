@@ -194,6 +194,7 @@ export default (router, { services, exceptions, getSchema }) => {
         last_login_at: now,
         updated_at: now,
         device: device,
+        access_token_active: authData.accessToken,
       });
 
       res.json({

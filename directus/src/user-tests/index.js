@@ -2,7 +2,7 @@ import { authMiddleware } from "../middleware/auth";
 
 import crypto from "crypto";
 
-export default (router, { services, database }) => {
+export default (router, { services, database, logger }) => {
   const { ItemsService, AuthenticationService } = services;
   const autValidation = authMiddleware(database);
 
@@ -11,6 +11,36 @@ export default (router, { services, database }) => {
     const problemID = req.query.problem_id;
 
     try {
+      //CEK ONLY 1 VALID TOKEN
+      const userId = req.user;
+      const userToken = req.token;
+      const couponService = new ItemsService("coupon", {
+        schema: req.schema,
+      });
+      const couponRows = await couponService.readByQuery({
+        filter: { user_id: userId },
+        fields: ["access_token_active"],
+      });
+      if (couponRows.length < 1) {
+        return res.status(403).json({
+          status: "error",
+          message: "Kunci unik tidak ditemukan - Sesi login tidak ditemukan",
+        });
+      }
+      const coupon = couponRows[0];
+      const activeToken = coupon.access_token_active;
+
+      // logger.info(activeToken);
+      // logger.info(userToken);
+
+      if (activeToken != userToken) {
+        return res.status(403).json({
+          status: "error",
+          message: "Kunci unik tidak ditemukan - Sesi login berbeda",
+        });
+      }
+      //CEK ONLY 1 VALID TOKEN
+
       const questionsService = new ItemsService("questions_bank", {
         schema: req.schema,
       });
@@ -83,6 +113,7 @@ export default (router, { services, database }) => {
         data: response,
       });
     } catch (err) {
+      logger.info(err);
       res.status(500).json({
         status: "error",
         message: "Terjadi Kesalahan, silahkan coba lagi",

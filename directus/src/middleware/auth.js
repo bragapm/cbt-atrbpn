@@ -12,6 +12,7 @@ export const authMiddleware = (database) => {
           message: "Missing or invalid authorization token",
         });
       }
+      const userToken = authHeader.split(" ")[1];
 
       if (!device) {
         return res.status(400).json({
@@ -52,6 +53,7 @@ export const authMiddleware = (database) => {
 
       // Jika device ID cocok atau user baru (device ID kosong), lanjutkan
       req.user = userId;
+      req.token = userToken;
       next();
     } catch (error) {
       console.error("Authentication error:", error.message);
