@@ -1,4 +1,9 @@
 import { deleteAccessToken, getAccessToken } from "@/midlewares/token";
+import {
+  hasRefreshToken,
+  isAuthEndpoint,
+  refreshAccessToken,
+} from "@/services/refresh-token";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -7,6 +12,10 @@ import axios, {
   CreateAxiosDefaults,
   InternalAxiosRequestConfig,
 } from "axios";
+
+type RetriableRequestConfig = InternalAxiosRequestConfig & {
+  _retry?: boolean;
+};
 
 export class DirectusInterceptor {
   public adapter: AxiosInstance;
@@ -22,7 +31,7 @@ export class DirectusInterceptor {
     this.adapter.interceptors.request.use(this.interceptRequest);
     this.adapter.interceptors.response.use(
       this.interceptResponse,
-      this.interceptError
+      this.interceptError.bind(this)
     );
   }
 
@@ -51,12 +60,36 @@ export class DirectusInterceptor {
     }
   }
 
-  private interceptError(error: AxiosError): void {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+  private async interceptError(error: AxiosError): Promise<AxiosResponse> {
+    const status = error.response?.status;
+    const originalRequest = error.config as RetriableRequestConfig | undefined;
+
+    // Access token kedaluwarsa: tukar dengan refresh token lalu ulangi request
+    // aslinya. Flag _retry menjaga supaya hanya dicoba sekali per request.
+    if (
+      status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !isAuthEndpoint(originalRequest.url) &&
+      hasRefreshToken()
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        await refreshAccessToken();
+        // Request interceptor akan memasang access token yang baru.
+        return await this.adapter.request(originalRequest);
+      } catch {
+        deleteAccessToken();
+        throw error;
+      }
+    }
+
+    if (status === 401 || status === 403) {
       deleteAccessToken();
     }
 
-    if (error.response?.status === 400) {
+    if (status === 400) {
       throw error.response.data;
     }
 

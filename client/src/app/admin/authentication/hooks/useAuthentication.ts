@@ -4,7 +4,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { IAuthenticationRequest, IAuthToken } from "../types/auth.type";
-import { setAccessToken } from "@/midlewares/token";
+import { setAuthSession } from "@/midlewares/token";
 
 type IUseAuthentication = {
   onSuccess?: () => void;
@@ -23,7 +23,7 @@ const useAuthentication = ({ onSuccess, onError }: IUseAuthentication) => {
     },
 
     onSuccess: (response: AxiosResponse<{ data: IAuthToken }>) => {
-      setAccessToken(response?.data?.data?.access_token);
+      setAuthSession(response?.data?.data);
       navigation("/");
       onSuccess?.();
     },
