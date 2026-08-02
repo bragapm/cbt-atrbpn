@@ -24,7 +24,7 @@ export default (router, { services, database, logger }) => {
       if (couponRows.length < 1) {
         return res.status(403).json({
           status: "error",
-          message: "Kunci unik tidak ditemukan - Sesi login tidak ditemukan",
+          message: "Device tidak valid. Login dari device tidak diperbolehkan.",
         });
       }
       const coupon = couponRows[0];
@@ -36,7 +36,7 @@ export default (router, { services, database, logger }) => {
       if (activeToken != userToken) {
         return res.status(403).json({
           status: "error",
-          message: "Kunci unik tidak ditemukan - Sesi login berbeda",
+          message: "Device tidak valid. Login dari device tidak diperbolehkan.",
         });
       }
       //CEK ONLY 1 VALID TOKEN
