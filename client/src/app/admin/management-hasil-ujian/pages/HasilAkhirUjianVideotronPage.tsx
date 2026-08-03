@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import useGetSessionTestQueries from "../../management-peserta/hooks/useGetSessionTestQueries";
 import useGetVideotron from "../hooks/useGetVideotron";
+import { formatScore } from "@/lib/utils";
 
 const speed = [
   {
@@ -77,7 +78,7 @@ export const HasilAkhirUjianVideotron: FC = () => {
       accessorKey: "score",
       header: "SKOR",
       cell: ({ row }) => {
-        return row.original.score || "-";
+        return formatScore(row.original.score);
       },
     },
   ];

@@ -33,29 +33,34 @@ export function VideotronTable<TData, TValue>({
 }: VideotronTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
 
-  const containerRef = useRef(null); // Menyimpan referensi ke elemen kontainer
-  const [isScrollingDown, setIsScrollingDown] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null); // Menyimpan referensi ke elemen kontainer
+  const isScrollingDownRef = useRef(true);
 
   useEffect(() => {
     const scrollInterval = setInterval(() => {
-      if (containerRef.current) {
-        const container = containerRef.current;
-        const maxScrollTop = container.scrollHeight - container.clientHeight;
-        const currentScrollTop = container.scrollTop;
-        if (isScrollingDown) {
-          container.scrollTop = currentScrollTop + 2;
-          if (currentScrollTop >= maxScrollTop) {
-            setIsScrollingDown(false);
-          }
-        } else {
-          container.scrollTop = 0;
-          setIsScrollingDown(true);
+      const container = containerRef.current;
+      if (!container) return;
+
+      const maxScrollTop = container.scrollHeight - container.clientHeight;
+
+      // Konten lebih pendek dari kontainer, tidak ada yang perlu di-scroll
+      if (maxScrollTop <= 0) return;
+
+      if (isScrollingDownRef.current) {
+        container.scrollTop += 2;
+        // scrollTop bernilai pecahan sementara scrollHeight/clientHeight dibulatkan,
+        // jadi perlu toleransi 1px supaya kondisi mentok bawah pasti terpenuhi
+        if (container.scrollTop >= maxScrollTop - 1) {
+          isScrollingDownRef.current = false;
         }
+      } else {
+        container.scrollTop = 0;
+        isScrollingDownRef.current = true;
       }
     }, Number(speed));
 
     return () => clearInterval(scrollInterval);
-  }, [isScrollingDown, speed]);
+  }, [speed]);
 
   const table = useReactTable({
     data,
