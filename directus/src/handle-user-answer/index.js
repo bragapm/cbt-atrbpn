@@ -180,6 +180,65 @@ export default (
     }
   );
 
+  // hook for updating score when an answer is deleted in user_test
+  filter("user_test.items.delete", async (keys, _meta, { database, schema }) => {
+    console.log("user_test deleted");
+
+    const userSessionService = new ItemsService("user_session_test", {
+      knex: database,
+      accountability: null,
+      schema,
+    });
+
+    for (const key of keys) {
+      // Filter berjalan sebelum baris dihapus, jadi skor yang sudah terhitung
+      // di sesi masih bisa dibaca dari row ini.
+      const row = await database("user_test")
+        .select("user_session_id", "score")
+        .where("id", key)
+        .first();
+      if (!row) {
+        logger.warn(`user_test ID ${key} not found, score update skipped`);
+        continue;
+      }
+
+      const user_session_id = row.user_session_id;
+      if (!user_session_id) continue;
+
+      const userTestScore = parseFloat(row.score) || 0;
+
+      const sessionData = await userSessionService.readByQuery({
+        filter: {
+          id: user_session_id,
+        },
+        fields: ["score"],
+        limit: 1,
+      });
+
+      if (!sessionData?.length) {
+        logger.warn(
+          `user_session_test ID ${user_session_id} not found, score update skipped`
+        );
+        continue;
+      }
+
+      const currentScore = parseFloat(sessionData[0].score) || 0;
+      const updatedScore = parseFloat(
+        (currentScore - userTestScore).toFixed(6)
+      );
+
+      await userSessionService.updateOne(user_session_id, {
+        score: updatedScore,
+      });
+
+      logger.info(
+        `Score updated successfully for user_session_test ID ${user_session_id}`
+      );
+    }
+
+    return keys;
+  });
+
   action(
     "user_session_test.items.update",
     async ({ keys, payload, collection }, { database, accountability }) => {
