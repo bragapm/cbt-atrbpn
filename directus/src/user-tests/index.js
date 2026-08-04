@@ -89,9 +89,12 @@ export default (router, { services, database, logger }) => {
         answerChoices = answerChoices.sort(() => seededRandom() - 0.5);
       }
 
+      // `limit: -1` wajib: tanpa itu Directus memakai limit default 100, jadi
+      // peserta dengan lebih dari 100 jawaban kehilangan jawaban ke-101 dst.
       const submittedAnswers = await userTestService.readByQuery({
         filter: { user_session_id: userTestID, deleted_at: { _null: true } },
         fields: ["problem", "answer"],
+        limit: -1,
       });
 
       const response = {
