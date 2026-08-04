@@ -78,7 +78,12 @@ export const HasilAkhirUjianVideotron: FC = () => {
       accessorKey: "score",
       header: "SKOR",
       cell: ({ row }) => {
-        return formatScore(row.original.score);
+        const score = row.original.score;
+        // Skor nol ditampilkan sebagai strip, bukan 0.000000
+        if (score !== null && score !== undefined && Number(score) === 0) {
+          return "-";
+        }
+        return formatScore(score);
       },
     },
   ];
