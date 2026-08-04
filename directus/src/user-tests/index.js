@@ -140,9 +140,6 @@ export default (router, { services, database, logger }) => {
       }
 
       try {
-        const userTestService = new ItemsService("user_test", {
-          schema: req.schema,
-        });
         const optionsService = new ItemsService("question_options", {
           schema: req.schema,
         });
@@ -151,12 +148,6 @@ export default (router, { services, database, logger }) => {
         });
         const questionsService = new ItemsService("questions_bank", {
           schema: req.schema,
-        });
-
-        // Check if the answer already exists for the given session and problem
-        const existingAnswer = await userTestService.readByQuery({
-          filter: { user_session_id: userSessionId, problem: problem_id },
-          limit: 1,
         });
 
         // Retrieve problem details to get the category ID
@@ -182,48 +173,73 @@ export default (router, { services, database, logger }) => {
         // Update or create the answer record
         const now = new Date();
         const correct_score = category.bobot_benar;
-        if (!existingAnswer.length) {
-          // Create new answer record
-          await userTestService.createOne({
+
+        // Cek-lalu-simpan harus berjalan sebagai satu blok yang tidak boleh
+        // disela request lain untuk soal yang sama. Tanpa ini, dua submit yang
+        // datang berbarengan (mis. double click) sama-sama membaca "belum ada"
+        // lalu sama-sama insert, sehingga jawabannya tercatat dobel.
+        await database.transaction(async (trx) => {
+          // Advisory lock dikunci per (sesi, soal) supaya peserta lain tidak
+          // ikut antre, dan otomatis dilepas begitu transaksi selesai.
+          await trx.raw(
+            "SELECT pg_advisory_xact_lock(hashtext(?), hashtext(?))",
+            [String(userSessionId), String(problem_id)]
+          );
+
+          // `knex: trx` wajib, kalau tidak query-nya keluar dari transaksi dan
+          // lock di atas jadi tidak ada gunanya.
+          const userTestService = new ItemsService("user_test", {
+            schema: req.schema,
+            knex: trx,
+          });
+
+          // Check if the answer already exists for the given session and problem
+          const existingAnswer = await userTestService.readByQuery({
+            filter: { user_session_id: userSessionId, problem: problem_id },
+            limit: 1,
+          });
+
+          if (!existingAnswer.length) {
+            // Create new answer record
+            await userTestService.createOne({
+              user_session_id: userSessionId,
+              problem: problem_id,
+              answer: answer_id,
+              score_category,
+              user: user,
+              score,
+              correct_score,
+              created_at: now,
+              updated_at: now,
+            });
+
+            return;
+          }
+
+          const answerRecordId = existingAnswer[0].id;
+
+          if (answer_id === "0") {
+            // Delete record if no answer is provided
+            await userTestService.deleteOne(answerRecordId);
+            return;
+          }
+
+          await userTestService.updateOne(answerRecordId, {
             user_session_id: userSessionId,
             problem: problem_id,
-            answer: answer_id,
+            answer: answer_id === "0" ? null : answer_id,
             score_category,
             user: user,
             score,
-            correct_score,
-            created_at: now,
             updated_at: now,
           });
-
-          return res.json({
-            status: "success",
-          });
-        }
-        const answerRecordId = existingAnswer[0].id;
-
-        if (answer_id === "0") {
-          // Delete record if no answer is provided
-          await userTestService.deleteOne(answerRecordId);
-          return res.json({
-            status: "success",
-          });
-        }
-
-        await userTestService.updateOne(answerRecordId, {
-          user_session_id: userSessionId,
-          problem: problem_id,
-          answer: answer_id === "0" ? null : answer_id,
-          score_category,
-          user: user,
-          score,
-          updated_at: now,
         });
 
         res.json({
           status: "success",
         });
       } catch (err) {
+        logger.error(err);
         res.status(500).json({
           status: "error",
           message: "Terjadi Kesalahan, silahkan coba lagi",
