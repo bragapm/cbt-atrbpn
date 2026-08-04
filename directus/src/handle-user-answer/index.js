@@ -63,10 +63,10 @@ export default (
   // hook for updating score when answer is updated in user_test
   filter(
     "user_test.items.update",
-    async (payload, _meta, { database, schema, accountability }) => {
+    async (payload, { keys }, { database, schema }) => {
       console.log("user_test updated");
-      if (!payload.answer || !payload.user_session_id) {
-        throw new Error("Invalid payload: Missing answer or user_session_id");
+      if (!payload.answer) {
+        throw new Error("Invalid payload: Missing answer");
       }
 
       const questionOption = await database("question_options")
@@ -79,33 +79,103 @@ export default (
         return payload;
       }
 
-      const userTestScore = questionOption.is_correct
-        ? parseFloat(payload.score) || 0
-        : 0;
+      // score_category: 1 benar, -1 salah. Status baru dipakai dari payload
+      // kalau dikirim, kalau tidak diturunkan dari jawaban yang baru.
+      const nextCategory =
+        payload.score_category !== undefined
+          ? Number(payload.score_category)
+          : questionOption.is_correct
+            ? 1
+            : -1;
+      const payloadScore =
+        payload.score !== undefined ? Number(payload.score) || 0 : undefined;
+
       const userSessionService = new ItemsService("user_session_test", {
         knex: database,
-        accountability,
+        accountability: null,
         schema,
       });
 
-      const sessionData = await userSessionService.readByQuery({
-        filter: {
-          id: payload.user_session_id,
-        },
-        fields: ["score"],
-        limit: 1,
-      });
+      for (const key of keys) {
+        // Filter berjalan sebelum data ditulis, jadi row ini masih berisi
+        // status & skor lama.
+        const row = await database("user_test")
+          .select("user_session_id", "problem", "score", "score_category")
+          .where("id", key)
+          .first();
+        if (!row) {
+          logger.warn(`user_test ID ${key} not found, score update skipped`);
+          continue;
+        }
 
-      const currentScore = parseFloat(sessionData?.[0]?.score) || 0;
-      const updatedScore = currentScore + userTestScore;
+        const prevCategory = Number(row.score_category);
+        const prevScore = parseFloat(row.score) || 0;
 
-      await userSessionService.updateOne(payload.user_session_id, {
-        score: updatedScore,
-      });
+        const user_session_id = payload.user_session_id || row.user_session_id;
+        if (!user_session_id) continue;
 
-      logger.info(
-        `Score updated successfully for user_session_test ID ${payload.user_session_id}`
-      );
+        // Status tidak berubah (sama-sama benar atau sama-sama salah), skor
+        // sesi tidak perlu disentuh.
+        if (prevCategory === nextCategory) {
+          logger.info(
+            `Score category unchanged for user_test ID ${key}, score update skipped`
+          );
+          continue;
+        }
+
+        let nextScore = payloadScore;
+        if (nextScore === undefined) {
+          // Bobot skor ada di `kategori_soal`, bukan di `question_options`.
+          // Dijangkau lewat user_test.problem -> questions_bank.kategori_id.
+          const category = await database("questions_bank as qb")
+            .join("kategori_soal as ks", "ks.id", "qb.kategori_id")
+            .where("qb.id", row.problem)
+            .select("ks.bobot_benar", "ks.bobot_salah")
+            .first();
+
+          if (!category) {
+            logger.warn(
+              `Kategori soal for user_test ID ${key} not found, score update skipped`
+            );
+            continue;
+          }
+
+          nextScore =
+            parseFloat(
+              nextCategory === 1 ? category.bobot_benar : category.bobot_salah
+            ) || 0;
+        }
+
+        // Salah -> benar: tambahkan skor jawaban yang baru.
+        // Benar -> salah: kembalikan skor jawaban lama yang sudah terhitung.
+        const scoreDelta = -prevScore + nextScore;
+        const sessionData = await userSessionService.readByQuery({
+          filter: {
+            id: user_session_id,
+          },
+          fields: ["score"],
+          limit: 1,
+        });
+
+        if (!sessionData?.length) {
+          logger.warn(
+            `user_session_test ID ${user_session_id} not found, score update skipped`
+          );
+          continue;
+        }
+
+        const currentScore = parseFloat(sessionData[0].score) || 0;
+        const updatedScore = parseFloat((currentScore + scoreDelta).toFixed(6));
+
+        await userSessionService.updateOne(user_session_id, {
+          score: updatedScore,
+        });
+
+        logger.info(
+          `Score updated successfully for user_session_test ID ${user_session_id}`
+        );
+      }
+
       return payload;
     }
   );
