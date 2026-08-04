@@ -79,8 +79,17 @@ export const HasilAkhirUjianVideotron: FC = () => {
       header: "SKOR",
       cell: ({ row }) => {
         const score = row.original.score;
-        // Skor nol ditampilkan sebagai strip, bukan 0.000000
-        if (score !== null && score !== undefined && Number(score) === 0) {
+        const numericScore = Number(score);
+        // Strip untuk skor kosong, non-angka (backend mengirim "-"), nol,
+        // maupun nilai sangat kecil yang terpotong jadi 0.000000 saat
+        // diformat 6 desimal
+        if (
+          score === null ||
+          score === undefined ||
+          score === "" ||
+          !Number.isFinite(numericScore) ||
+          Math.abs(numericScore) < 0.000001
+        ) {
           return "-";
         }
         return formatScore(score);
