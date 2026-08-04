@@ -200,6 +200,12 @@ export default (router, { services, database, logger }) => {
           });
 
           if (!existingAnswer.length) {
+            // Clear jawaban pada soal yang memang belum pernah dijawab: tidak
+            // ada yang perlu dihapus. Kalau diteruskan ke createOne, baris akan
+            // dibuat dengan answer "0" padahal kolomnya bertipe uuid, sehingga
+            // request gagal dengan 500.
+            if (answer_id === "0") return;
+
             // Create new answer record
             await userTestService.createOne({
               user_session_id: userSessionId,
