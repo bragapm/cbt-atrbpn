@@ -65,30 +65,15 @@ export default (
     "user_test.items.update",
     async (payload, { keys }, { database, schema }) => {
       console.log("user_test updated");
-      if (!payload.answer) {
-        throw new Error("Invalid payload: Missing answer");
+      if (!payload.answer || !payload.score_category || !payload.score) {
+        throw new Error(
+          "Invalid payload: Missing answer/score_category/score"
+        );
       }
 
-      const questionOption = await database("question_options")
-        .where({ id: payload.answer })
-        .select("is_correct")
-        .first();
-
-      if (!questionOption) {
-        logger.warn("Answer not found in question_options");
-        return payload;
-      }
-
-      // score_category: 1 benar, -1 salah. Status baru dipakai dari payload
-      // kalau dikirim, kalau tidak diturunkan dari jawaban yang baru.
-      const nextCategory =
-        payload.score_category !== undefined
-          ? Number(payload.score_category)
-          : questionOption.is_correct
-            ? 1
-            : -1;
-      const payloadScore =
-        payload.score !== undefined ? Number(payload.score) || 0 : undefined;
+      // score_category: 1 benar, -1 salah.
+      const nextCategory = Number(payload.score_category);
+      const nextScore = parseFloat(payload.score) || 0;
 
       const userSessionService = new ItemsService("user_session_test", {
         knex: database,
@@ -100,7 +85,7 @@ export default (
         // Filter berjalan sebelum data ditulis, jadi row ini masih berisi
         // status & skor lama.
         const row = await database("user_test")
-          .select("user_session_id", "problem", "score", "score_category")
+          .select("user_session_id", "score", "score_category")
           .where("id", key)
           .first();
         if (!row) {
@@ -123,31 +108,8 @@ export default (
           continue;
         }
 
-        let nextScore = payloadScore;
-        if (nextScore === undefined) {
-          // Bobot skor ada di `kategori_soal`, bukan di `question_options`.
-          // Dijangkau lewat user_test.problem -> questions_bank.kategori_id.
-          const category = await database("questions_bank as qb")
-            .join("kategori_soal as ks", "ks.id", "qb.kategori_id")
-            .where("qb.id", row.problem)
-            .select("ks.bobot_benar", "ks.bobot_salah")
-            .first();
-
-          if (!category) {
-            logger.warn(
-              `Kategori soal for user_test ID ${key} not found, score update skipped`
-            );
-            continue;
-          }
-
-          nextScore =
-            parseFloat(
-              nextCategory === 1 ? category.bobot_benar : category.bobot_salah
-            ) || 0;
-        }
-
-        // Salah -> benar: tambahkan skor jawaban yang baru.
-        // Benar -> salah: kembalikan skor jawaban lama yang sudah terhitung.
+        // Kurangi dulu skor lama yang sudah terhitung di sesi, baru tambahkan
+        // skor jawaban yang baru.
         const scoreDelta = -prevScore + nextScore;
         const sessionData = await userSessionService.readByQuery({
           filter: {
