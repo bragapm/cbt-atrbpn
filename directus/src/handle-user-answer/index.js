@@ -7,28 +7,25 @@ export default (
   // hook for updating score when an answer is created in user_test
   filter(
     "user_test.items.create",
-    async (payload, _meta, { database, schema, accountability }) => {
+    async (payload, _meta, { database, schema }) => {
       console.log("user_test created");
-      if (!payload.answer || !payload.user_session_id) {
-        throw new Error("Invalid payload: Missing answer or user_session_id");
+      if (
+        !payload.user_session_id ||
+        !payload.problem ||
+        !payload.answer ||
+        !payload.score_category ||
+        !payload.score
+      ) {
+        throw new Error(
+          "Invalid payload: Missing user_session_id/problem/answer/score_category/score"
+        );
       }
 
-      const questionOption = await database("question_options")
-        .where({ id: payload.answer })
-        .select("is_correct")
-        .first();
+      const userTestScore = parseFloat(payload.score) || 0;
 
-      if (!questionOption) {
-        logger.warn("Answer not found in question_options");
-        return payload;
-      }
-
-      const userTestScore = questionOption.is_correct
-        ? parseFloat(payload.score) || 0
-        : 0;
       const userSessionService = new ItemsService("user_session_test", {
         knex: database,
-        accountability,
+        accountability: null,
         schema,
       });
 
@@ -40,8 +37,17 @@ export default (
         limit: 1,
       });
 
-      const currentScore = parseFloat(sessionData?.[0]?.score) || 0;
-      const updatedScore = currentScore + userTestScore;
+      if (!sessionData?.length) {
+        logger.warn(
+          `user_session_test ID ${payload.user_session_id} not found, score update skipped`
+        );
+        return payload;
+      }
+
+      const currentScore = parseFloat(sessionData[0].score) || 0;
+      const updatedScore = parseFloat(
+        (currentScore + userTestScore).toFixed(6)
+      );
 
       await userSessionService.updateOne(payload.user_session_id, {
         score: updatedScore,
